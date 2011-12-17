@@ -1,0 +1,19 @@
+{%- if breadcrumbs.count %}
+  <ul id="breadcrumbtrail">
+  {% for breadcrumb in breadcrumbs %}
+    {%- if loop.first %}
+        <li class="home">
+    {%- elseif loop.last %}
+        <li class="current">
+    {%- else %}
+        <li>
+    {%- endif %}
+    {%- if breadcrumb.url is null or loop.last -%}
+        {{ breadcrumb.title }}
+    {%- else -%}
+        <a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
+    {%- endif -%}
+    </li>
+  {% endfor %}
+  </ul>
+{%- endif -%}
