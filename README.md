@@ -27,7 +27,6 @@ Please follow the steps given [here](https://github.com/Abhoryo/APYBreadcrumbTra
      * @Breadcrumb("Home")
      * @Breadcrumb("Level 1", route="level_1")
      * @Breadcrumb("Level 2", route="level_2")
-     *
      */
     class MyController extends Controller
     {
