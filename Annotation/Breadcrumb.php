@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the APYBreadcrumbTrailBundleBundle.
+ * This file is part of the APYBreadcrumbTrailBundle.
  *
  * (c) Abhoryo <abhoryo@free.fr>
  *
