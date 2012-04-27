@@ -9,9 +9,9 @@
         <li>
     {%- endif %}
     {%- if breadcrumb.url is null or loop.last -%}
-        {{ breadcrumb.title }}
+        {{ breadcrumb.title|trans }}
     {%- else -%}
-        <a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
+        <a href="{{ breadcrumb.url }}">{{ breadcrumb.title|trans }}</a>
     {%- endif -%}
     </li>
   {% endfor %}
