@@ -55,6 +55,9 @@ class BreadcrumbListener
         if ($class->isAbstract()) {
             throw new \InvalidArgumentException(sprintf('Annotations from class "%s" cannot be read as it is abstract.', $class));
         }
+
+        $this->breadcrumbTrail->reset();
+
         $this->addBreadcrumbsFromAnnotations($this->reader->getClassAnnotations($class));
 
         // Annotations from method
