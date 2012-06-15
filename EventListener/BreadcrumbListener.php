@@ -56,13 +56,13 @@ class BreadcrumbListener
             throw new \InvalidArgumentException(sprintf('Annotations from class "%s" cannot be read as it is abstract.', $class));
         }
 
-        $this->breadcrumbTrail->reset();
+        if (!$this->breadcrumbTrail->count()) {
+            $this->addBreadcrumbsFromAnnotations($this->reader->getClassAnnotations($class));
 
-        $this->addBreadcrumbsFromAnnotations($this->reader->getClassAnnotations($class));
-
-        // Annotations from method
-        $method = $class->getMethod($controller[1]);
-        $this->addBreadcrumbsFromAnnotations($this->reader->getMethodAnnotations($method));
+            // Annotations from method
+            $method = $class->getMethod($controller[1]);
+            $this->addBreadcrumbsFromAnnotations($this->reader->getMethodAnnotations($method));
+        }
     }
 
     /**
