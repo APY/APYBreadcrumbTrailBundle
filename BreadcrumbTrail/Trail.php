@@ -68,10 +68,6 @@ class Trail implements \IteratorAggregate, \Countable
         return $this;
     }
 
-    public function reset() {
-        return $this->breadcrumbs->removeAll($this->breadcrumbs);
-    }
-
     /**
      * {@inheritDoc}
      */
