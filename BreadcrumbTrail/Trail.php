@@ -43,7 +43,7 @@ class Trail implements \IteratorAggregate, \Countable
      * @param string  $routeName            The name of the route
      * @param mixed   $routeParameters      An array of parameters for the route
      * @param Boolean $routeAbsolute        Whether to generate an absolute URL
-     * @return BreadcrumbTrail
+     * @return self
      */
     function add($breadcrumb_or_title, $routeName = null, $routeParameters = array(), $routeAbsolute = false)
     {
@@ -64,6 +64,17 @@ class Trail implements \IteratorAggregate, \Countable
 
             $this->breadcrumbs->attach(new Breadcrumb($breadcrumb_or_title, $url));
         }
+
+        return $this;
+    }
+
+    /**
+     * Reset the trail
+     *
+     * @return self
+     */
+    public function reset() {
+        $this->breadcrumbs->removeAll($this->breadcrumbs);
 
         return $this;
     }
