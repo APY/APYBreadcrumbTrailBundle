@@ -15,6 +15,7 @@ use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class BreadcrumbListener
 {
@@ -56,7 +57,9 @@ class BreadcrumbListener
             throw new \InvalidArgumentException(sprintf('Annotations from class "%s" cannot be read as it is abstract.', $class));
         }
 
-        if (!$this->breadcrumbTrail->count()) {
+        if ($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) {
+            $this->breadcrumbTrail->reset();
+            
             $this->addBreadcrumbsFromAnnotations($this->reader->getClassAnnotations($class));
 
             // Annotations from method
