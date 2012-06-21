@@ -15,7 +15,7 @@
         "symfony/framework-bundle": ">=2.0.0"
     },
     "suggest": {
-        "ext-intl": "*",
+        "ext-intl": "*"
     },
     "autoload": {
         "psr-0": { "APY\\BreadcrumbTrailBundle": "" }
