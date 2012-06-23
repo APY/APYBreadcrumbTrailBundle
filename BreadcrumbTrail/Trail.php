@@ -56,9 +56,6 @@ class Trail implements \IteratorAggregate, \Countable
 
             $url = null;
             if ( !is_null($routeName) ) {
-                if (is_null($this->router->getRouteCollection()->get($routeName)) )  {
-                    throw new \InvalidArgumentException('You must define a existed route for your breadcrumb.');
-                }
                 $url = $this->router->generate($routeName, $routeParameters, $routeAbsolute);
             }
 

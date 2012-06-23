@@ -2,7 +2,7 @@
     "name": "apy/breadcrumbtrail-bundle",
     "type": "symfony-bundle",
     "description": "Symfony2 Breadcrumbs Bundle with annotations",
-    "keywords": ["Breadcrumb Trail", "Breadcrumbs", "Fil d'ariane", "annotation"],
+    "keywords": ["Symfony", "Breadcrumb Trail", "Breadcrumbs", "Fil d'ariane", "annotation"],
     "homepage": "https://github.com/Abhoryo/APYBreadcrumbTrailBundle",
     "authors": [
         {
