@@ -53,13 +53,19 @@ class BreadcrumbListener
 
         // Annotations from class
         $class = new \ReflectionClass($controller[0]);
+
+        // Manage JMSSecurityExtraBundle proxy class
+        if (false !== $className = $className = $this->getRealClass($class->getName())) {
+            $class = new \ReflectionClass($className);
+        }
+
         if ($class->isAbstract()) {
             throw new \InvalidArgumentException(sprintf('Annotations from class "%s" cannot be read as it is abstract.', $class));
         }
 
         if ($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) {
             $this->breadcrumbTrail->reset();
-            
+
             $this->addBreadcrumbsFromAnnotations($this->reader->getClassAnnotations($class));
 
             // Annotations from method
@@ -79,12 +85,21 @@ class BreadcrumbListener
         foreach ($annotations as $annotation) {
             if ($annotation instanceof Breadcrumb) {
                 $this->breadcrumbTrail->add(
-                        $annotation->getTitle(),
-                        $annotation->getRouteName(),
-                        $annotation->getRouteParameters(),
-                        $annotation->getRouteAbsolute()
+                    $annotation->getTitle(),
+                    $annotation->getRouteName(),
+                    $annotation->getRouteParameters(),
+                    $annotation->getRouteAbsolute()
                 );
             }
         }
+    }
+
+    private function getRealClass($className)
+    {
+        if (false === $pos = strrpos($className, '\\__CG__\\')) {
+            return false;
+        }
+
+        return substr($className, $pos + 8);
     }
 }
