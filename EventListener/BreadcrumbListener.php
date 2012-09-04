@@ -55,7 +55,7 @@ class BreadcrumbListener
         $class = new \ReflectionClass($controller[0]);
 
         // Manage JMSSecurityExtraBundle proxy class
-        if (false !== $className = $className = $this->getRealClass($class->getName())) {
+        if (false !== $className = $this->getRealClass($class->getName())) {
             $class = new \ReflectionClass($className);
         }
 
