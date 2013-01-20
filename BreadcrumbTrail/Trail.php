@@ -71,7 +71,7 @@ class Trail implements \IteratorAggregate, \Countable
             throw new \InvalidArgumentException('The position of a breadcrumb must be an integer.');
         }
 
-        if ($position == 0) {
+        if ($position == 0 || $position > $this->breadcrumbs->count()) {
             $this->breadcrumbs->attach($breadcrumb);
         }else {
             $this->insert($breadcrumb, $position);
