@@ -88,7 +88,8 @@ class BreadcrumbListener
                     $annotation->getTitle(),
                     $annotation->getRouteName(),
                     $annotation->getRouteParameters(),
-                    $annotation->getRouteAbsolute()
+                    $annotation->getRouteAbsolute(),
+                    $annotation->getPosition()
                 );
             }
         }

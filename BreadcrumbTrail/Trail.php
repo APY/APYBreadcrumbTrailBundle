@@ -43,12 +43,17 @@ class Trail implements \IteratorAggregate, \Countable
      * @param string  $routeName            The name of the route
      * @param mixed   $routeParameters      An array of parameters for the route
      * @param Boolean $routeAbsolute        Whether to generate an absolute URL
+     * @param integer $position             Position of the breadcrumb (default = 0)
      * @return self
      */
-    function add($breadcrumb_or_title, $routeName = null, $routeParameters = array(), $routeAbsolute = false)
+    public function add($breadcrumb_or_title, $routeName = null, $routeParameters = array(), $routeAbsolute = false, $position = 0)
     {
+        if ($breadcrumb_or_title === null) {
+            return $this->reset();
+        }
+
         if ($breadcrumb_or_title instanceof Breadcrumb) {
-            $this->breadcrumbs->attach($breadcrumb_or_title);
+            $breadcrumb = $breadcrumb_or_title;
         } else {
             if (!is_string($breadcrumb_or_title)) {
                 throw new \InvalidArgumentException('The title of a breadcrumb must be a string.');
@@ -59,10 +64,44 @@ class Trail implements \IteratorAggregate, \Countable
                 $url = $this->router->generate($routeName, $routeParameters, $routeAbsolute);
             }
 
-            $this->breadcrumbs->attach(new Breadcrumb($breadcrumb_or_title, $url));
+            $breadcrumb = new Breadcrumb($breadcrumb_or_title, $url);
+        }
+
+        if (!is_int($position)) {
+            throw new \InvalidArgumentException('The position of a breadcrumb must be an integer.');
+        }
+
+        if ($position == 0) {
+            $this->breadcrumbs->attach($breadcrumb);
+        }else {
+            $this->insert($breadcrumb, $position);
         }
 
         return $this;
+    }
+
+    private function insert($breadcrumb, $position)
+    {
+        if ($position < 0) {
+            $position += $this->breadcrumbs->count();
+        } else { // $position >= 1
+            $position--;
+        }
+
+        $breadcrumbs = new \SplObjectStorage();
+        $breadcrumbs->addAll($this->breadcrumbs);
+        $this->breadcrumbs->removeAll($this->breadcrumbs);
+
+
+        $breadcrumbs->rewind();
+        while($breadcrumbs->valid()) {
+            if (max(0, $position) == $breadcrumbs->key()) {
+                $this->breadcrumbs->attach($breadcrumb);
+            }
+
+            $this->breadcrumbs->attach($breadcrumbs->current());
+            $breadcrumbs->next();
+        }
     }
 
     /**

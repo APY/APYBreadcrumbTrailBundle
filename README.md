@@ -13,56 +13,211 @@ Please follow the steps given [here](https://github.com/Abhoryo/APYBreadcrumbTra
 
 ## Usage
 
-### Render a breadcrumb trail in a template
+### Add breadcumbs to the trail with annotations in your controller.
 
-    {{ apy_breadcrumb_trail_render() }}
+You can add annotations on the controller and the action.
 
+```
+...
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 
-### Add breadcumbs to the trail with annotations or PHP in your controller.
-
-    ...
-    use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
-
+/**
+ * @Breadcrumb("Level 1", route="level_1")
+ * @Breadcrumb("Level 2", route="level_2")
+ */
+class MyController extends Controller
+{
     /**
-     * @Breadcrumb("Home")
-     * @Breadcrumb("Level 1", route="level_1")
-     * @Breadcrumb("Level 2", route="level_2")
+     * @Breadcrumb("Level 3a", route="level_3a")
+     * @Breadcrumb("Level 4a", route="level_4a")
      */
-    class MyController extends Controller
+    public function aAction()
     {
-        /**
-         * @Breadcrumb("Level 3a", route="level_3a")
-         * @Breadcrumb("Level 4a", route="level_4a")
-         */
-        public function aAction()
-        {
-            ...
-        }
+        /*
 
-        /**
-         * @Breadcrumb("Level 3b")
-         * @Breadcrumb("Level 4b", route={"name"="level_4b", "parameters"={"var1"=1,"var2"=2}})
-         */
-        public function bAction()
-        {
-            $this->get("apy_breadcrumb_trail")
-                ->add('Level 5b', 'level_5b', array('var3'=>3))
-                ->add('Level 6b', 'level_6b');
-            ...
-        }
+        This action will show the following breacrumb trail:
+        Level 1 > Level 2 > Level 3a > Level 4a
+
+        */
     }
 
-Will turn into:
+    /**
+     * With route parameters
+     * @Breadcrumb("Level 3b")
+     * @Breadcrumb("Level 4b", route={"name"="level_4b", "parameters"={"var1"=1,"var2"=2}})
+     */
+    public function bAction()
+    {
+        /*
 
-    <ul id="breadcrumbtrail">
-        <li class="home">Home</li>
-        <li><a href="/level_1">Level 1</a></li>
-        <li><a href="/level_2">Level 2</a></li>
-        <li>Level 3b</li>
-        <li><a href="/level_4b/1/2">Level 4b</a></li>
-        <li><a href="/level_5b/3">Level 5b</a></li>
-        <li class="current">Level 6b</li>
-    </ul>
+        This action will show the following breacrumb trail:
+        Level 1 > Level 2 > Level 3b > Level 4b
+
+        */
+    }
+
+    /**
+     * With position (position=0 will put the breacrumb to the end of the trail)
+     * @Breadcrumb("Level 3c", route="level_3c")
+     * @Breadcrumb("Level 4c", position=2)
+     */
+    public function cAction()
+    {
+        /*
+
+        This action will show the following breacrumb trail:
+        Level 1 > Level 4c > Level 2 > Level 3c
+
+        */
+    }
+
+    /**
+     * With negative position
+     * @Breadcrumb("Level 3d", route="level_3d")
+     * @Breadcrumb("Level 4d", position=-1)
+     */
+    public function dAction()
+    {
+        /*
+
+        This action will show the following breacrumb trail:
+        Level 1 > Level 2 > Level 4d > Level 3d
+
+        */
+    }
+
+    /**
+     * Reset the trail
+     * @Breadcrumb("Level 3d", route="level_3d")
+     * @Breadcrumb()
+     * @Breadcrumb("Level 1e", route="level_1e")
+     * @Breadcrumb("Level 2e", route="level_2e")
+     */
+    public function dAction()
+    {
+        /*
+
+        This action will show the following breacrumb trail:
+        Level 1e > Level 2e
+
+        */
+    }
+}
+```
+
+### Add breadcumbs to the trail with PHP in your controller.
+
+```
+...
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+
+/**
+ * @Breadcrumb("Level 1", route="level_1")
+ * @Breadcrumb("Level 2")
+ */
+class MyController extends Controller
+{
+    /**
+     * @Breadcrumb("Level 3a", route="level_3a")
+     */
+    public function aAction()
+    {
+        $this->get("apy_breadcrumb_trail")->add('Level 4a', 'level_4a');
+
+        /*
+
+        This action will show the following breacrumb trail:
+        Level 1 > Level 2 > Level 3a > Level 4a
+
+        */
+    }
+
+    /**
+     * With route parameters
+     * @Breadcrumb("Level 3b")
+     */
+    public function bAction()
+    {
+        $this->get("apy_breadcrumb_trail")->add('Level 4b', 'level_4b', array("var1" => 1,"var2" => 2));
+
+        /*
+
+        This action will show the following breacrumb trail:
+        Level 1 > Level 2 > Level 3b > Level 4b
+
+        */
+    }
+
+    /**
+     * With position (position=0 will put the breacrumb to the end of the trail)
+     * @Breadcrumb("Level 3c", route="level_3c")
+     */
+    public function cAction()
+    {
+        $this->get("apy_breadcrumb_trail")->add('Level 4c', 'level_4c', array(), false, 2);
+        // The fourth argument is the absolute option of a route
+
+        /*
+
+        This action will show the following breacrumb trail:
+        Level 1 > Level 4c > Level 2 > Level 3c
+
+        */
+    }
+
+    /**
+     * With negative position
+     * @Breadcrumb("Level 3d", route="level_3d")
+     */
+    public function dAction()
+    {
+        $this->get("apy_breadcrumb_trail")->add('Level 4d', 'level_4d', array(), false, -1);
+        // The fourth argument is the absolute option of a route
+
+        /*
+
+        This action will show the following breacrumb trail:
+        Level 1 > Level 2 > Level 4d > Level 3d
+
+        */
+    }
+
+    /**
+     * Reset the trail
+     * @Breadcrumb("Level 3d", route="level_3d")
+     */
+    public function dAction()
+    {
+        $this->get("apy_breadcrumb_trail")
+            ->reset()
+            ->add('Level 1e', 'level_1e')
+            ->add('Level 2e', 'level_2e')
+
+        /*
+
+        This action will show the following breacrumb trail:
+        Level 1e > Level 2e
+
+        */
+    }
+}
+```
+
+### Render a breadcrumb trail in a template
+
+`{{ apy_breadcrumb_trail_render() }}`
+
+The action `a` will render the following breadcrumb trail:
+
+```
+<ul id="breadcrumbtrail">
+    <li class="home">Home</li>
+    <li><a href="/level_1">Level 1</a></li>
+    <li>Level 2b</li>
+    <li><a href="/level_3a">Level 3a</a></li>
+    <li class="current"><a href="/level_4a">Level 4a</a></li>
+</ul>
+```
 
 **Notes:**
 
@@ -82,3 +237,7 @@ And these too.
     @Breadcrumb("Level 4b", route="level_4b")
     @Breadcrumb("Level 4b", route={"name"="level_4b"})
     @Breadcrumb("Level 4b", routeName="level_4b")
+
+### Todo
+
+ * Issue #2

@@ -19,7 +19,7 @@ class Breadcrumb
     /**
      * @var string Title of the breadcrumb
      */
-    private $title;
+    private $title = null;
 
     /**
      * @var string The name of the route
@@ -30,11 +30,16 @@ class Breadcrumb
      * @var mixed An array of parameters for the route
      */
     private $routeParameters = array();
-    
+
     /**
      * @var Boolean Whether to generate an absolute URL
      */
     private $routeAbsolute = false;
+
+    /**
+     * @var integer Position of the breadcrumb (default = 0)
+     */
+    private $position = 0;
 
     /**
      * Constructor.
@@ -75,7 +80,7 @@ class Breadcrumb
     }
 
     /**
-     * Sets the title.
+     * Sets the title of the breadcrumb.
      *
      * @param string $methods The title of the breadcrumb
      */
@@ -132,5 +137,20 @@ class Breadcrumb
     public function getRouteAbsolute()
     {
         return $this->routeAbsolute;
+    }
+
+    /**
+     * Sets the position of the breadcrumb.
+     *
+     * @param integer Position of the breadcrumb (default = 0)
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
+
+    public function getPosition()
+    {
+        return $this->position;
     }
 }
