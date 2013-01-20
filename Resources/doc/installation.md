@@ -34,7 +34,18 @@ $ git submodule add git://github.com/Abhoryo/APYBreadcrumbTrailBundle.git vendor
 $ git submodule update --init
 ```
 
-## Step 2: Configure the Autoloader
+**Using composer**
+
+add the following to your composer.json:
+
+`"apy/breadcrumbtrail-bundle": "dev-master"`
+
+and run:
+
+`php composer.phar install`
+
+
+## Step 2: Configure the Autoloader (not with composer)
 
 Add the `APY` namespace to your autoloader:
 

@@ -3,9 +3,9 @@ Getting Started With BreadcrumbTrailBundle
 
 This bundle provides a breacrumb trail service also known as breadcrumbs or Fil d'Ariane.
 
-Breadcrumbs can be define with annotations or PHP.
+Breadcrumbs can be defined with annotations or/and PHP.
 
-**Compatibility**: Symfony 2.0+
+**Compatibility**: The bundle is compatible with Symfony 2.0 upwards.
 
 ## Installation
 
