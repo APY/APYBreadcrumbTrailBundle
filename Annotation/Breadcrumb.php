@@ -42,6 +42,11 @@ class Breadcrumb
     private $position = 0;
 
     /**
+     * @var string Template of the breadcrumb trail
+     */
+    private $template = null;
+
+    /**
      * Constructor.
      *
      * @param Array $data An array of annotation values
@@ -152,5 +157,20 @@ class Breadcrumb
     public function getPosition()
     {
         return $this->position;
+    }
+
+    /**
+     * Sets the template of the breadcrumb trail.
+     *
+     * @param string Template of the breadcrumb trail.
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
+    }
+
+    public function getTemplate()
+    {
+        return $this->template;
     }
 }

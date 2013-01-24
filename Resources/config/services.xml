@@ -5,13 +5,16 @@
 
     <parameters>
         <parameter key="apy_breadcrumb_trail.class">APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail</parameter>
-        <parameter key="apy_breadcrumb_trail.twig.extension.class">APY\BreadcrumbTrailBundle\Twig\Extension\BreadcrumbTrailExtension</parameter>
+        <parameter key="apy_breadcrumb_trail.twig.extension.class">APY\BreadcrumbTrailBundle\Twig\BreadcrumbTrailExtension</parameter>
         <parameter key="apy_breadcrumb_trail.annotation.listener.class">APY\BreadcrumbTrailBundle\EventListener\BreadcrumbListener</parameter>
     </parameters>
 
     <services>
         <service id="apy_breadcrumb_trail" class="%apy_breadcrumb_trail.class%">
             <argument type="service" id="router" />
+            <call method="setTemplate">
+                <argument>%apy_breadcrumb_trail.template%</argument>
+            </call>
         </service>
 
         <service id="apy_breadcrumb_trail.twig.extension" class="%apy_breadcrumb_trail.twig.extension.class%">

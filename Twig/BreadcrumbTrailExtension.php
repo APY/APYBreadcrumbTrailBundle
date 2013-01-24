@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace APY\BreadcrumbTrailBundle\Twig\Extension;
+namespace APY\BreadcrumbTrailBundle\Twig;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -51,11 +51,12 @@ class BreadcrumbTrailExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function renderBreadcrumbTrail()
+    public function renderBreadcrumbTrail($template = null)
     {
+        $breadcrumbs = $this->container->get("apy_breadcrumb_trail");
         return $this->container->get("templating")->render(
-                "APYBreadcrumbTrailBundle::breadcrumbtrail.html.twig",
-                array( 'breadcrumbs' => $this->container->get("apy_breadcrumb_trail") )
+                $template == null ? $breadcrumbs->getTemplate() : $template,
+                array( 'breadcrumbs' => $breadcrumbs )
         );
     }
 

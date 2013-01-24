@@ -26,6 +26,11 @@ class Trail implements \IteratorAggregate, \Countable
     private $router;
 
     /**
+     * @var string Template to render the breadcrumb trail
+     */
+    private $template;
+
+    /**
      * Constructor.
      *
      * @param UrlGeneratorInterface $router URL generator class
@@ -34,6 +39,18 @@ class Trail implements \IteratorAggregate, \Countable
     {
         $this->router = $router;
         $this->breadcrumbs = new \SplObjectStorage();
+    }
+
+    public function setTemplate($template)
+    {
+        $this->template = $template;
+
+        return $this;
+    }
+
+    public function getTemplate()
+    {
+        return $this->template;
     }
 
     /**
@@ -91,7 +108,6 @@ class Trail implements \IteratorAggregate, \Countable
         $breadcrumbs = new \SplObjectStorage();
         $breadcrumbs->addAll($this->breadcrumbs);
         $this->breadcrumbs->removeAll($this->breadcrumbs);
-
 
         $breadcrumbs->rewind();
         while($breadcrumbs->valid()) {

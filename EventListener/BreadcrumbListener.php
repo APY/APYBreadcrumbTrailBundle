@@ -84,8 +84,18 @@ class BreadcrumbListener
         // requirements (@Breadcrumb)
         foreach ($annotations as $annotation) {
             if ($annotation instanceof Breadcrumb) {
+                $template = $annotation->getTemplate();
+                $title = $annotation->getTitle();
+
+                if ($template != null) {
+                    $this->breadcrumbTrail->setTemplate($template);
+                    if ($title == null) {
+                        continue;
+                    }
+                }
+
                 $this->breadcrumbTrail->add(
-                    $annotation->getTitle(),
+                    $title,
                     $annotation->getRouteName(),
                     $annotation->getRouteParameters(),
                     $annotation->getRouteAbsolute(),

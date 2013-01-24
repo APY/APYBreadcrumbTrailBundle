@@ -11,9 +11,18 @@ Breadcrumbs can be defined with annotations or/and PHP.
 
 Please follow the steps given [here](https://github.com/Abhoryo/APYBreadcrumbTrailBundle/blob/master/Resources/doc/installation.md) to install this bundle.
 
+## Summary
+
+ - [Annotation configuration](#annotation-configuration)
+ - [PHP configuration](#php-configuration)
+ - [Render the breadcrumb trail](#render-a-breadcrumb-trail-in-a-template)
+ - [Override the template](#override-the-template)
+
 ## Usage
 
-### Add breadcumbs to the trail with annotations in your controller.
+### Annotation configuration
+
+Add breadcumbs to the trail with annotations in your controller.
 
 You can add annotations on the controller and the action.
 
@@ -105,7 +114,11 @@ class MyController extends Controller
 }
 ```
 
-### Add breadcumbs to the trail with PHP in your controller.
+---
+
+### PHP configuration
+
+Add breadcumbs to the trail with PHP in your controller.
 
 ```
 ...
@@ -203,6 +216,8 @@ class MyController extends Controller
 }
 ```
 
+---
+
 ### Render a breadcrumb trail in a template
 
 `{{ apy_breadcrumb_trail_render() }}`
@@ -223,6 +238,43 @@ The action `a` will render the following breadcrumb trail:
 
 - No link is displayed if no route is defined for the breadcrumb or if it's the last breadcrumb of the trail.
 - The first breadcrumb will have the `home` class and the last breadcrumb will have the `current` class.
+
+---
+
+### Override the template
+You can override the default template in many ways.
+
+ - You can put your new template in the app folder:
+
+`app/Resources/APYBreadcrumbTrailBundle/views/breadcrumbtrail.html.twig`
+
+ - You can define the template in your config.yml file:
+
+```
+apy_breadcrumb_trail:
+    template: APYBreadcrumbTrailBundle::breadcrumbtrail.html.twig
+```
+
+ - You can define the template in a breadcrumb annotation:
+
+```
+@Breadcrumb("My breadcrumb", route="my_route")
+@Breadcrumb(template="APYBreadcrumbTrailBundle::breadcrumbtrail.html.twig")
+
+OR
+
+@Breadcrumb("My breadcrumb", route="my_route", template="APYBreadcrumbTrailBundle::breadcrumbtrail.html.twig")
+```
+
+ - You can define the template in PHP:
+
+```
+$this->get("apy_breadcrumb_trail")->setTemplate('APYBreadcrumbTrailBundle::breadcrumbtrail.html.twig');
+```
+
+ - You can define the template when you render the breadcrumb trail in your twig file:
+
+`{{ apy_breadcrumb_trail_render('APYBreadcrumbTrailBundle::breadcrumbtrail.html.twig') }}`
 
 ---
 
