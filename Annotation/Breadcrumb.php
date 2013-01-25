@@ -47,6 +47,11 @@ class Breadcrumb
     private $template = null;
 
     /**
+     * @var mixed An array of additional attributes for the breadcrumb
+     */
+    private $attributes = array();
+
+    /**
      * Constructor.
      *
      * @param Array $data An array of annotation values
@@ -173,4 +178,21 @@ class Breadcrumb
     {
         return $this->template;
     }
+
+    /**
+     * Sets the additional attributes for the breadcrumb.
+     *
+     * @param mixed Additional attributes for the breadcrumb.
+     */
+    public function setAttributes($attributes)
+    {
+        $this->attributes = $attributes;
+    }
+
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+
 }

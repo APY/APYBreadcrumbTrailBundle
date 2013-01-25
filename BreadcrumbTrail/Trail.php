@@ -61,9 +61,10 @@ class Trail implements \IteratorAggregate, \Countable
      * @param mixed   $routeParameters      An array of parameters for the route
      * @param Boolean $routeAbsolute        Whether to generate an absolute URL
      * @param integer $position             Position of the breadcrumb (default = 0)
+     * @param mixed   $attributes           Additional attributes for the breadcrumb
      * @return self
      */
-    public function add($breadcrumb_or_title, $routeName = null, $routeParameters = array(), $routeAbsolute = false, $position = 0)
+    public function add($breadcrumb_or_title, $routeName = null, $routeParameters = array(), $routeAbsolute = false, $position = 0, $attributes = array())
     {
         if ($breadcrumb_or_title === null) {
             return $this->reset();
@@ -81,7 +82,7 @@ class Trail implements \IteratorAggregate, \Countable
                 $url = $this->router->generate($routeName, $routeParameters, $routeAbsolute);
             }
 
-            $breadcrumb = new Breadcrumb($breadcrumb_or_title, $url);
+            $breadcrumb = new Breadcrumb($breadcrumb_or_title, $url, $attributes);
         }
 
         if (!is_int($position)) {
