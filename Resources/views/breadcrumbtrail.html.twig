@@ -1,11 +1,12 @@
 {%- if breadcrumbs.count %}
   <ul id="breadcrumbtrail">
   {% for breadcrumb in breadcrumbs %}
-    {% set class = (loop.first ? ' home ') ~ (loop.last ? ' current ') %}
+
+    {% set class = (loop.first ? 'home' : (loop.last ? 'current')) %}
     {% set attributes = '' %}
     {% for attr,value in breadcrumb.attributes %}
       {% if attr == 'class' %}
-        {% set class = class ~ value %}
+        {% set class = class ~ ' ' ~ value %}
       {% else %}
         {% set attributes = attributes ~ ' ' ~ attr ~ '=' ~ value %}
       {% endif %}
