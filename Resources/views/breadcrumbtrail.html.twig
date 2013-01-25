@@ -3,15 +3,11 @@
   {% for breadcrumb in breadcrumbs %}
 
     {% set class = (loop.first ? 'home' : (loop.last ? 'current')) %}
-    {% set attributes = '' %}
-    {% for attr,value in breadcrumb.attributes %}
-      {% if attr == 'class' %}
-        {% set class = class ~ ' ' ~ value %}
-      {% else %}
-        {% set attributes = attributes ~ ' ' ~ attr ~ '=' ~ value %}
-      {% endif %}
-    {% endfor %}
-    <li class="{{ class }}" {{ attributes }}>
+
+    <li {% for attr,value in breadcrumb.attributes -%}
+          {%- if attr == 'class' %}{% set value = value ~ ' ' ~ class %}{% endif -%}
+          {{ attr }}="{{ value }}"
+        {%- endfor %}{% if breadcrumb.attributes.class is not defined %} class="{{ class }}"{% endif %}>
       {%- if breadcrumb.url is null or loop.last -%}
         {{ breadcrumb.title|trans }}
       {%- else -%}
