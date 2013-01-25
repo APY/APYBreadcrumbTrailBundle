@@ -111,6 +111,21 @@ class MyController extends Controller
 
         */
     }
+    /**
+     * Add extra attributes for the breadcrumb
+     * @Breadcrumb("Level 2e", route="level_2e", attributes={"class" : "yellow", "title" : "Hello world !"})
+     */
+    public function dAction()
+    {
+        /*
+
+        This action will show the following breacrumb trail:
+        Level 1e > Level 2e
+
+        Level 2e will have additional attributes in the template
+
+        */
+    }
 }
 ```
 
