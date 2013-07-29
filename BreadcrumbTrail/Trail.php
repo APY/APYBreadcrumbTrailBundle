@@ -17,11 +17,6 @@ use Symfony\Component\HttpFoundation\Request;
 class Trail implements \IteratorAggregate, \Countable
 {
     /**
-     * Const used in annotation to fetch parameter value in request
-     */
-    const REQUEST_KEYWORD = "{request}";
-
-    /**
      * @var Breadcrumb[] Array of breadcrumbs
      */
     private $breadcrumbs;
@@ -94,8 +89,9 @@ class Trail implements \IteratorAggregate, \Countable
             }
 
             foreach ($routeParameters as $key => $value) {
-                if ( $value == self::REQUEST_KEYWORD) {
-                    $routeParameters[$key] = $this->request->get($key, null);
+                if (is_numeric($key)) {
+                    $routeParameters[$value] = $this->request->get($value);
+                    unset($routeParameters[$key]);
                 }
             }
 
