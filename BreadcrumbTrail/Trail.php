@@ -12,6 +12,7 @@
 namespace APY\BreadcrumbTrailBundle\BreadcrumbTrail;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class Trail implements \IteratorAggregate, \Countable
 {
@@ -24,6 +25,11 @@ class Trail implements \IteratorAggregate, \Countable
      * @var UrlGeneratorInterface URL generator class
      */
     private $router;
+
+    /**
+     * @var Request request
+     */
+    private $request;
 
     /**
      * @var string Template to render the breadcrumb trail
@@ -39,6 +45,11 @@ class Trail implements \IteratorAggregate, \Countable
     {
         $this->router = $router;
         $this->breadcrumbs = new \SplObjectStorage();
+    }
+
+    public function setRequest(Request $request = null)
+    {
+        $this->request = $request;
     }
 
     public function setTemplate($template)
@@ -75,6 +86,13 @@ class Trail implements \IteratorAggregate, \Countable
         } else {
             if (!is_string($breadcrumb_or_title)) {
                 throw new \InvalidArgumentException('The title of a breadcrumb must be a string.');
+            }
+
+            foreach ($routeParameters as $key => $value) {
+                if (is_numeric($key)) {
+                    $routeParameters[$value] = $this->request->get($value);
+                    unset($routeParameters[$key]);
+                }
             }
 
             $url = null;
