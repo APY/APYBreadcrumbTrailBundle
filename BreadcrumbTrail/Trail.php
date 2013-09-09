@@ -11,8 +11,8 @@
 
 namespace APY\BreadcrumbTrailBundle\BreadcrumbTrail;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 class Trail implements \IteratorAggregate, \Countable
 {
@@ -27,9 +27,9 @@ class Trail implements \IteratorAggregate, \Countable
     private $router;
 
     /**
-     * @var Request request
+     * @var ContainerInterface container
      */
-    private $request;
+    private $container;
 
     /**
      * @var string Template to render the breadcrumb trail
@@ -41,15 +41,11 @@ class Trail implements \IteratorAggregate, \Countable
      *
      * @param UrlGeneratorInterface $router URL generator class
      */
-    public function __construct(UrlGeneratorInterface $router)
+    public function __construct(UrlGeneratorInterface $router, ContainerInterface $container)
     {
         $this->router = $router;
+        $this->container = $container;
         $this->breadcrumbs = new \SplObjectStorage();
-    }
-
-    public function setRequest(Request $request = null)
-    {
-        $this->request = $request;
     }
 
     public function setTemplate($template)
@@ -87,14 +83,19 @@ class Trail implements \IteratorAggregate, \Countable
             if (!is_string($breadcrumb_or_title)) {
                 throw new \InvalidArgumentException('The title of a breadcrumb must be a string.');
             }
-
-            foreach ($routeParameters as $key => $value) {
-                if (is_numeric($key)) {
-                    $routeParameters[$value] = $this->request->get($value);
-                    unset($routeParameters[$key]);
-                }
+            
+            $request = $this->container->get('request', ContainerInterface::NULL_ON_INVALID_REFERENCE);
+            
+            if($request)
+            {
+	            foreach ($routeParameters as $key => $value) {
+	                if (is_numeric($key)) {
+	                    $routeParameters[$value] = $this->request->get($value);
+	                    unset($routeParameters[$key]);
+	                }
+	            }
             }
-
+            
             $url = null;
             if ( !is_null($routeName) ) {
                 $url = $this->router->generate($routeName, $routeParameters, $routeAbsolute);
