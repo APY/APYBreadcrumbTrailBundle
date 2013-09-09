@@ -10,14 +10,12 @@
     </parameters>
 
     <services>
-        <service id="apy_breadcrumb_trail" class="%apy_breadcrumb_trail.class%" scope="request">
+        <service id="apy_breadcrumb_trail" class="%apy_breadcrumb_trail.class%">
             <argument type="service" id="router" />
+            <argument type="service" id="service_container" />
             <call method="setTemplate">
                 <argument>%apy_breadcrumb_trail.template%</argument>
             </call>
-            <call method="setRequest">
-                <argument type="service" id="request" />
-            </call>            
         </service>
 
         <service id="apy_breadcrumb_trail.twig.extension" class="%apy_breadcrumb_trail.twig.extension.class%">
@@ -25,7 +23,7 @@
             <tag name="twig.extension" />
         </service>
 
-        <service id="apy_breadcrumb_trail.annotation.listener" class="%apy_breadcrumb_trail.annotation.listener.class%" scope="request">
+        <service id="apy_breadcrumb_trail.annotation.listener" class="%apy_breadcrumb_trail.annotation.listener.class%">
             <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" />
             <argument type="service" id="annotation_reader" />
             <argument type="service" id="apy_breadcrumb_trail" />
