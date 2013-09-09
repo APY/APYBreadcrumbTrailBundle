@@ -44,6 +44,7 @@ class Trail implements \IteratorAggregate, \Countable
     public function __construct(UrlGeneratorInterface $router, ContainerInterface $container)
     {
         $this->router = $router;
+        $this->container = $container;
         $this->breadcrumbs = new \SplObjectStorage();
     }
 
