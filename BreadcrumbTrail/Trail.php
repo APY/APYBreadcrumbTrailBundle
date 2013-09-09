@@ -86,8 +86,7 @@ class Trail implements \IteratorAggregate, \Countable
             
             $request = $this->container->get('request', ContainerInterface::NULL_ON_INVALID_REFERENCE);
             
-            if($request)
-            {
+            if($request !== null) {
 	            foreach ($routeParameters as $key => $value) {
 	                if (is_numeric($key)) {
 	                    $routeParameters[$value] = $this->request->get($value);
