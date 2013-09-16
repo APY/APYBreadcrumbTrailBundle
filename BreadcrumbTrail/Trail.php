@@ -86,13 +86,13 @@ class Trail implements \IteratorAggregate, \Countable
             
             $request = $this->container->get('request', ContainerInterface::NULL_ON_INVALID_REFERENCE);
             
-            if($request !== null) {
-	            foreach ($routeParameters as $key => $value) {
-	                if (is_numeric($key)) {
-	                    $routeParameters[$value] = $this->request->get($value);
-	                    unset($routeParameters[$key]);
-	                }
+            if ($request !== null) {
+	        foreach ($routeParameters as $key => $value) {
+	            if (is_numeric($key)) {
+	                $routeParameters[$value] = $request->get($value);
+	                unset($routeParameters[$key]);
 	            }
+	        }
             }
             
             $url = null;
@@ -109,7 +109,7 @@ class Trail implements \IteratorAggregate, \Countable
 
         if ($position == 0 || $position > $this->breadcrumbs->count()) {
             $this->breadcrumbs->attach($breadcrumb);
-        }else {
+        } else {
             $this->insert($breadcrumb, $position);
         }
 
