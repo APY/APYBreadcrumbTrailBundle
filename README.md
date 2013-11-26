@@ -141,7 +141,92 @@ class MyController extends Controller
 
         */
     }
+
 }
+```
+
+#### Title with @ParamConverter
+
+The [@ParamConverter](http://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/converters.html#annotation-configuration) of the SensioFrameworkExtraBundle convert request parameters like 'id' to objects then injected as controller method arguments:
+
+It is possible to display values ​​of these objects in the breadcrumb.
+
+
+```
+...
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
+/**
+ * @Route("/book/{id}")
+ * @Breadcrumb("Books")
+ * @Breadcrumb("{book}")
+ */
+public function aShowAction(Book $book)
+{
+
+    /*
+
+    This action will show the following breacrumb trail:
+    Books > result of __toString method of $book's Object
+
+    */
+
+}
+
+/**
+ * @Route("/book/{id}")
+ * @Breadcrumb("Books")
+ * @Breadcrumb("{book.title}")
+ */
+public function bShowAction(Book $book)
+{
+
+    /*
+
+    This action will show the following breacrumb trail:
+    Books > result of getTitle method of $book's Object
+
+    The bundle tries to call the methods : getTitle, hasTitle or isTitle
+
+    */
+
+}
+
+/**
+ * @Route("/book/{id}")
+ * @Breadcrumb("Books")
+ * @Breadcrumb("{book.title:argument1}")
+ */
+public function cShowAction(Book $book)
+{
+
+    /*
+
+    This action will show the following breacrumb trail:
+    Books > result of getTitle('argument1') method of $book's Object
+
+    */
+
+}
+
+/**
+ * @Route("/book/{id}")
+ * @Breadcrumb("Books")
+ * @Breadcrumb("{book.title:argument1: argument2}")
+ */
+public function dShowAction(Book $book)
+{
+
+    /*
+
+    This action will show the following breacrumb trail:
+    Books > result of getTitle('argument1', ' argument2') method of $book's Object
+
+    */
+
+}
+
 ```
 
 ---

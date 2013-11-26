@@ -69,6 +69,8 @@ class Trail implements \IteratorAggregate, \Countable
      * @param Boolean $routeAbsolute        Whether to generate an absolute URL
      * @param integer $position             Position of the breadcrumb (default = 0)
      * @param mixed   $attributes           Additional attributes for the breadcrumb
+     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
      * @return self
      */
     public function add($breadcrumb_or_title, $routeName = null, $routeParameters = array(), $routeAbsolute = false, $position = 0, $attributes = array())
@@ -87,6 +89,31 @@ class Trail implements \IteratorAggregate, \Countable
             $request = $this->container->get('request', ContainerInterface::NULL_ON_INVALID_REFERENCE);
             
             if ($request !== null) {
+                preg_match_all('#\{(?P<variable>\w+).?(?P<function>\w*):?(?P<parameters>(\w|,| )*)\}#', $breadcrumb_or_title, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
+                foreach ($matches as $match) {
+                    $varName = $match['variable'][0];
+                    $functionName = $match['function'][0];
+                    $parameters = explode(',', $match['parameters'][0]);
+
+                    if($request->attributes->has($varName)) {
+                        $object = $request->attributes->get($varName);
+
+                        if(empty($functionName)) {
+                            $objectValue = (string) $object;
+                        }
+                        elseif(is_callable(array($object, $fullFunctionName = 'get'.$functionName))
+                           || is_callable(array($object, $fullFunctionName = 'has'.$functionName))
+                           || is_callable(array($object, $fullFunctionName = 'is'.$functionName))) {
+                            $objectValue = call_user_func_array(array($object, $fullFunctionName),$parameters);
+                        }
+                        else {
+                            throw new \RuntimeException(sprintf('Function "%s" not found.', $functionName));
+                        }
+
+                        $breadcrumb_or_title = str_replace($match[0][0], $objectValue, $breadcrumb_or_title);
+                    }
+                }
+
                 foreach ($routeParameters as $key => $value) {
                     if (is_numeric($key)) {
                         $routeParameters[$value] = $request->get($value);
