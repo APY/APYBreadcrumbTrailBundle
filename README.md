@@ -117,7 +117,7 @@ class MyController extends Controller
      * @Breadcrumb("Level 1e", route="level_1e")
      * @Breadcrumb("Level 2e", route="level_2e")
      */
-    public function dAction()
+    public function eAction()
     {
         /*
 
@@ -130,7 +130,7 @@ class MyController extends Controller
      * Add extra attributes for the breadcrumb
      * @Breadcrumb("Level 2e", route="level_2e", attributes={"class" : "yellow", "title" : "Hello world !"})
      */
-    public function dAction()
+    public function fAction()
     {
         /*
 
@@ -229,7 +229,7 @@ class MyController extends Controller
      * Reset the trail
      * @Breadcrumb("Level 3d", route="level_3d")
      */
-    public function dAction()
+    public function eAction()
     {
         $this->get("apy_breadcrumb_trail")
             ->reset()
