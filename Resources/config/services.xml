@@ -24,7 +24,7 @@
         </service>
 
         <service id="apy_breadcrumb_trail.annotation.listener" class="%apy_breadcrumb_trail.annotation.listener.class%">
-            <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" />
+            <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" priority="-1" />
             <argument type="service" id="annotation_reader" />
             <argument type="service" id="apy_breadcrumb_trail" />
         </service>
