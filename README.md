@@ -213,7 +213,7 @@ public function cShowAction(Book $book)
 /**
  * @Route("/book/{id}")
  * @Breadcrumb("Books")
- * @Breadcrumb("{book.title:argument1: argument2}")
+ * @Breadcrumb("{book.title:argument1,argument2}")
  */
 public function dShowAction(Book $book)
 {
