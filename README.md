@@ -64,7 +64,7 @@ class MyController extends Controller
 
         */
     }
-    
+
     /**
      * With route parameters dynamically fetched in the Request
      * @Breadcrumb("Level 3b")
@@ -77,6 +77,21 @@ class MyController extends Controller
         This action will show the following breacrumb trail:
         Level 1 > Level 2 > Level 3b > Level 4b
         var1 will have the value given by $request->get("var1")
+        */
+    }
+
+    /**
+     * With an associative array of route parameters dynamically fetched in the Request
+     * @Breadcrumb("Level 3b")
+     * @Breadcrumb("Level 4b", route={"name"="level_4b", "parameters"={"var1"="var2"}})
+     */
+    public function cRequestAction()
+    {
+        /*
+
+        This action will show the following breacrumb trail:
+        Level 1 > Level 2 > Level 3b > Level 4b
+        var1 will have the value given by $request->get("var2")
         */
     }
 

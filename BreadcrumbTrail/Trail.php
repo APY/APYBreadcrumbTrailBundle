@@ -85,9 +85,9 @@ class Trail implements \IteratorAggregate, \Countable
             if (!is_string($breadcrumb_or_title)) {
                 throw new \InvalidArgumentException('The title of a breadcrumb must be a string.');
             }
-            
+
             $request = $this->container->get('request', ContainerInterface::NULL_ON_INVALID_REFERENCE);
-            
+
             if ($request !== null) {
                 preg_match_all('#\{(?P<variable>\w+).?(?P<function>\w*):?(?P<parameters>(\w|,| )*)\}#', $breadcrumb_or_title, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
                 foreach ($matches as $match) {
@@ -118,10 +118,12 @@ class Trail implements \IteratorAggregate, \Countable
                     if (is_numeric($key)) {
                         $routeParameters[$value] = $request->get($value);
                         unset($routeParameters[$key]);
+                    } else {
+                        $routeParameters[$key] = $request->get($value, $value);
                     }
                 }
             }
-            
+
             $url = null;
             if ( !is_null($routeName) ) {
                 $url = $this->router->generate($routeName, $routeParameters, $routeAbsolute);
