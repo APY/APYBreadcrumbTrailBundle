@@ -67,92 +67,93 @@ class MyController extends Controller
 
     /**
      * With route parameters dynamically fetched in the Request
-     * @Breadcrumb("Level 3b")
-     * @Breadcrumb("Level 4b", route={"name"="level_4b", "parameters"={"var1","var2"=2}})
-     */
-    public function bRequestAction()
-    {
-        /*
-
-        This action will show the following breacrumb trail:
-        Level 1 > Level 2 > Level 3b > Level 4b
-        var1 will have the value given by $request->get("var1")
-        */
-    }
-
-    /**
-     * With an associative array of route parameters dynamically fetched in the Request
-     * @Breadcrumb("Level 3b")
-     * @Breadcrumb("Level 4b", route={"name"="level_4b", "parameters"={"var1"="{var2}"}})
+     * @Breadcrumb("Level 3c")
+     * @Breadcrumb("Level 4c", route={"name"="level_4c", "parameters"={"var1","var2"=2}})
      */
     public function cRequestAction()
     {
         /*
 
         This action will show the following breacrumb trail:
-        Level 1 > Level 2 > Level 3b > Level 4b
+        Level 1 > Level 2 > Level 3c > Level 4c
+        var1 will have the value given by $request->get("var1")
+        */
+    }
+
+    /**
+     * With an associative array of route parameters dynamically fetched in the Request
+     * @Breadcrumb("Level 3d")
+     * @Breadcrumb("Level 4d", route={"name"="level_4d", "parameters"={"var1"="{var2}"}})
+     */
+    public function dRequestAction()
+    {
+        /*
+
+        This action will show the following breacrumb trail:
+        Level 1 > Level 2 > Level 3d > Level 4d
         var1 will have the value given by $request->get("var2")
         */
     }
 
     /**
      * With position (position=0 will put the breacrumb to the end of the trail)
-     * @Breadcrumb("Level 3c", route="level_3c")
-     * @Breadcrumb("Level 4c", position=2)
-     */
-    public function cAction()
-    {
-        /*
-
-        This action will show the following breacrumb trail:
-        Level 1 > Level 4c > Level 2 > Level 3c
-
-        */
-    }
-
-    /**
-     * With negative position
-     * @Breadcrumb("Level 3d", route="level_3d")
-     * @Breadcrumb("Level 4d", position=-1)
-     */
-    public function dAction()
-    {
-        /*
-
-        This action will show the following breacrumb trail:
-        Level 1 > Level 2 > Level 4d > Level 3d
-
-        */
-    }
-
-    /**
-     * Reset the trail
-     * @Breadcrumb("Level 3d", route="level_3d")
-     * @Breadcrumb()
-     * @Breadcrumb("Level 1e", route="level_1e")
-     * @Breadcrumb("Level 2e", route="level_2e")
+     * @Breadcrumb("Level 3e", route="level_3e")
+     * @Breadcrumb("Level 4e", position=2)
      */
     public function eAction()
     {
         /*
 
         This action will show the following breacrumb trail:
-        Level 1e > Level 2e
+        Level 1 > Level 4e > Level 2 > Level 3e
 
         */
     }
+
     /**
-     * Add extra attributes for the breadcrumb
-     * @Breadcrumb("Level 2e", route="level_2e", attributes={"class" : "yellow", "title" : "Hello world !"})
+     * With negative position
+     * @Breadcrumb("Level 3f", route="level_3f")
+     * @Breadcrumb("Level 4f", position=-1)
      */
     public function fAction()
     {
         /*
 
         This action will show the following breacrumb trail:
-        Level 1e > Level 2e
+        Level 1 > Level 2 > Level 4f > Level 3f
 
-        Level 2e will have additional attributes in the template
+        */
+    }
+
+    /**
+     * Reset the trail
+     * @Breadcrumb("Level 3f", route="level_3f")
+     * @Breadcrumb()
+     * @Breadcrumb("Level 1g", route="level_1g")
+     * @Breadcrumb("Level 2g", route="level_2g")
+     */
+    public function gAction()
+    {
+        /*
+
+        This action will show the following breacrumb trail:
+        Level 1g > Level 2g
+
+        */
+    }
+
+    /**
+     * Add extra attributes for the breadcrumb
+     * @Breadcrumb("Level 2h", route="level_2h", attributes={"class" : "yellow", "title" : "Hello world !"})
+     */
+    public function hAction()
+    {
+        /*
+
+        This action will show the following breacrumb trail:
+        Level 1h > Level 2h
+
+        Level 2h will have additional attributes in the template
 
         */
     }
