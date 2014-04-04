@@ -119,7 +119,9 @@ class Trail implements \IteratorAggregate, \Countable
                         $routeParameters[$value] = $request->get($value);
                         unset($routeParameters[$key]);
                     } else {
-                        $routeParameters[$key] = $request->get($value, $value);
+                        if (preg_match('#^\{(?P<parameter>\w+)\}$#', $value, $matches)) {
+                            $routeParameters[$key] = $request->get($matches['parameter']);
+                        }
                     }
                 }
             }
