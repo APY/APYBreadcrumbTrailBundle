@@ -29,7 +29,7 @@ class MyController extends Controller
 
 Will render the following breadcrumb trail :
 
-Level 1 > Level 2 > Level 3 > Level 4
+> Level 1 > Level 2 > Level 3 > Level 4
 
 ## Reference
 
@@ -66,7 +66,7 @@ public function myAction(Book $book)
 
 Will render the following breadcrumb trail :
 
-Books > result of __toString method of $book's Object
+> Books > result of __toString method of $book's Object
 
 ```php
 /**
@@ -82,7 +82,7 @@ public function myAction(Book $book)
 
 Will render the following breadcrumb trail :
 
-Books > result of getTitle method of $book's Object
+> Books > result of getTitle method of $book's Object
 
 **Note:** The bundle tries to call the methods : getTitle, hasTitle or isTitle.
 
@@ -100,7 +100,7 @@ public function myAction(Book $book)
 
 Will render the following breadcrumb trail :
 
-Books > result of getTitle('argument1') method of $book's Object
+> Books > result of getTitle('argument1') method of $book's Object
 
 ```php
 /**
@@ -116,7 +116,7 @@ public function myAction(Book $book)
 
 Will render the following breadcrumb trail :
 
-Books > result of getTitle('argument1', ' argument2') method of $book's Object
+> Books > result of getTitle('argument1', ' argument2') method of $book's Object
 
 ### Route
 
@@ -131,7 +131,7 @@ Books > result of getTitle('argument1', ' argument2') method of $book's Object
 
 Will render the following breadcrumb trail :
 
-[Level 1](http://example.com) > Level 2
+> [Level 1](http://example.com) > Level 2
 
 #### Routes with parameters
 
@@ -152,12 +152,29 @@ and that you are currently on the `my_action_route` with url `http://example.com
  * @Breadcrumb("Level 2", route={"name"="my_route", "parameters"={"var"="foo"}})
  * @Breadcrumb("Level 3", route={"name"="my_route", "parameters"={"var"}})
  * @Breadcrumb("Level 4", route={"name"="my_route", "parameters"={"var"="{var1}"}})
+ * @Breadcrumb("Level 5")
  */
 ```
 
 Will render the following breadcrumb trail :
 
-[Level 1](http://example.com/var/1) > [Level 2](http://example.com/var/foo) > [Level 3](http://example.com/var/foo) > [Level 4](http://example.com/var/bar)
+> [Level 1](http://example.com/var/1) > [Level 2](http://example.com/var/foo) > [Level 3](http://example.com/var/foo) > [Level 4](http://example.com/var/bar) > Level 5
+
+#### Alternative syntax
+
+The two following expressions are equivalents :
+
+```php
+/**
+ * @Breadcrumb("Level 1", route={"name"="my_route", "parameters"={"var1"=1,"var2"=2}, "absolute"=true})
+ */
+```
+
+```php
+/**
+ * @Breadcrumb("Level 1", routeName="my_route", routeParameters={"var1"=1,"var2"=2}, routeAbsolute=true)
+ */
+```
 
 ### Position
 
@@ -172,7 +189,7 @@ Will render the following breadcrumb trail :
 
 Will render the following breadcrumb trail :
 
-Level 2 > Level 1 > Level 4 > Level 3
+> Level 2 > Level 1 > Level 4 > Level 3
 
 **Note:** `position=0` will put the breacrumb to the end of the trail.
 
@@ -187,9 +204,17 @@ Level 2 > Level 1 > Level 4 > Level 3
 
 Will render the following breadcrumb trail :
 
-Level 1 > Level 2
-
-Level 1 will have additional attributes in the template.
+```html
+<ul id="breadcrumbtrail">
+    <li class="home">Home</li>
+    <li class="yellow" title="Hello world !">
+        <span>Level 1</span>
+    </li>
+    <li class="current">
+        <span>Level 2</span>
+    </li>
+</ul>
+```
 
 ## Extra
 
@@ -206,25 +231,4 @@ Level 1 will have additional attributes in the template.
 
 Will render the following breacrumb trail :
 
-Level 2 > Level 3
-
-### Alternative syntax
-
-These expressions generate the same breadcrumb.
-
-```php
-/**
- * @Breadcrumb("Level 4b", route={"name"="level_4b", "parameters"={"var1"=1,"var2"=2}, "absolute"=true})
- * @Breadcrumb("Level 4b", routeName="level_4b", routeParameters={"var1"=1,"var2"=2}, routeAbsolute=true)
- */
-```
-
-And these too.
-
-```php
-/**
- * @Breadcrumb("Level 4b", route="level_4b")
- * @Breadcrumb("Level 4b", route={"name"="level_4b"})
- * @Breadcrumb("Level 4b", routeName="level_4b")
- */
-```
+> Level 2 > Level 3

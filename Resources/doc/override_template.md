@@ -37,4 +37,6 @@ $this->get("apy_breadcrumb_trail")->setTemplate('APYBreadcrumbTrailBundle::bread
 
  - You can define the template when you render the breadcrumb trail in your twig file:
 
-`{{ apy_breadcrumb_trail_render('APYBreadcrumbTrailBundle::breadcrumbtrail.html.twig') }}`
+```twig
+{{ apy_breadcrumb_trail_render('APYBreadcrumbTrailBundle::breadcrumbtrail.html.twig') }}
+```

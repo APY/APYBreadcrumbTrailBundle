@@ -1,16 +1,47 @@
 # Render a breadcrumb trail in a template
 
-`{{ apy_breadcrumb_trail_render() }}`
 
-The action `a` will render the following breadcrumb trail:
+```php
+...
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+
+/**
+ * @Breadcrumb("Level 1", route="level_1")
+ * @Breadcrumb("Level 2")
+ */
+class MyController extends Controller
+{
+    /**
+     * @Breadcrumb("Level 3", route="level_3")
+     * @Breadcrumb("Level 4", route="level_4")
+     */
+    public function myAction()
+    {
+        /* Awesome code here */
+    }
+}
+```
+
+```twig
+{{ apy_breadcrumb_trail_render() }}
+```
+
+The previous action `my` will render the following breadcrumb trail:
 
 ```html
 <ul id="breadcrumbtrail">
-    <li class="home">Home</li>
-    <li><a href="/level_1">Level 1</a></li>
-    <li>Level 2b</li>
-    <li><a href="/level_3a">Level 3a</a></li>
-    <li class="current"><a href="/level_4a">Level 4a</a></li>
+    <li class="home">
+        <a href="/level_1">Level 1</a>
+    </li>
+    <li>
+        <span>Level 2</span>
+    </li>
+    <li>
+        <a href="/level_3">Level 3</a>
+    </li>
+    <li class="current">
+        <span>Level 4</span>
+    </li>
 </ul>
 ```
 

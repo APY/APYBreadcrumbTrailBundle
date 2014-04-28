@@ -24,7 +24,7 @@ class MyController extends Controller
 
 Will render the following breadcrumb trail :
 
-Level 1 > Level 2 > Level 3 > Level 4
+> Level 1 > Level 2 > Level 3 > Level 4
 
 ## Reference
 
@@ -39,14 +39,14 @@ $this->get("apy_breadcrumb_trail")->add(
 );
 ```
 
-| Parameter           | Type   | Required |
-|---------------------|--------|----------|
-| breadcrumb_or_title | string | [x]      |
-| routeName           | string |          |
-| routeParameters     | array  |          |
-| routeAbsolute       | bool   |          |
-| position            | int    |          |
-| attributes          | array  |          |
+| Parameter           | Type                 | Required |
+|---------------------|----------------------|----------|
+| breadcrumb_or_title | Breadcrumb or string | true     |
+| routeName           | string               |          |
+| routeParameters     | array                |          |
+| routeAbsolute       | bool                 |          |
+| position            | int                  |          |
+| attributes          | array                |          |
 
 
 ## Route
@@ -66,12 +66,13 @@ Assume that you have defined the following route :
 public function myAction()
 {
     $this->get("apy_breadcrumb_trail")->add('Level 2', 'my_route', array("var" => "foo"));
+    $this->get("apy_breadcrumb_trail")->add('Level 3');
 }
 ```
 
 Will render the following breadcrumb trail :
 
-Level 1 > [Level 2](http://example.com/var/foo)
+> Level 1 > [Level 2](http://example.com/var/foo) > Level 3
 
 ## Position
 
@@ -89,7 +90,7 @@ public function myAction()
 
 Will render the following breadcrumb trail :
 
-Level 2 > Level 1 > Level 4 > Level 3
+> Level 2 > Level 1 > Level 4 > Level 3
 
 **Note:** `position=0` will put the breacrumb to the end of the trail.
 
@@ -103,11 +104,11 @@ public function myAction()
 {
     $this->get("apy_breadcrumb_trail")
         ->reset()
-        ->add('Level 1e', 'level_1e')
-        ->add('Level 2e', 'level_2e');
+        ->add('Level 2')
+        ->add('Level 3');
 }
 ```
 
 Will render the following breadcrumb trail :
 
-Level 1 > Level 2
+> Level 2 > Level 3
