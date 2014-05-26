@@ -193,6 +193,4 @@ class Breadcrumb
     {
         return $this->attributes;
     }
-
-
 }

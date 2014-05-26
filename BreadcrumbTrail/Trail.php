@@ -175,7 +175,8 @@ class Trail implements \IteratorAggregate, \Countable
      *
      * @return self
      */
-    public function reset() {
+    public function reset()
+    {
         $this->breadcrumbs->removeAll($this->breadcrumbs);
 
         return $this;
@@ -184,14 +185,16 @@ class Trail implements \IteratorAggregate, \Countable
     /**
      * {@inheritDoc}
      */
-    public function count() {
+    public function count()
+    {
         return $this->breadcrumbs->count();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getIterator() {
+    public function getIterator()
+    {
         return $this->breadcrumbs;
     }
 }

@@ -66,6 +66,7 @@ class BreadcrumbListener
         if ($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) {
             $this->breadcrumbTrail->reset();
 
+            // Annotations from class
             $this->addBreadcrumbsFromAnnotations($this->reader->getClassAnnotations($class));
 
             // Annotations from method
