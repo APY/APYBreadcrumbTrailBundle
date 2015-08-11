@@ -17,4 +17,5 @@ Please follow the steps given [here](https://github.com/Abhoryo/APYBreadcrumbTra
  - [PHP configuration](Resources/doc/php_configuration.md)
  - [Twig configuration](Resources/doc/twig_configuration.md)
  - [Render the breadcrumb trail](Resources/doc/rendering.md)
+ - [Render the breadcrumb title](Resources/doc/rendering_breadcrumb_title.md)
  - [Override the template](Resources/doc/override_template.md)
