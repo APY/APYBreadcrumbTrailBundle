@@ -176,6 +176,29 @@ The two following expressions are equivalents :
  */
 ```
 
+#### Routes with complex parameters
+
+Assume that you have the following controller :
+
+```php
+/**
+ * @Route("/object/{object}", name="my_route", requirements={"object" = "\d+"})
+ * @Breadcrumb("Level 1", route={"name"="my_route", "parameters"={"object"="{object.id}"}})
+ * 
+ * @param Request $request
+ * @param Object $object
+ * @return array
+ */
+public function indexAction(Request $request, Object $object) {
+    return [
+        'id'   => $object->getId(),
+        'name' => $object->getName(),
+    ];
+}
+```
+
+As you can see, you can generate a route by querying {object.id} (that will translate to $object->getId()) into the route parameters.
+
 ### Position
 
 ```php

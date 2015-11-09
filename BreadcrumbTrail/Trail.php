@@ -102,8 +102,8 @@ class Trail implements \IteratorAggregate, \Countable
                             $objectValue = (string) $object;
                         }
                         elseif(is_callable(array($object, $fullFunctionName = 'get'.$functionName))
-                           || is_callable(array($object, $fullFunctionName = 'has'.$functionName))
-                           || is_callable(array($object, $fullFunctionName = 'is'.$functionName))) {
+                            || is_callable(array($object, $fullFunctionName = 'has'.$functionName))
+                            || is_callable(array($object, $fullFunctionName = 'is'.$functionName))) {
                             $objectValue = call_user_func_array(array($object, $fullFunctionName),$parameters);
                         }
                         else {
@@ -119,7 +119,37 @@ class Trail implements \IteratorAggregate, \Countable
                         $routeParameters[$value] = $request->get($value);
                         unset($routeParameters[$key]);
                     } else {
-                        if (preg_match('#^\{(?P<parameter>\w+)\}$#', $value, $matches)) {
+                        if (preg_match_all('#\{(?P<variable>\w+).?(?P<function>\w*):?(?P<parameters>(\w|,| )*)\}#', $value, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)) {
+
+                            foreach ($matches AS $match) {
+
+                                $varName      = $match['variable'][0];
+                                $functionName = $match['function'][0];
+                                $parameters   = explode(',', $match['parameters'][0]);
+
+                                if ($request->attributes->has($varName)) {
+                                    $object = $request->attributes->get($varName);
+
+                                    if (empty($functionName)) {
+                                        $objectValue = (string) $object;
+                                    }
+                                    elseif (is_callable(array($object, $fullFunctionName = 'get' . $functionName))
+                                        || is_callable(array($object, $fullFunctionName  = 'has' . $functionName))
+                                        || is_callable(array($object, $fullFunctionName  = 'is' . $functionName))
+                                    ) {
+                                        $objectValue = call_user_func_array(array($object, $fullFunctionName), $parameters);
+                                    }
+                                    else {
+                                        throw new \RuntimeException(sprintf('Function "%s" not found.', $functionName));
+                                    }
+
+                                    $routeParameter        = str_replace($match[0][0], $objectValue, $value);
+                                    $routeParameters[$key] = $routeParameter;
+                                }
+
+
+                            }
+                        } elseif (preg_match('#^\{(?P<parameter>\w+)\}$#', $value, $matches)) {
                             $routeParameters[$key] = $request->get($matches['parameter']);
                         }
                     }
