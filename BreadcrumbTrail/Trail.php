@@ -93,8 +93,8 @@ class Trail implements \IteratorAggregate, \Countable
 
                 foreach ($matches as $match) {
                     $varName    = $match['variable'][0];
-                    $functions  = explode('.', $match['function'][0]);
-                    $parameters = explode(',', $match['parameters'][0]);
+                    $functions  = $match['function'][0] ? explode('.', $match['function'][0]) : array();
+                    $parameters = $match['parameters'][0] ? explode(',', $match['parameters'][0]) : array();
                     $nbCalls    = count($functions);
 
                     if($request->attributes->has($varName)) {
@@ -146,8 +146,8 @@ class Trail implements \IteratorAggregate, \Countable
                             foreach ($matches AS $match) {
 
                                 $varName    = $match['variable'][0];
-                                $functions  = explode('.', $match['function'][0]);
-                                $parameters = explode(',', $match['parameters'][0]);
+                                $functions  = $match['function'][0] ? explode('.', $match['function'][0]) : array();
+                                $parameters = $match['parameters'][0] ? explode(',', $match['parameters'][0]) : array();
                                 $nbCalls    = count($functions);
 
                                 if ($request->attributes->has($varName)) {
