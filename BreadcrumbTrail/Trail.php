@@ -89,25 +89,47 @@ class Trail implements \IteratorAggregate, \Countable
             $request = $this->container->get('request', ContainerInterface::NULL_ON_INVALID_REFERENCE);
 
             if ($request !== null) {
-                preg_match_all('#\{(?P<variable>\w+).?(?P<function>\w*):?(?P<parameters>(\w|,| )*)\}#', $breadcrumb_or_title, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
+                preg_match_all('#\{(?P<variable>\w+).?(?P<function>([\w\.])*):?(?P<parameters>(\w|,| )*)\}#', $breadcrumb_or_title, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
+
                 foreach ($matches as $match) {
-                    $varName = $match['variable'][0];
-                    $functionName = $match['function'][0];
+                    $varName    = $match['variable'][0];
+                    $functions  = explode('.', $match['function'][0]);
                     $parameters = explode(',', $match['parameters'][0]);
+                    $nbCalls    = count($functions);
 
                     if($request->attributes->has($varName)) {
                         $object = $request->attributes->get($varName);
 
-                        if(empty($functionName)) {
+                        if(empty($functions)) {
                             $objectValue = (string) $object;
                         }
-                        elseif(is_callable(array($object, $fullFunctionName = 'get'.$functionName))
-                            || is_callable(array($object, $fullFunctionName = 'has'.$functionName))
-                            || is_callable(array($object, $fullFunctionName = 'is'.$functionName))) {
-                            $objectValue = call_user_func_array(array($object, $fullFunctionName),$parameters);
-                        }
                         else {
-                            throw new \RuntimeException(sprintf('Function "%s" not found.', $functionName));
+                            foreach ($functions AS $f => $function) {
+
+                                # While this is not the last function, call the chain
+                                if ($f < $nbCalls - 1) {
+                                    if(is_callable(array($object, $fullFunctionName = 'get'.$function))
+                                        || is_callable(array($object, $fullFunctionName = 'has'.$function))
+                                        || is_callable(array($object, $fullFunctionName = 'is'.$function))) {
+                                        $object = call_user_func(array($object, $fullFunctionName));
+                                    }
+                                    else {
+                                        throw new \RuntimeException(sprintf('"%s" is not callable.', join('.', array_merge([$varName], $functions))));
+                                    }
+                                }
+
+                                # End of the chain: call the method
+                                else {
+                                    if(is_callable(array($object, $fullFunctionName = 'get'.$function))
+                                        || is_callable(array($object, $fullFunctionName = 'has'.$function))
+                                        || is_callable(array($object, $fullFunctionName = 'is'.$function))) {
+                                        $objectValue = call_user_func_array(array($object, $fullFunctionName),$parameters);
+                                    }
+                                    else {
+                                        throw new \RuntimeException(sprintf('"%s" is not callable.', join('.', array_merge([$varName], $functions))));
+                                    }
+                                }
+                            }
                         }
 
                         $breadcrumb_or_title = str_replace($match[0][0], $objectValue, $breadcrumb_or_title);
@@ -119,28 +141,51 @@ class Trail implements \IteratorAggregate, \Countable
                         $routeParameters[$value] = $request->get($value);
                         unset($routeParameters[$key]);
                     } else {
-                        if (preg_match_all('#\{(?P<variable>\w+).?(?P<function>\w*):?(?P<parameters>(\w|,| )*)\}#', $value, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)) {
+                        if (preg_match_all('#\{(?P<variable>\w+).?(?P<function>([\w\.])*):?(?P<parameters>(\w|,| )*)\}#', $value, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)) {
 
                             foreach ($matches AS $match) {
 
-                                $varName      = $match['variable'][0];
-                                $functionName = $match['function'][0];
-                                $parameters   = explode(',', $match['parameters'][0]);
+                                $varName    = $match['variable'][0];
+                                $functions  = explode('.', $match['function'][0]);
+                                $parameters = explode(',', $match['parameters'][0]);
+                                $nbCalls    = count($functions);
 
                                 if ($request->attributes->has($varName)) {
                                     $object = $request->attributes->get($varName);
 
-                                    if (empty($functionName)) {
+                                    if (empty($functions)) {
                                         $objectValue = (string) $object;
                                     }
-                                    elseif (is_callable(array($object, $fullFunctionName = 'get' . $functionName))
-                                        || is_callable(array($object, $fullFunctionName  = 'has' . $functionName))
-                                        || is_callable(array($object, $fullFunctionName  = 'is' . $functionName))
-                                    ) {
-                                        $objectValue = call_user_func_array(array($object, $fullFunctionName), $parameters);
-                                    }
                                     else {
-                                        throw new \RuntimeException(sprintf('Function "%s" not found.', $functionName));
+                                        foreach ($functions AS $f => $function) {
+
+                                            # While this is not the last function, call the chain
+                                            if ($f < $nbCalls - 1) {
+                                                if (is_callable(array($object, $fullFunctionName = 'get' . $function))
+                                                    || is_callable(array($object, $fullFunctionName  = 'has' . $function))
+                                                    || is_callable(array($object, $fullFunctionName  = 'is' . $function))
+                                                ) {
+                                                    $object = call_user_func(array($object, $fullFunctionName));
+                                                }
+                                                else {
+                                                    throw new \RuntimeException(sprintf('"%s" is not callable.', join('.', array_merge([$varName], $functions))));
+                                                }
+                                            }
+
+                                            # End of the chain: call the method
+                                            else {
+
+                                                if (is_callable(array($object, $fullFunctionName = 'get' . $function))
+                                                    || is_callable(array($object, $fullFunctionName  = 'has' . $function))
+                                                    || is_callable(array($object, $fullFunctionName  = 'is' . $function))
+                                                ) {
+                                                    $objectValue = call_user_func_array(array($object, $fullFunctionName), $parameters);
+                                                }
+                                                else {
+                                                    throw new \RuntimeException(sprintf('"%s" is not callable.', join('.', array_merge([$varName], $functions))));
+                                                }
+                                            }
+                                        }
                                     }
 
                                     $routeParameter        = str_replace($match[0][0], $objectValue, $value);

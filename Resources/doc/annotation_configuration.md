@@ -176,28 +176,30 @@ The two following expressions are equivalents :
  */
 ```
 
-#### Routes with complex parameters
+### Complex parameters
 
-Assume that you have the following controller :
+Assume your controllers are designed like a REST API and you have a ManyToOne relationship on Book -> Author :
 
 ```php
 /**
- * @Route("/object/{object}", name="my_route", requirements={"object" = "\d+"})
- * @Breadcrumb("Level 1", route={"name"="my_route", "parameters"={"object"="{object.id}"}})
+ * @Route("/books/{book}", name="book", requirements={"book" = "\d+"}) // example: /book/53
+ * @Breadcrumb("{book.author.name}", route={"name"="author", "parameters"={"author"="{book.author.id}"}}) // example: /author/15
+ * @Breadcrumb("{book.title}", route={"name"="book", "parameters"={"book"="{book.id}"}})
  * 
  * @param Request $request
- * @param Object $object
+ * @param Book $book
  * @return array
  */
-public function indexAction(Request $request, Object $object) {
+public function indexAction(Request $request, Book $book) {
     return [
-        'id'   => $object->getId(),
-        'name' => $object->getName(),
+        'id'     => $book->getId(),
+        'title'  => $book->getTitle(),
+        'author' => $book->getAuthor()->getName(),
     ];
 }
 ```
 
-As you can see, you can generate a route by querying {object.id} (that will translate to $object->getId()) into the route parameters.
+
 
 ### Position
 

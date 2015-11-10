@@ -1,5 +1,5 @@
-#2015-11-09
- - Allow complex expressions in route parameters
+#2015-11-10
+ - Allow complex expressions in breadcrumb names and route parameters
 
 #2014-04-18
  - Rewrite documentation
