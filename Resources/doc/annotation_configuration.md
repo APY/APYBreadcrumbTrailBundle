@@ -176,6 +176,31 @@ The two following expressions are equivalents :
  */
 ```
 
+### Complex parameters
+
+Assume your controllers are designed like a REST API and you have a ManyToOne relationship on Book -> Author :
+
+```php
+/**
+ * @Route("/books/{book}", name="book", requirements={"book" = "\d+"}) // example: /book/53
+ * @Breadcrumb("{book.author.name}", route={"name"="author", "parameters"={"author"="{book.author.id}"}}) // example: /author/15
+ * @Breadcrumb("{book.title}", route={"name"="book", "parameters"={"book"="{book.id}"}})
+ * 
+ * @param Request $request
+ * @param Book $book
+ * @return array
+ */
+public function indexAction(Request $request, Book $book) {
+    return [
+        'id'     => $book->getId(),
+        'title'  => $book->getTitle(),
+        'author' => $book->getAuthor()->getName(),
+    ];
+}
+```
+
+
+
 ### Position
 
 ```php
