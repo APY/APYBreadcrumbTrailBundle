@@ -203,7 +203,8 @@ class Trail implements \IteratorAggregate, \Countable
 
             $url = null;
             if ( !is_null($routeName) ) {
-                $url = $this->router->generate($routeName, $routeParameters, $routeAbsolute);
+                $referenceType = $routeAbsolute ? UrlGeneratorInterface::ABSOLUTE_URL : UrlGeneratorInterface::RELATIVE_PATH;
+                $url = $this->router->generate($routeName, $routeParameters, $referenceType);
             }
 
             $breadcrumb = new Breadcrumb($breadcrumb_or_title, $url, $attributes);
