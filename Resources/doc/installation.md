@@ -36,13 +36,9 @@ $ git submodule update --init
 
 **Using composer**
 
-add the following to your composer.json:
+run:
 
-`"apy/breadcrumbtrail-bundle": "dev-master"`
-
-and run:
-
-`php composer.phar install`
+`php composer.phar require apy/breadcrumbtrail-bundle`
 
 
 ## Step 2: Configure the Autoloader (not with composer)
