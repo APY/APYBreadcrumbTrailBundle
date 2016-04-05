@@ -73,7 +73,7 @@ class Trail implements \IteratorAggregate, \Countable
      * @throws \InvalidArgumentException
      * @return self
      */
-    public function add($breadcrumb_or_title, $routeName = null, $routeParameters = array(), $routeAbsolute = false, $position = 0, $attributes = array())
+    public function add($breadcrumb_or_title, $routeName = null, $routeParameters = array(), $routeAbsolute = UrlGeneratorInterface::ABSOLUTE_PATH, $position = 0, $attributes = array())
     {
         if ($breadcrumb_or_title === null) {
             return $this->reset();
