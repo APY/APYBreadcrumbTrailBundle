@@ -12,9 +12,6 @@
 namespace APY\BreadcrumbTrailBundle\Twig;
 
 use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
-use Symfony\Bridge\Twig\TwigEngine;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ServiceSubscriberInterface;
 use Symfony\Component\Templating\EngineInterface;
 
 /**
@@ -25,10 +22,11 @@ class BreadcrumbTrailExtension extends \Twig_Extension
     private $trail;
     private $templating;
 
+
     /**
-     * Constructor.
-     *
-     * @param ContainerInterface $container An ContainerInterface instance
+     * BreadcrumbTrailExtension constructor.
+     * @param Trail $trail
+     * @param EngineInterface $templating
      */
     public function __construct(Trail $trail, EngineInterface $templating)
     {
