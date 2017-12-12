@@ -70,6 +70,4 @@ class BreadcrumbTrailExtension extends \Twig_Extension
     {
         return "breadcrumbtrail";
     }
-
-
 }
