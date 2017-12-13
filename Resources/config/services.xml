@@ -19,7 +19,8 @@
         </service>
 
         <service id="apy_breadcrumb_trail.twig.extension" class="%apy_breadcrumb_trail.twig.extension.class%">
-            <argument type="service" id="service_container" />
+            <argument type="service" id="apy_breadcrumb_trail" />
+            <argument type="service" id="templating" />
             <tag name="twig.extension" />
         </service>
 
