@@ -54,7 +54,7 @@ class BreadcrumbTrailExtension extends \Twig_Extension
     public function renderBreadcrumbTrail($template = null)
     {
         $breadcrumbs = $this->container->get("apy_breadcrumb_trail");
-        return $this->container->get("templating")->render(
+        return $this->container->get("twig")->render(
                 $template == null ? $breadcrumbs->getTemplate() : $template,
                 array( 'breadcrumbs' => $breadcrumbs )
         );
