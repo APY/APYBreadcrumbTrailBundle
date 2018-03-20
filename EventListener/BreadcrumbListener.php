@@ -78,7 +78,7 @@ class BreadcrumbListener
     /**
      * Add Breadcrumb from annotations to the trail.
      *
-     * @param Array $annotations Array of Breadcrumb annotations
+     * @param array $annotations Array of Breadcrumb annotations
      */
     private function addBreadcrumbsFromAnnotations(array $annotations)
     {
@@ -90,7 +90,7 @@ class BreadcrumbListener
 
                 if ($template != null) {
                     $this->breadcrumbTrail->setTemplate($template);
-                    if ($title == null) {
+                    if ($title === null) {
                         continue;
                     }
                 }
