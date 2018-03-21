@@ -10,7 +10,7 @@
     </parameters>
 
     <services>
-        <service id="apy_breadcrumb_trail" class="%apy_breadcrumb_trail.class%">
+        <service id="apy_breadcrumb_trail" class="%apy_breadcrumb_trail.class%" public="true">
             <argument type="service" id="router" />
             <argument type="service" id="service_container" />
             <call method="setTemplate">
