@@ -54,7 +54,7 @@ class Breadcrumb
     /**
      * Constructor.
      *
-     * @param Array $data An array of annotation values
+     * @param array $data An array of annotation values
      */
     public function __construct(array $data)
     {

@@ -11,8 +11,6 @@
 
 namespace APY\BreadcrumbTrailBundle\BreadcrumbTrail;
 
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
 class Breadcrumb
 {
     /**
