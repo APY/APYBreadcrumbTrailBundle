@@ -20,8 +20,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('apy_breadcrumb_trail');
+        $treeBuilder = new TreeBuilder('apy_breadcrumb_trail');
+        $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
             ->children()
