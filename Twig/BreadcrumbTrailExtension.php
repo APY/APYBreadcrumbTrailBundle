@@ -12,12 +12,13 @@
 namespace APY\BreadcrumbTrailBundle\Twig;
 
 use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
+use Twig\Extension\AbstractExtension;
 
 /**
  * Provides an extension for Twig to output breadcrumbs
  */
-class BreadcrumbTrailExtension extends \Twig_Extension
+class BreadcrumbTrailExtension extends AbstractExtension
 {
     private $trail;
     private $templating;
@@ -26,9 +27,9 @@ class BreadcrumbTrailExtension extends \Twig_Extension
     /**
      * BreadcrumbTrailExtension constructor.
      * @param Trail $trail
-     * @param EngineInterface $templating
+     * @param Environment $templating
      */
-    public function __construct(Trail $trail, EngineInterface $templating)
+    public function __construct(Trail $trail, Environment $templating)
     {
         $this->trail = $trail;
         $this->templating = $templating;
