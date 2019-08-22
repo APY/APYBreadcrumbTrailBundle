@@ -20,8 +20,9 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('apy_breadcrumb_trail');
+        $treeBuilder = new TreeBuilder('apy_breadcrumb_trail');
+        // BC layer for symfony/config < 4.2
+        $rootNode = method_exists($treeBuilder, 'getRootNode') ? $treeBuilder->getRootNode() : $treeBuilder->root('apy_breadcrumb_trail');
 
         $rootNode
             ->children()

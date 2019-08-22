@@ -10,7 +10,7 @@
     </parameters>
 
     <services>
-        <service id="apy_breadcrumb_trail" class="%apy_breadcrumb_trail.class%">
+        <service id="apy_breadcrumb_trail" class="%apy_breadcrumb_trail.class%" public="true">
             <argument type="service" id="router" />
             <argument type="service" id="service_container" />
             <call method="setTemplate">
@@ -19,7 +19,8 @@
         </service>
 
         <service id="apy_breadcrumb_trail.twig.extension" class="%apy_breadcrumb_trail.twig.extension.class%">
-            <argument type="service" id="service_container" />
+            <argument type="service" id="apy_breadcrumb_trail" />
+            <argument type="service" id="templating" />
             <tag name="twig.extension" />
         </service>
 

@@ -66,7 +66,7 @@ class Trail implements \IteratorAggregate, \Countable
      * @param mixed   $breadcrumb_or_title  A Breadcrumb instance or the title of the breadcrumb
      * @param string  $routeName            The name of the route
      * @param mixed   $routeParameters      An array of parameters for the route
-     * @param Boolean $routeAbsolute        Whether to generate an absolute URL
+     * @param boolean $routeAbsolute        Whether to generate an absolute URL
      * @param integer $position             Position of the breadcrumb (default = 0)
      * @param mixed   $attributes           Additional attributes for the breadcrumb
      * @throws \RuntimeException
