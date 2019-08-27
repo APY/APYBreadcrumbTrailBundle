@@ -3,7 +3,7 @@
 Add breadcumbs to the trail with PHP in your controller.
 
 
-## Basic example
+## Basic example (without autowiring)
 
 ```php
 /**
@@ -18,6 +18,31 @@ class MyController extends Controller
     public function myAction()
     {
         $this->get("apy_breadcrumb_trail")->add('Level 4');
+    }
+}
+```
+
+Will render the following breadcrumb trail :
+
+> Level 1 > Level 2 > Level 3 > Level 4
+
+## Basic example (with autowiring)
+
+```php
+use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
+
+/**
+ * @Breadcrumb("Level 1")
+ * @Breadcrumb("Level 2")
+ */
+class MyController extends Controller
+{
+    /**
+     * @Breadcrumb("Level 3")
+     */
+    public function myAction(Trail $trail)
+    {
+        $trail->add('Level 4');
     }
 }
 ```
