@@ -18,6 +18,8 @@
             </call>
         </service>
 
+        <service id="%apy_breadcrumb_trail.class%" alias="apy_breadcrumb_trail" public="true"/>
+
         <service id="apy_breadcrumb_trail.twig.extension" class="%apy_breadcrumb_trail.twig.extension.class%">
             <argument type="service" id="apy_breadcrumb_trail" />
             <argument type="service" id="templating" />
