@@ -22,7 +22,7 @@
 
         <service id="apy_breadcrumb_trail.twig.extension" class="%apy_breadcrumb_trail.twig.extension.class%">
             <argument type="service" id="apy_breadcrumb_trail" />
-            <argument type="service" id="templating" />
+            <argument type="service" id="twig" />
             <tag name="twig.extension" />
         </service>
 
