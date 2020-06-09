@@ -14,6 +14,7 @@ namespace APY\BreadcrumbTrailBundle\Twig;
 use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
  * Provides an extension for Twig to output breadcrumbs
@@ -43,7 +44,7 @@ class BreadcrumbTrailExtension extends AbstractExtension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction("apy_breadcrumb_trail_render", array($this, "renderBreadcrumbTrail"), array("is_safe" => array("html"))),
+            new TwigFunction("apy_breadcrumb_trail_render", array($this, "renderBreadcrumbTrail"), array("is_safe" => array("html"))),
         );
     }
 
