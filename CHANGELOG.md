@@ -1,3 +1,6 @@
+#2020-06-10
+ - Add PHPUnit to integration test bundle
+
 #2015-11-10
  - Allow complex expressions in breadcrumb names and route parameters
 
