@@ -20,7 +20,7 @@
         "ext-intl": "*"
     },
     "autoload": {
-        "psr-4": { "APY\\BreadcrumbTrailBundle\\": "" }
+        "psr-4": { "APY\\BreadcrumbTrailBundle\\": "src/" }
     },
     "target-dir": "APY/BreadcrumbTrailBundle"
 }

@@ -10,8 +10,8 @@ Please follow the steps given [here](https://github.com/Abhoryo/APYBreadcrumbTra
 
 ## Summary
 
- - [Annotation configuration](Resources/doc/annotation_configuration.md)
- - [PHP configuration](Resources/doc/php_configuration.md)
- - [Twig configuration](Resources/doc/twig_configuration.md)
- - [Render the breadcrumb trail](Resources/doc/rendering.md)
- - [Override the template](Resources/doc/override_template.md)
+ - [Annotation configuration](src/Resources/doc/annotation_configuration.md)
+ - [PHP configuration](src/Resources/doc/php_configuration.md)
+ - [Twig configuration](src/Resources/doc/twig_configuration.md)
+ - [Render the breadcrumb trail](src/Resources/doc/rendering.md)
+ - [Override the template](src/Resources/doc/override_template.md)

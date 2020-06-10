@@ -11,7 +11,7 @@
 
 namespace APY\BreadcrumbTrailBundle\BreadcrumbTrail;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class Trail implements \IteratorAggregate, \Countable
@@ -27,9 +27,9 @@ class Trail implements \IteratorAggregate, \Countable
     private $router;
 
     /**
-     * @var ContainerInterface container
+     * @var RequestStack
      */
-    private $container;
+    private $requestStack;
 
     /**
      * @var string Template to render the breadcrumb trail
@@ -37,14 +37,12 @@ class Trail implements \IteratorAggregate, \Countable
     private $template;
 
     /**
-     * Constructor.
-     *
      * @param UrlGeneratorInterface $router URL generator class
      */
-    public function __construct(UrlGeneratorInterface $router, ContainerInterface $container)
+    public function __construct(UrlGeneratorInterface $router, RequestStack $requestStack)
     {
         $this->router = $router;
-        $this->container = $container;
+        $this->requestStack = $requestStack;
         $this->breadcrumbs = new \SplObjectStorage();
     }
 
@@ -86,12 +84,7 @@ class Trail implements \IteratorAggregate, \Countable
                 throw new \InvalidArgumentException('The title of a breadcrumb must be a string.');
             }
 
-            if ($this->container->has('request_stack')) {
-                $request = $this->container->get('request_stack')->getCurrentRequest();
-            } else {
-                // For Symfony < 2.4
-                $request = $this->container->get('request', ContainerInterface::NULL_ON_INVALID_REFERENCE);
-            }
+            $request = $this->requestStack->getCurrentRequest();
 
             if ($request !== null) {
                 preg_match_all('#\{(?P<variable>\w+).?(?P<function>([\w\.])*):?(?P<parameters>(\w|,| )*)\}#', $breadcrumb_or_title, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
