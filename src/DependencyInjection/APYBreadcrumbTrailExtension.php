@@ -28,7 +28,7 @@ class APYBreadcrumbTrailExtension extends Extension
 
         $container->setParameter('apy_breadcrumb_trail.template', $config['template']);
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
     }
 }
