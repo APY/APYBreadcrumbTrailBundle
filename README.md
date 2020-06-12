@@ -6,7 +6,7 @@ Breadcrumbs can be defined with annotations, PHP and Twig.
 
 ## Installation
 
-Please follow the steps given [here](https://github.com/Abhoryo/APYBreadcrumbTrailBundle/blob/master/Resources/doc/installation.md) to install this bundle.
+Please follow the steps given in [installation.md](src/Resources/doc/installation.md) to install this bundle.
 
 ## Summary
 
