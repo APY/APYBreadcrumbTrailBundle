@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults public="true" autoconfigure="true" autowire="true" />
+
+        <service id="APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail">
+            <call method="setTemplate">
+                <argument>%apy_breadcrumb_trail.template%</argument>
+            </call>
+        </service>
+
+        <service id="apy_breadcrumb_trail.annotation.listener" class="APY\BreadcrumbTrailBundle\EventListener\BreadcrumbListener">
+            <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" priority="-1" />
+        </service>
+    </services>
+</container>
