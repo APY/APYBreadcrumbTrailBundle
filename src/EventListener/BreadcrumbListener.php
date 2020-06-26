@@ -11,9 +11,9 @@
 
 namespace APY\BreadcrumbTrailBundle\EventListener;
 
-use Doctrine\Common\Annotations\Reader;
-use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
+use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -48,7 +48,7 @@ class BreadcrumbListener
     public function onKernelController(KernelEvent $event)
     {
         if (!is_array($controller = $event->getController())) {
-            return;
+            $controller = [$controller, '__invoke'];
         }
 
         // Annotations from class
