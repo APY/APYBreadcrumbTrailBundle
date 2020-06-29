@@ -31,7 +31,8 @@
         "nyholm/symfony-bundle-test": "^1.5",
         "matthiasnoback/symfony-dependency-injection-test": "^4.0",
         "doctrine/doctrine-bundle": "^v1.0|^v2.0",
-        "symfony/twig-bundle": "^3.4|^4.0|^5.0"
+        "symfony/twig-bundle": "^3.4|^4.0|^5.0",
+        "symfony/browser-kit": "^3.4|^4.0|^5.0"
     },
     "autoload-dev": {
         "psr-4": { "APY\\BreadcrumbTrailBundle\\": "tests/" }

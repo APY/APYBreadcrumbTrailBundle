@@ -9,6 +9,7 @@ use Nyholm\BundleTest\BaseBundleTestCase;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class BreadcrumbListenerTest extends BaseBundleTestCase
@@ -59,7 +60,14 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
         /** @var BreadcrumbListener $listener */
         $trail = $container->get('APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail');
         $listener = $container->get('apy_breadcrumb_trail.annotation.listener');
-        $listener->onKernelController(new ControllerEvent($container->get('kernel'), $controller, new Request(), HttpKernelInterface::MASTER_REQUEST));
+        $eventClass = class_exists(ControllerEvent::class) ? ControllerEvent::class : FilterControllerEvent::class;
+        $event = new $eventClass(
+            $container->get('kernel'),
+            $controller,
+            new Request(),
+            HttpKernelInterface::MASTER_REQUEST
+        );
+        $listener->onKernelController($event);
         /** @var Breadcrumb[] $crumbs */
         $crumbs = iterator_to_array($trail->getIterator());
         $this->assertCount(1, $crumbs);
