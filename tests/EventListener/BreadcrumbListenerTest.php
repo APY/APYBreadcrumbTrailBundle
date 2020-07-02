@@ -15,8 +15,22 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class BreadcrumbListenerTest extends BaseBundleTestCase
 {
-    public function controllerProvider()
+    public function controllerProvider(): array
     {
+        require_once __DIR__.'/ProxyController.php';
+
+        /**
+         * @APY\Breadcrumb("name")
+         */
+        $closure = function () {
+        };
+
+        /**
+         * @APY\Breadcrumb("name")
+         */
+        function controllerFunction() {
+        }
+
         return [
             'Traditional' => [[new class {
                 /**
@@ -25,7 +39,7 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
                 public function action()
                 {
                 }
-            }, 'action']],
+            }, 'action'], 1],
             'Invokable' => [new class {
                 /**
                  * @APY\Breadcrumb("name")
@@ -33,7 +47,20 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
                 public function __invoke()
                 {
                 }
-            }],
+            }, 1],
+            'Private __invoke' => [new class {
+                /**
+                 * @APY\Breadcrumb("name")
+                 */
+                private function __invoke() // emits a WARNING
+                {
+                }
+            }, 0],
+            'Proxy' => [['\JMSSecurityExtraBundle\__CG__\APY\BreadcrumbTrailBundle\EventListener\ProxyController', 'action'], 1],
+            // Reading annotations gets no results since it's wrapped inside a Closure
+            'Anonymous function' => [$closure, 0],
+            // Doctrine annotation reader does not read annotations from functions, so we don't handle it
+            'Function' => ['APY\BreadcrumbTrailBundle\EventListener\controllerFunction', 0],
         ];
     }
 
@@ -44,7 +71,9 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
 
     protected function setUp(): void
     {
-        $this->addCompilerPass(new PublicServicePass('|^APY\\\\BreadcrumbTrailBundle\\\\EventListener\\\\BreadcrumbListener$|'));
+        $this->addCompilerPass(
+            new PublicServicePass('|^APY\\\\BreadcrumbTrailBundle\\\\EventListener\\\\BreadcrumbListener$|')
+        );
         $kernel = $this->createKernel();
         $kernel->boot();
     }
@@ -53,8 +82,9 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
      * @dataProvider controllerProvider
      *
      * @param callable $controller
+     * @param int      $expectedCrumbs
      */
-    public function testInvokableController($controller)
+    public function testOnKernelController(callable $controller, int $expectedCrumbs)
     {
         $container = $this->getContainer();
         $trail = $container->get(Trail::class);
@@ -69,8 +99,43 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
         $listener->onKernelController($event);
         /** @var Breadcrumb[] $crumbs */
         $crumbs = iterator_to_array($trail->getIterator());
-        $this->assertCount(1, $crumbs);
-        $this->assertArrayHasKey(0, $crumbs);
-        $this->assertSame('name', $crumbs[0]->title);
+        $this->assertCount($expectedCrumbs, $crumbs);
+        if ($expectedCrumbs > 0) {
+            $this->assertArrayHasKey(0, $crumbs);
+            $this->assertSame('name', $crumbs[0]->title);
+        }
+    }
+
+    public function testAbstractController(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp(
+            '/^Annotations from class "[\s\S]+" cannot be read as it is abstract.$/m'
+        );
+        $controller = ['APY\BreadcrumbTrailBundle\EventListener\AbstractController', 'action'];
+        $this->testOnKernelController($controller, 0);
+    }
+}
+
+abstract class AbstractController
+{
+    /**
+     * @APY\Breadcrumb("name")
+     */
+    public static function action()
+    {
+    }
+}
+
+/**
+ * @APY\Breadcrumb(template="template.twig")
+ */
+class ProxyController
+{
+    /**
+     * @APY\Breadcrumb("name")
+     */
+    public static function action()
+    {
     }
 }

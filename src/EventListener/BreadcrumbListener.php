@@ -14,6 +14,8 @@ namespace APY\BreadcrumbTrailBundle\EventListener;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 use Doctrine\Common\Annotations\Reader;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -43,12 +45,22 @@ class BreadcrumbListener
     }
 
     /**
-     * @param \Symfony\Component\HttpKernel\Event\FilterControllerEvent|\Symfony\Component\HttpKernel\Event\ControllerEvent  $event
+     * @param FilterControllerEvent|ControllerEvent $event
+     *
+     * @throws \ReflectionException
      */
     public function onKernelController(KernelEvent $event)
     {
         if (!is_array($controller = $event->getController())) {
+            // Doctrine annotation reader can not work with functions
+            // Closures don't allow reading annotations of wrapped functions
+            if (is_string($controller) && function_exists($controller) || $controller instanceof \Closure) {
+                return;
+            }
             $controller = [$controller, '__invoke'];
+            if (!is_callable($controller)) {
+                return;
+            }
         }
 
         // Annotations from class
