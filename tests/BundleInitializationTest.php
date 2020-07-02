@@ -11,7 +11,7 @@ class BundleInitializationTest extends BaseBundleTestCase
         return APYBreadcrumbTrailBundle::class;
     }
 
-    public function testServicesAreRegistrated()
+    public function testServicesAreRegistered()
     {
         $this->bootKernel();
         $container = $this->getContainer();

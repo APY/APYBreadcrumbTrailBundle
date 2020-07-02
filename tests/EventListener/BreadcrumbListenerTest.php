@@ -5,8 +5,9 @@ namespace APY\BreadcrumbTrailBundle\EventListener;
 use APY\BreadcrumbTrailBundle\Annotation as APY;
 use APY\BreadcrumbTrailBundle\APYBreadcrumbTrailBundle;
 use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Breadcrumb;
+use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 use Nyholm\BundleTest\BaseBundleTestCase;
-use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Nyholm\BundleTest\CompilerPass\PublicServicePass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
@@ -43,9 +44,8 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
 
     protected function setUp(): void
     {
+        $this->addCompilerPass(new PublicServicePass('|^APY\\\\BreadcrumbTrailBundle\\\\EventListener\\\\BreadcrumbListener$|'));
         $kernel = $this->createKernel();
-        $kernel->addConfigFile(__DIR__.'/../services.xml');
-        $kernel->addBundle(FrameworkBundle::class);
         $kernel->boot();
     }
 
@@ -57,9 +57,8 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
     public function testInvokableController($controller)
     {
         $container = $this->getContainer();
-        /** @var BreadcrumbListener $listener */
-        $trail = $container->get('APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail');
-        $listener = $container->get('apy_breadcrumb_trail.annotation.listener');
+        $trail = $container->get(Trail::class);
+        $listener = $container->get(BreadcrumbListener::class);
         $eventClass = class_exists(ControllerEvent::class) ? ControllerEvent::class : FilterControllerEvent::class;
         $event = new $eventClass(
             $container->get('kernel'),

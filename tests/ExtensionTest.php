@@ -22,6 +22,5 @@ class ExtensionTest extends AbstractExtensionTestCase
         $this->load();
         $this->assertContainerBuilderHasService(Trail::class);
         $this->assertContainerBuilderHasService(BreadcrumbListener::class);
-        $this->assertContainerBuilderHasService(BreadcrumbTrailExtension::class);
     }
 }

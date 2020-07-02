@@ -20,7 +20,7 @@ class BreadcrumbTrailExtensionTest extends BaseBundleTestCase
 
     protected function setUp(): void
     {
-        $this->addCompilerPass(new PublicServicePass('|twig|'));
+        $this->addCompilerPass(new PublicServicePass('|^twig$|'));
 
         $kernel = $this->createKernel();
         $kernel->addBundle(TwigBundle::class);
