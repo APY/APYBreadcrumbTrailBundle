@@ -34,6 +34,33 @@ jobs:
       - name: Run tests
         run: make test
 
+ test-sf4:
+    name: Test SF4
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 10
+      matrix:
+        php: ['7.2', '7.3', '7.4']
+
+    steps:
+      - name: Set up PHP
+        uses: shivammathur/setup-php@1.7.0
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: xdebug
+          ini-values: xdebug.overload_var_dump=1
+          extensions: mbstring, intl
+          tools: prestissimo
+
+      - name: Setup Problem Matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run tests
+        run: make test-sf4
+
  test-lowest:
     name: Test Lowest
     runs-on: ubuntu-latest
