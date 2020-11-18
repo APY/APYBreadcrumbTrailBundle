@@ -14,6 +14,8 @@
             </call>
         </service>
 
+        <service id="APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail" alias="apy_breadcrumb_trail" public="true"/>
+
         <service id="apy_breadcrumb_trail.annotation.listener" class="APY\BreadcrumbTrailBundle\EventListener\BreadcrumbListener">
             <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" priority="-1" />
         </service>
