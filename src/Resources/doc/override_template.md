@@ -32,7 +32,10 @@ Or
  - You can define the template in PHP:
 
 ```php
-$this->get("apy_breadcrumb_trail")->setTemplate('APYBreadcrumbTrailBundle::breadcrumbtrail.html.twig');
+/**
+ * @see \APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail::setTemplate()
+ */
+$trail->setTemplate('APYBreadcrumbTrailBundle::breadcrumbtrail.html.twig');
 ```
 
  - You can define the template when you render the breadcrumb trail in your twig file:

@@ -9,7 +9,7 @@ You just have to add the service in a global variable.
 #app/config/config.yml
 twig:
     globals:
-        breadcrumb_trail: "@apy_breadcrumb_trail"
+        breadcrumb_trail: "@APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail"
 ```
 
 ## Basic example

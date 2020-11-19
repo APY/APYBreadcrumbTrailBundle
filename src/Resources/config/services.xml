@@ -8,14 +8,20 @@
 
         <prototype namespace="APY\BreadcrumbTrailBundle\" resource="../../*" exclude="../../{Annotation,Resources}"/>
 
-        <service id="apy_breadcrumb_trail" class="APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail" public="true">
+        <service id="APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail">
             <call method="setTemplate">
                 <argument>%apy_breadcrumb_trail.template%</argument>
             </call>
         </service>
+        <service id="apy_breadcrumb_trail" alias="APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail" public="true">
+            <deprecated version="1.7" package="APY/APYBreadcrumbTrailBundle">The "%service_id%" service is deprecated, use "%alias_id%" FQCN as service id instead.</deprecated>
+        </service>
 
-        <service id="apy_breadcrumb_trail.annotation.listener" class="APY\BreadcrumbTrailBundle\EventListener\BreadcrumbListener">
+        <service id="APY\BreadcrumbTrailBundle\EventListener\BreadcrumbListener">
             <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" priority="-1" />
+        </service>
+        <service id="apy_breadcrumb_trail.annotation.listener" alias="APY\BreadcrumbTrailBundle\EventListener\BreadcrumbListener" public="true">
+            <deprecated version="1.7" package="APY/APYBreadcrumbTrailBundle">The "%service_id%" service is deprecated, use "%alias_id%" FQCN as service id instead.</deprecated>
         </service>
     </services>
 </container>

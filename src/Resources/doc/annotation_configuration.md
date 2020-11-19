@@ -7,7 +7,6 @@ You can add annotations on the controller and the action.
 ## Basic example
 
 ```php
-...
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 
 /**
@@ -53,6 +52,8 @@ The [@ParamConverter](symfony.com/doc/current/bundles/SensioFrameworkExtraBundle
 It is possible to display values ​​of these objects in the breadcrumb.
 
 ```php
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+
 /**
  * @Route("/book/{id}")
  * @Breadcrumb("Books")
@@ -69,6 +70,8 @@ Will render the following breadcrumb trail :
 > Books > result of __toString method of $book's Object
 
 ```php
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+
 /**
  * @Route("/book/{id}")
  * @Breadcrumb("Books")
@@ -84,9 +87,11 @@ Will render the following breadcrumb trail :
 
 > Books > result of getTitle method of $book's Object
 
-**Note:** The bundle tries to call the methods : getTitle, hasTitle or isTitle.
+**Note:** The bundle tries to call the methods : `getTitle`, `hasTitle` or `isTitle`.
 
 ```php
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+
 /**
  * @Route("/book/{id}")
  * @Breadcrumb("Books")
@@ -103,6 +108,8 @@ Will render the following breadcrumb trail :
 > Books > result of getTitle('argument1') method of $book's Object
 
 ```php
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+
 /**
  * @Route("/book/{id}")
  * @Breadcrumb("Books")
@@ -123,6 +130,8 @@ Will render the following breadcrumb trail :
 #### Basic example
 
 ```php
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+
 /**
  * @Breadcrumb("Level 1", route={"name"="my_route"}
  * @Breadcrumb("Level 2")
@@ -146,6 +155,8 @@ Assume that you have defined the following route :
 and that you are currently on the `my_action_route` with url `http://example.com/var/foo/var1/bar`
 
 ```php
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+
 /**
  * @Route("/var/{var}/var1/{var1}", name="my_action_route")
  * @Breadcrumb("Level 1", route={"name"="my_route", "parameters"={"var"=1}})
@@ -165,12 +176,16 @@ Will render the following breadcrumb trail :
 The two following expressions are equivalents :
 
 ```php
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+
 /**
  * @Breadcrumb("Level 1", route={"name"="my_route", "parameters"={"var1"=1,"var2"=2}, "absolute"=true})
  */
 ```
 
 ```php
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+
 /**
  * @Breadcrumb("Level 1", routeName="my_route", routeParameters={"var1"=1,"var2"=2}, routeAbsolute=true)
  */
@@ -181,6 +196,8 @@ The two following expressions are equivalents :
 Assume your controllers are designed like a REST API and you have a ManyToOne relationship on Book -> Author :
 
 ```php
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+
 /**
  * @Route("/books/{book}", name="book", requirements={"book" = "\d+"}) // example: /book/53
  * @Breadcrumb("{book.author.name}", route={"name"="author", "parameters"={"author"="{book.author.id}"}}) // example: /author/15
@@ -204,6 +221,8 @@ public function indexAction(Request $request, Book $book) {
 ### Position
 
 ```php
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+
 /**
  * @Breadcrumb("Level 1")
  * @Breadcrumb("Level 2", position=1)
@@ -221,6 +240,8 @@ Will render the following breadcrumb trail :
 ### Attributes
 
 ```php
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+
 /**
  * @Breadcrumb("Level 1", attributes={"class": "yellow", "title": "Hello world !"})
  * @Breadcrumb("Level 2")
@@ -246,6 +267,8 @@ Will render the following breadcrumb trail :
 ### Reset the trail
 
 ```php
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+
 /**
  * @Breadcrumb("Level 1")
  * @Breadcrumb()
