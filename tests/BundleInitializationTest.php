@@ -11,12 +11,13 @@ class BundleInitializationTest extends BaseBundleTestCase
         return APYBreadcrumbTrailBundle::class;
     }
 
-    public function testServicesAreRegistrated()
+    public function testServicesAreRegisteredToContainer()
     {
         $this->bootKernel();
         $container = $this->getContainer();
 
         $this->assertTrue($container->has('apy_breadcrumb_trail'));
+        $this->assertTrue($container->has('apy_breadcrumb_trail.annotation.listener'));
         $this->assertTrue($container->hasParameter('apy_breadcrumb_trail.template'));
     }
 }

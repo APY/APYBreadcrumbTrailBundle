@@ -2,7 +2,6 @@
 
 
 ```php
-...
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 
 /**

@@ -1,34 +1,47 @@
 # PHP configuration
 
-Add breadcumbs to the trail with PHP in your controller.
+How to add breadcumbs to the trail in the controller.
 
+## Example 1) Injected via the controller's constructor 
 
-## Basic example (without autowiring)
+Autowiring has to be enabled for the folder where the controller is located. Symfony 4 and higher
+by default have autowiring enabled.
 
 ```php
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
+
 /**
  * @Breadcrumb("Level 1")
  * @Breadcrumb("Level 2")
  */
 class MyController extends Controller
 {
+   private $trail;
+   
+   public function __construct(Trail $trail)
+   {
+        $this->trail = $trail;
+    }
+    
     /**
      * @Breadcrumb("Level 3")
      */
     public function myAction()
     {
-        $this->get("apy_breadcrumb_trail")->add('Level 4');
+        $this->trail->add('Level 4');
     }
 }
 ```
 
-Will render the following breadcrumb trail :
+The above example will render the following breadcrumb trail:
 
 > Level 1 > Level 2 > Level 3 > Level 4
 
-## Basic example (with autowiring)
+## Example 2) by autowiring the trail to the action callable)
 
 ```php
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 
 /**
@@ -51,10 +64,13 @@ Will render the following breadcrumb trail :
 
 > Level 1 > Level 2 > Level 3 > Level 4
 
-## Reference
+## Method reference
 
 ```php
-$this->get("apy_breadcrumb_trail")->add(
+/**
+ * @see APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail::add()
+ */
+$trail->add(
     $breadcrumb_or_title,
     $routeName,
     $routeParameters,
@@ -85,13 +101,16 @@ Assume that you have defined the following route :
 ```
 
 ```php
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
+
 /**
  * @Breadcrumb("Level 1")
  */
-public function myAction()
+public function myAction(Trail $trail)
 {
-    $this->get("apy_breadcrumb_trail")->add('Level 2', 'my_route', array("var" => "foo"));
-    $this->get("apy_breadcrumb_trail")->add('Level 3');
+    $trail->add('Level 2', 'my_route', ["var" => "foo"]);
+    $trail->add('Level 3');
 }
 ```
 
@@ -102,14 +121,17 @@ Will render the following breadcrumb trail :
 ## Position
 
 ```php
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
+
 /**
  * @Breadcrumb("Level 1")
  */
-public function myAction()
+public function myAction(Trail $trail)
 {
-    $this->get("apy_breadcrumb_trail")->add('Level 2', null, array(), false, 1);
-    $this->get("apy_breadcrumb_trail")->add('Level 3');
-    $this->get("apy_breadcrumb_trail")->add('Level 4', null, array(), false, -1);
+    $trail->add('Level 2', null, [], false, 1);
+    $trail->add('Level 3');
+    $trail->add('Level 4', null, [], false, -1);
 }
 ```
 
@@ -122,15 +144,19 @@ Will render the following breadcrumb trail :
 ### Reset the trail
 
 ```php
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
+
 /**
  * @Breadcrumb("Level 1")
  */
-public function myAction()
+public function myAction(Trail $trail)
 {
-    $this->get("apy_breadcrumb_trail")
+    $trail
         ->reset()
         ->add('Level 2')
-        ->add('Level 3');
+        ->add('Level 3')
+    ;
 }
 ```
 
