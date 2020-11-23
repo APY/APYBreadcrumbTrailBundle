@@ -11,25 +11,27 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 10
       matrix:
-        php: ['7.2', '7.3', '7.4']
+        php: ['7.3', '7.4']
+        symfony: ['3.4', '4.4', '5.1']
 
     steps:
       - name: Set up PHP
-        uses: shivammathur/setup-php@1.7.0
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          coverage: xdebug
-          ini-values: xdebug.overload_var_dump=1
+          coverage: none
           extensions: mbstring, intl
-          tools: prestissimo
+          tools: composer:v2
 
       - name: Setup Problem Matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Select supported Symfony version
+        run: composer require symfony/framework-bundle:"^${{ matrix.symfony }}" --no-update
 
       - name: Run tests
         run: make test
@@ -40,17 +42,16 @@ jobs:
     strategy:
       max-parallel: 10
       matrix:
-        php: ['7.2', '7.3', '7.4']
+        php: ['7.3', '7.4']
 
     steps:
       - name: Set up PHP
-        uses: shivammathur/setup-php@1.7.0
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          coverage: xdebug
-          ini-values: xdebug.overload_var_dump=1
+          coverage: none
           extensions: mbstring, intl
-          tools: prestissimo
+          tools: composer:v2
 
       - name: Setup Problem Matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
