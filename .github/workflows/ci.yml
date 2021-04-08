@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['7.3', '7.4']
-        symfony: ['3.4', '4.4', '5.1']
+        php: ['7.3', '7.4', '8.0']
+        symfony: ['3.4', '4.4', '5.1', '5.2']
 
     steps:
       - name: Set up PHP
@@ -42,7 +42,7 @@ jobs:
     strategy:
       max-parallel: 10
       matrix:
-        php: ['7.3', '7.4']
+        php: ['7.2', '7.3', '7.4']
 
     steps:
       - name: Set up PHP
