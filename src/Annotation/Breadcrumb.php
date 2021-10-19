@@ -60,6 +60,7 @@ class Breadcrumb
     public function __construct(
         array $data = [],
         $title = null,
+        $route = null,
         $routeName = null,
         $routeParameters = [],
         $routeAbsolute = false,
@@ -69,6 +70,7 @@ class Breadcrumb
     )
     {
         $data['title'] = $data['title'] ?? $title;
+        $data['route'] = $data['route'] ?? $route;
         $data['routeName'] = $data['routeName'] ?? $routeName;
         $data['routeParameters'] = $data['routeParameters'] ?? $routeParameters;
         $data['routeAbsolute'] = $data['routeAbsolute'] ?? $routeAbsolute;
