@@ -78,12 +78,12 @@ class Breadcrumb
         $data['template'] = $data['template'] ?? $template;
         $data['attributes'] = $data['attributes'] ?? $attributes;
 
-        if (isset($data['value'])) {
+        if ($data['value']) {
             $data['title'] = $data['value'];
-            unset($data['value']);
+            $data['value'] = null;
         }
 
-        if (isset($data['route'])) {
+        if ($data['route']) {
             if (is_array($data['route'])) {
                 foreach ($data['route'] as $key => $value) {
                     $method = 'setRoute'.$key;
@@ -97,10 +97,14 @@ class Breadcrumb
                 $data['routeName'] = $data['route'];
             }
 
-            unset($data['route']);
+            $data['route'] = null;
         }
 
         foreach ($data as $key => $value) {
+            if ($value === null) {
+                continue;
+            }
+
             $method = 'set'.$key;
             if (!method_exists($this, $method)) {
                 throw new \BadMethodCallException(sprintf("Unknown property '%s' on annotation '%s'.", $key, get_class($this)));

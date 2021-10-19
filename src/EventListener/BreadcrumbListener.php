@@ -74,7 +74,7 @@ class BreadcrumbListener
 
             // Annotations from class
             $classAnnotations = $this->shouldLoadAnnotations() ? $this->reader->getClassAnnotations($class) : [];
-            $classAttributes = $this->shouldLoadAttributes() ? $this->getClassAttributes($class): [];
+            $classAttributes = $this->shouldLoadAttributes() ? $this->getAttributes($class): [];
 
             $this->addBreadcrumbsFromAnnotations(array_merge($classAnnotations, $classAttributes));
 
@@ -82,7 +82,7 @@ class BreadcrumbListener
             $method = $class->getMethod($controller[1]);
 
             $methodAnnotations = $this->shouldLoadAnnotations() ? $this->reader->getMethodAnnotations($method) : [];
-            $methodAttributes = $this->shouldLoadAttributes() ? $this->getMethodAttributes($method) : [];
+            $methodAttributes = $this->shouldLoadAttributes() ? $this->getAttributes($method) : [];
             $this->addBreadcrumbsFromAnnotations(array_merge($methodAnnotations, $methodAttributes));
         }
     }
@@ -137,7 +137,11 @@ class BreadcrumbListener
         return in_array($this->type, ["attribute", "both"]);
     }
 
-    private function getClassAttributes(\ReflectionClass $class): array
+    /**
+     * @param \ReflectionClass|\ReflectionMethod $reflected
+     * @return list<Breadcrumb>
+     */
+    private function getAttributes($reflected): array
     {
 
         if (\PHP_VERSION_ID < 80000) {
@@ -145,21 +149,7 @@ class BreadcrumbListener
         }
 
         $attributes = [];
-        foreach ($class->getAttributes(Breadcrumb::class) as $reflectionAttribute) {
-            $attributes[] = $reflectionAttribute->newInstance();
-        }
-
-        return $attributes;
-    }
-
-    private function getMethodAttributes(\ReflectionMethod $method): array
-    {
-        if (\PHP_VERSION_ID < 80000) {
-            return [];
-        }
-
-        $attributes = [];
-        foreach ($method->getAttributes(Breadcrumb::class) as $reflectionAttribute) {
+        foreach ($reflected->getAttributes(Breadcrumb::class) as $reflectionAttribute) {
             $attributes[] = $reflectionAttribute->newInstance();
         }
 
