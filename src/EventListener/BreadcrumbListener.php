@@ -130,11 +130,11 @@ class BreadcrumbListener
 
     private function shouldLoadAnnotations(): bool
     {
-        return in_array($this->type, ["annotations", "both"]);
+        return in_array($this->type, ["annotation", "both"]);
     }
     private function shouldLoadAttributes(): bool
     {
-        return in_array($this->type, ["attributes", "both"]);
+        return in_array($this->type, ["attribute", "both"]);
     }
 
     private function getClassAttributes(\ReflectionClass $class): array

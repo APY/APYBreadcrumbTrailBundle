@@ -71,7 +71,7 @@ class Breadcrumb
         $data['title'] = $data['title'] ?? $title;
         $data['routeName'] = $data['routeName'] ?? $routeName;
         $data['routeParameters'] = $data['routeParameters'] ?? $routeParameters;
-        $data['$routeAbsolute'] = $data['$routeAbsolute'] ?? $routeAbsolute;
+        $data['routeAbsolute'] = $data['routeAbsolute'] ?? $routeAbsolute;
         $data['position'] = $data['position'] ?? $position;
         $data['template'] = $data['template'] ?? $template;
         $data['attributes'] = $data['attributes'] ?? $attributes;
