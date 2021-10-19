@@ -16,6 +16,7 @@
         <service id="apy_breadcrumb_trail" alias="APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail" public="true" />
 
         <service id="APY\BreadcrumbTrailBundle\EventListener\BreadcrumbListener">
+            <argument key="type">%apy_breadcrumb_trail.type%</argument>
             <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" priority="-1" />
         </service>
         <service id="apy_breadcrumb_trail.annotation.listener" alias="APY\BreadcrumbTrailBundle\EventListener\BreadcrumbListener" public="true" />

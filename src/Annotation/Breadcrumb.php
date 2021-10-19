@@ -14,6 +14,7 @@ namespace APY\BreadcrumbTrailBundle\Annotation;
 /**
  * @Annotation
  */
+#[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
 class Breadcrumb
 {
     /**
@@ -56,8 +57,25 @@ class Breadcrumb
      *
      * @param array $data An array of annotation values
      */
-    public function __construct(array $data)
+    public function __construct(
+        array $data = [],
+        $title = null,
+        $routeName = null,
+        $routeParameters = [],
+        $routeAbsolute = false,
+        $position = 0,
+        $template = 0,
+        $attributes = []
+    )
     {
+        $data['title'] = $data['title'] ?? $title;
+        $data['routeName'] = $data['routeName'] ?? $routeName;
+        $data['routeParameters'] = $data['routeParameters'] ?? $routeParameters;
+        $data['$routeAbsolute'] = $data['$routeAbsolute'] ?? $routeAbsolute;
+        $data['position'] = $data['position'] ?? $position;
+        $data['template'] = $data['template'] ?? $template;
+        $data['attributes'] = $data['attributes'] ?? $attributes;
+
         if (isset($data['value'])) {
             $data['title'] = $data['value'];
             unset($data['value']);

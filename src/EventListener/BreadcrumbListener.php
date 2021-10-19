@@ -29,16 +29,22 @@ class BreadcrumbListener
      * @var Trail An Trail instance
      */
     protected $breadcrumbTrail;
+    /**
+     * @var string
+     */
+    protected $type;
 
     /**
      * Constructor.
      *
-     * @param Reader $reader An Reader instance
      * @param Trail $breadcrumbTrail An Trail instance
+     * @param string $type Load Annotation, Attribute or both
+     * @param Reader $reader An Reader instance
      */
-    public function __construct(Reader $reader, Trail $breadcrumbTrail)
+    public function __construct(Trail $breadcrumbTrail, string $type, Reader $reader = null)
     {
         $this->reader = $reader;
+        $this->type = $type;
         $this->breadcrumbTrail = $breadcrumbTrail;
     }
 
@@ -67,11 +73,17 @@ class BreadcrumbListener
             $this->breadcrumbTrail->reset();
 
             // Annotations from class
-            $this->addBreadcrumbsFromAnnotations($this->reader->getClassAnnotations($class));
+            $classAnnotations = $this->shouldLoadAnnotations() ? $this->reader->getClassAnnotations($class) : [];
+            $classAttributes = $this->shouldLoadAttributes() ? $this->getClassAttributes($class): [];
+
+            $this->addBreadcrumbsFromAnnotations(array_merge($classAnnotations, $classAttributes));
 
             // Annotations from method
             $method = $class->getMethod($controller[1]);
-            $this->addBreadcrumbsFromAnnotations($this->reader->getMethodAnnotations($method));
+
+            $methodAnnotations = $this->shouldLoadAnnotations() ? $this->reader->getMethodAnnotations($method) : [];
+            $methodAttributes = $this->shouldLoadAttributes() ? $this->getMethodAttributes($method) : [];
+            $this->addBreadcrumbsFromAnnotations(array_merge($methodAnnotations, $methodAttributes));
         }
     }
 
@@ -114,5 +126,43 @@ class BreadcrumbListener
         }
 
         return substr($className, $pos + 8);
+    }
+
+    private function shouldLoadAnnotations(): bool
+    {
+        return in_array($this->type, ["annotations", "both"]);
+    }
+    private function shouldLoadAttributes(): bool
+    {
+        return in_array($this->type, ["attributes", "both"]);
+    }
+
+    private function getClassAttributes(\ReflectionClass $class): array
+    {
+
+        if (\PHP_VERSION_ID < 80000) {
+            return [];
+        }
+
+        $attributes = [];
+        foreach ($class->getAttributes(Breadcrumb::class) as $reflectionAttribute) {
+            $attributes[] = $reflectionAttribute->newInstance();
+        }
+
+        return $attributes;
+    }
+
+    private function getMethodAttributes(\ReflectionMethod $method): array
+    {
+        if (\PHP_VERSION_ID < 80000) {
+            return [];
+        }
+
+        $attributes = [];
+        foreach ($method->getAttributes(Breadcrumb::class) as $reflectionAttribute) {
+            $attributes[] = $reflectionAttribute->newInstance();
+        }
+
+        return $attributes;
     }
 }
