@@ -62,7 +62,7 @@ class Breadcrumb
         $title = null,
         $route = null,
         $routeName = null,
-        $routeParameters = [],
+        $routeParameters = null,
         $routeAbsolute = false,
         $position = 0,
         $template = 0,
@@ -78,7 +78,7 @@ class Breadcrumb
         $data['template'] = $data['template'] ?? $template;
         $data['attributes'] = $data['attributes'] ?? $attributes;
 
-        if ($data['value']) {
+        if (isset($data['value'])) {
             $data['title'] = $data['value'];
             $data['value'] = null;
         }
