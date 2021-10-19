@@ -58,7 +58,7 @@ class Breadcrumb
      * @param array $data An array of annotation values
      */
     public function __construct(
-        array $data = [],
+        $data = [],
         $title = null,
         $route = null,
         $routeName = null,
@@ -69,6 +69,10 @@ class Breadcrumb
         $attributes = []
     )
     {
+        if (is_string($data)) {
+            $data = ["title" => $data];
+        }
+
         $data['title'] = $data['title'] ?? $title;
         $data['route'] = $data['route'] ?? $route;
         $data['routeName'] = $data['routeName'] ?? $routeName;
