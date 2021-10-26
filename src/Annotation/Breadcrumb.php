@@ -55,7 +55,7 @@ class Breadcrumb
     /**
      * Constructor.
      *
-     * @param string $title An array of annotation values
+     * @param string $title Title, or an array of annotation values
      * @param ?array<string, string|array> $route
      * @param ?string $routeName
      * @param ?array<string,mixed> $routeParameters
@@ -79,7 +79,7 @@ class Breadcrumb
         $data = [];
 
         if (is_string($title)) {
-            $data = ["title" => $data];
+            $data = ["title" => $title];
         } elseif (is_array($title)) {
             $data = $title;
         }
