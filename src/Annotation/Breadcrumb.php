@@ -55,7 +55,15 @@ class Breadcrumb
     /**
      * Constructor.
      *
-     * @param array $data An array of annotation values
+     * @param string $title An array of annotation values
+     * @param ?array<string, string|array> $route
+     * @param ?string $routeName
+     * @param ?array<string,mixed> $routeParameters
+     * @param bool $routeAbsolute
+     * @param int $position
+     * @param ?string $template
+     * @param array $attributes
+     *
      */
     public function __construct(
         $title,
@@ -64,7 +72,7 @@ class Breadcrumb
         $routeParameters = null,
         $routeAbsolute = false,
         $position = 0,
-        $template = 0,
+        $template = null,
         $attributes = []
     )
     {
