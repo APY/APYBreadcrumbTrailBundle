@@ -4,7 +4,6 @@ namespace APY\BreadcrumbTrailBundle\Twig;
 
 use APY\BreadcrumbTrailBundle\APYBreadcrumbTrailBundle;
 use Nyholm\BundleTest\BaseBundleTestCase;
-use Nyholm\BundleTest\CompilerPass\PublicServicePass;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Twig\Environment;
 
@@ -20,8 +19,6 @@ class BreadcrumbTrailExtensionTest extends BaseBundleTestCase
 
     protected function setUp(): void
     {
-        $this->addCompilerPass(new PublicServicePass('|twig|'));
-
         $kernel = $this->createKernel();
         $kernel->addBundle(TwigBundle::class);
         $kernel->boot();
