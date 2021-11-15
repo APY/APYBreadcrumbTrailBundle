@@ -53,9 +53,7 @@ class Breadcrumb
     private $attributes = array();
 
     /**
-     * Constructor.
-     *
-     * @param string $title Title, or an array of annotation values
+     * @param array|string $title title, or the legacy array that contains all annotation data
      * @param ?array<string, string|array> $route
      * @param ?string $routeName
      * @param ?array<string,mixed> $routeParameters
@@ -63,17 +61,15 @@ class Breadcrumb
      * @param int $position
      * @param ?string $template
      * @param array $attributes
-     *
      */
     public function __construct(
         $title,
-        $route = null,
         $routeName = null,
         $routeParameters = null,
-        $routeAbsolute = false,
-        $position = 0,
+        $routeAbsolute = null,
+        $position = null,
         $template = null,
-        $attributes = []
+        $attributes = null
     )
     {
         $data = [];
@@ -84,7 +80,6 @@ class Breadcrumb
             $data = $title;
         }
 
-        $data['route'] = $data['route'] ?? $route;
         $data['routeName'] = $data['routeName'] ?? $routeName;
         $data['routeParameters'] = $data['routeParameters'] ?? $routeParameters;
         $data['routeAbsolute'] = $data['routeAbsolute'] ?? $routeAbsolute;
@@ -94,10 +89,10 @@ class Breadcrumb
 
         if (isset($data['value'])) {
             $data['title'] = $data['value'];
-            $data['value'] = null;
+            unset($data['value']);
         }
 
-        if ($data['route']) {
+        if (isset($data['route'])) {
             if (is_array($data['route'])) {
                 foreach ($data['route'] as $key => $value) {
                     $method = 'setRoute'.$key;
@@ -111,10 +106,12 @@ class Breadcrumb
                 $data['routeName'] = $data['route'];
             }
 
-            $data['route'] = null;
+            unset($data['route']);
         }
 
         foreach ($data as $key => $value) {
+
+            // Do not attempt setting values that were provided as null
             if ($value === null) {
                 continue;
             }
