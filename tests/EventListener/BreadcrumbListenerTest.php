@@ -39,7 +39,21 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
         $kernelEvent = new ControllerEvent($this->kernel, [$controller, 'indexAction'], new Request(), HttpKernelInterface::MASTER_REQUEST);
         $this->listener->onKernelController($kernelEvent);
 
-        self::assertCount(3, $this->breadcrumbTrail);
+        self::assertGreaterThan(3,count($this->breadcrumbTrail));
+    }
+
+    /**
+     * @requires PHP >= 8.0
+     */
+    public function testMultipleAttributesOnPhp8()
+    {
+        $this->setUpTest();
+
+        $controller = new ControllerWithMultipleAttributes();
+        $kernelEvent = new ControllerEvent($this->kernel, [$controller, 'indexAction'], new Request(), HttpKernelInterface::MASTER_REQUEST);
+        $this->listener->onKernelController($kernelEvent);
+
+        self::assertCount(6, $this->breadcrumbTrail);
     }
 
     protected function getBundleClass()
