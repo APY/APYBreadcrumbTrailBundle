@@ -32,21 +32,14 @@ class BreadcrumbListener
     protected $breadcrumbTrail;
 
     /**
-     * @var string
-     */
-    private $type;
-
-    /**
      * Constructor.
      *
      * @param Reader $reader An Reader instance
      * @param Trail $breadcrumbTrail An Trail instance
-     * @param string $type Load Annotation, Attribute or both
      */
-    public function __construct(Reader $reader, Trail $breadcrumbTrail, string $type)
+    public function __construct(Reader $reader, Trail $breadcrumbTrail)
     {
         $this->reader = $reader;
-        $this->type = $type;
         $this->breadcrumbTrail = $breadcrumbTrail;
     }
 
@@ -135,23 +128,19 @@ class BreadcrumbListener
         return substr($className, $pos + 8);
     }
 
-    private function shouldLoadAnnotations(): bool
+    private function supportsLoadingAttributes(): bool
     {
-        return in_array($this->type, ["annotation", "both"]);
-    }
-    private function shouldLoadAttributes(): bool
-    {
-        return in_array($this->type, ["attribute", "both"]);
+        return \PHP_VERSION_ID >= 80000;
     }
 
     /**
      * @param \ReflectionClass|\ReflectionMethod $reflected
-     * @return list<Breadcrumb>
+     * @return array<Breadcrumb>
      */
     private function getAttributes($reflected): array
     {
-        if (\PHP_VERSION_ID < 80000) {
-            return [];
+        if ($this->supportsLoadingAttributes() === false) {
+            throw new \RuntimeException('Detected an attempt on getting attributes while your version of PHP does not support this.');
         }
 
         $attributes = [];
