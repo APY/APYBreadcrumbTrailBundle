@@ -11,6 +11,7 @@
 
 namespace APY\BreadcrumbTrailBundle\EventListener;
 
+use APY\BreadcrumbTrailBundle\MixedAnnotationWithAttributeBreadcrumbsException;
 use Doctrine\Common\Annotations\Reader;
 use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
@@ -67,20 +68,38 @@ class BreadcrumbListener
             $this->breadcrumbTrail->reset();
 
             // Annotations from class
-            $this->addBreadcrumbsFromAnnotations($this->reader->getClassAnnotations($class));
+            $classBreadcrumbs = $this->reader->getClassAnnotations($class);
+            if ($this->supportsLoadingAttributes()) {
+                $classAttributeBreadcrumbs = $this->getAttributes($class);
+                if (count($classAttributeBreadcrumbs) > 0) {
+                    if (count($classBreadcrumbs) > 0) {
+                        throw MixedAnnotationWithAttributeBreadcrumbsException::forClass($class->name);
+                    }
+                    $classBreadcrumbs = $classAttributeBreadcrumbs;
+                }
+            }
+            $this->addBreadcrumbsToTrail($classBreadcrumbs);
 
             // Annotations from method
             $method = $class->getMethod($controller[1]);
-            $this->addBreadcrumbsFromAnnotations($this->reader->getMethodAnnotations($method));
+            $methodBreadcrumbs = $this->reader->getMethodAnnotations($method);
+            if ($this->supportsLoadingAttributes()) {
+                $methodAttributeBreadcrumbs = $this->getAttributes($method);
+                if (count($methodAttributeBreadcrumbs) > 0) {
+                    if (count($methodBreadcrumbs) > 0) {
+                        throw MixedAnnotationWithAttributeBreadcrumbsException::forClassMethod($class->name, $method->name);
+                    }
+                    $methodBreadcrumbs = $methodAttributeBreadcrumbs;
+                }
+            }
+            $this->addBreadcrumbsToTrail($methodBreadcrumbs);
         }
     }
 
     /**
-     * Add Breadcrumb from annotations to the trail.
-     *
      * @param array $annotations Array of Breadcrumb annotations
      */
-    private function addBreadcrumbsFromAnnotations(array $annotations)
+    private function addBreadcrumbsToTrail(array $annotations)
     {
         // requirements (@Breadcrumb)
         foreach ($annotations as $annotation) {
@@ -114,5 +133,28 @@ class BreadcrumbListener
         }
 
         return substr($className, $pos + 8);
+    }
+
+    private function supportsLoadingAttributes(): bool
+    {
+        return \PHP_VERSION_ID >= 80000;
+    }
+
+    /**
+     * @param \ReflectionClass|\ReflectionMethod $reflected
+     * @return array<Breadcrumb>
+     */
+    private function getAttributes($reflected): array
+    {
+        if ($this->supportsLoadingAttributes() === false) {
+            throw new \RuntimeException('Detected an attempt on getting attributes while your version of PHP does not support this.');
+        }
+
+        $attributes = [];
+        foreach ($reflected->getAttributes(Breadcrumb::class) as $reflectionAttribute) {
+            $attributes[] = $reflectionAttribute->newInstance();
+        }
+
+        return $attributes;
     }
 }

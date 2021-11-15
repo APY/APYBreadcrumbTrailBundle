@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=7.2",
-        "symfony/framework-bundle": "^3.4|^4.0|^5.0",
+        "symfony/framework-bundle": "^v3.4.25|^4.0|^5.0",
         "twig/twig": "^1.41|^2.0|^3.0"
     },
     "scripts": {
@@ -32,6 +32,9 @@
         "matthiasnoback/symfony-dependency-injection-test": "^4.0",
         "doctrine/doctrine-bundle": "^v1.0|^v2.0",
         "symfony/twig-bundle": "^3.4|^4.0|^5.0"
+    },
+    "conflict": {
+        "doctrine/annotations": "< 1.7"
     },
     "autoload-dev": {
         "psr-4": { "APY\\BreadcrumbTrailBundle\\": "tests/" }

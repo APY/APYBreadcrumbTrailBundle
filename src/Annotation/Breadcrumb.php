@@ -14,6 +14,7 @@ namespace APY\BreadcrumbTrailBundle\Annotation;
 /**
  * @Annotation
  */
+#[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
 class Breadcrumb
 {
     /**
@@ -52,12 +53,46 @@ class Breadcrumb
     private $attributes = array();
 
     /**
-     * Constructor.
-     *
-     * @param array $data An array of annotation values
+     * @param array|string $title title, or the legacy array that contains all annotation data
+     * @param ?array<string, string|array> $route
+     * @param ?string $routeName
+     * @param ?array<string,mixed> $routeParameters
+     * @param bool $routeAbsolute
+     * @param int $position
+     * @param ?string $template
+     * @param array $attributes
      */
-    public function __construct(array $data)
+    public function __construct(
+        $title,
+        $routeName = null,
+        $routeParameters = null,
+        $routeAbsolute = null,
+        $position = null,
+        $template = null,
+        $attributes = null
+    )
     {
+        $data = [];
+
+        if (is_string($title)) {
+            $data = ["title" => $title];
+        } elseif (is_array($title)) {
+            $data = $title;
+        }
+
+        $data['routeName'] = $data['routeName'] ?? $routeName;
+        $data['routeParameters'] = $data['routeParameters'] ?? $routeParameters;
+        $data['routeAbsolute'] = $data['routeAbsolute'] ?? $routeAbsolute;
+        $data['position'] = $data['position'] ?? $position;
+        $data['template'] = $data['template'] ?? $template;
+        $data['attributes'] = $data['attributes'] ?? $attributes;
+
+        // When no data key is provided, the first value gets respected as the `value`
+        if (isset($data[0])) {
+            $data['value'] = $data[0];
+            unset($data[0]);
+        }
+
         if (isset($data['value'])) {
             $data['title'] = $data['value'];
             unset($data['value']);
@@ -81,6 +116,12 @@ class Breadcrumb
         }
 
         foreach ($data as $key => $value) {
+
+            // Do not attempt setting values that were provided as null
+            if ($value === null) {
+                continue;
+            }
+
             $method = 'set'.$key;
             if (!method_exists($this, $method)) {
                 throw new \BadMethodCallException(sprintf("Unknown property '%s' on annotation '%s'.", $key, get_class($this)));
