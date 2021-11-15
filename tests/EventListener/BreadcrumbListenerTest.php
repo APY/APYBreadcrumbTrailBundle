@@ -5,6 +5,7 @@ namespace APY\BreadcrumbTrailBundle\EventListener;
 use APY\BreadcrumbTrailBundle\APYBreadcrumbTrailBundle;
 use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 use APY\BreadcrumbTrailBundle\Fixtures\ControllerWithMultipleAttributes;
+use APY\BreadcrumbTrailBundle\InvalidBreadcrumbException;
 use Nyholm\BundleTest\AppKernel;
 use Nyholm\BundleTest\BaseBundleTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,10 +37,10 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
         $this->setUpTest();
 
         $controller = new ControllerWithMultipleAttributes();
-        $kernelEvent = new ControllerEvent($this->kernel, [$controller, 'indexAction'], new Request(), HttpKernelInterface::MASTER_REQUEST);
+        $kernelEvent = new ControllerEvent($this->kernel, [$controller, 'annotationOnlyAction'], new Request(), HttpKernelInterface::MASTER_REQUEST);
         $this->listener->onKernelController($kernelEvent);
 
-        self::assertGreaterThanOrEqual(3,count($this->breadcrumbTrail));
+        self::assertCount(3,$this->breadcrumbTrail);
     }
 
     /**
@@ -50,10 +51,25 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
         $this->setUpTest();
 
         $controller = new ControllerWithMultipleAttributes();
-        $kernelEvent = new ControllerEvent($this->kernel, [$controller, 'indexAction'], new Request(), HttpKernelInterface::MASTER_REQUEST);
+        $kernelEvent = new ControllerEvent($this->kernel, [$controller, 'attributeOnlyAction'], new Request(), HttpKernelInterface::MASTER_REQUEST);
         $this->listener->onKernelController($kernelEvent);
 
-        self::assertCount(6, $this->breadcrumbTrail);
+        self::assertCount(3, $this->breadcrumbTrail);
+    }
+
+    /**
+     * @requires PHP >= 8.0
+     */
+    public function testMixingAnnotationsWithAttributesFails()
+    {
+        $this->setUpTest();
+        $this->expectException(InvalidBreadcrumbException::class);
+
+        $controller = new ControllerWithMultipleAttributes();
+        $kernelEvent = new ControllerEvent($this->kernel, [$controller, 'mixedAction'], new Request(), HttpKernelInterface::MASTER_REQUEST);
+        $this->listener->onKernelController($kernelEvent);
+
+        self::assertCount(4, $this->breadcrumbTrail);
     }
 
     protected function getBundleClass()

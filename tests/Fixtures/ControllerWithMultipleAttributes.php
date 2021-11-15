@@ -9,15 +9,28 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  * @Breadcrumb("first-breadcrumb")
  * @Breadcrumb("second-breadcrumb")
  */
-#[Breadcrumb(title: 'first-breadcrumb')]
-#[Breadcrumb(title: 'second-breadcrumb')]
 class ControllerWithMultipleAttributes extends AbstractController
 {
+
+    /**
+     * @Breadcrumb("third-breadcrumb")
+     */
+    public function annotationOnlyAction()
+    {
+        return [];
+    }
+
+    #[Breadcrumb(title: 'third-breadcrumb')]
+    public function attributeOnlyAction()
+    {
+        return [];
+    }
+
     /**
      * @Breadcrumb("third-breadcrumb")
      */
     #[Breadcrumb(title: 'third-breadcrumb')]
-    public function indexAction()
+    public function mixedAction()
     {
         return [];
     }

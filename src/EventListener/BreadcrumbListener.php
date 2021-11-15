@@ -11,6 +11,7 @@
 
 namespace APY\BreadcrumbTrailBundle\EventListener;
 
+use APY\BreadcrumbTrailBundle\InvalidBreadcrumbException;
 use Doctrine\Common\Annotations\Reader;
 use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
@@ -76,6 +77,8 @@ class BreadcrumbListener
             // Annotations from class
             $classAnnotations = $this->shouldLoadAnnotations() ? $this->reader->getClassAnnotations($class) : [];
             $classAttributes = $this->shouldLoadAttributes() ? $this->getAttributes($class): [];
+            if (count($classAttributes) > 0 && count($classAnnotations) > 0)
+                throw new InvalidBreadcrumbException($class->getName());
 
             $this->addBreadcrumbsFromAnnotations(array_merge($classAnnotations, $classAttributes));
 
@@ -84,6 +87,9 @@ class BreadcrumbListener
 
             $methodAnnotations = $this->shouldLoadAnnotations() ? $this->reader->getMethodAnnotations($method) : [];
             $methodAttributes = $this->shouldLoadAttributes() ? $this->getAttributes($method) : [];
+            if (count($methodAnnotations) > 0 && count($methodAttributes) > 0)
+                throw new InvalidBreadcrumbException($class->getName(), $method->getName());
+
             $this->addBreadcrumbsFromAnnotations(array_merge($methodAnnotations, $methodAttributes));
         }
     }
