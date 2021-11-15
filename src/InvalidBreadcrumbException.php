@@ -3,7 +3,7 @@
 namespace APY\BreadcrumbTrailBundle;
 
 
-class InvalidBreadcrumbException extends \Exception
+class InvalidBreadcrumbException extends \LogicException
 {
     public function __construct(string $class, string $method = null)
     {
