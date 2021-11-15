@@ -9,8 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  * @Breadcrumb("first-breadcrumb")
  * @Breadcrumb("second-breadcrumb")
  */
-#[Breadcrumb(title: 'first-breadcrumb')]
-#[Breadcrumb(title: 'second-breadcrumb')]
 class ControllerWithAttributesAndAnnotations extends AbstractController
 {
     /**

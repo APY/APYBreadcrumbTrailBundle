@@ -7,6 +7,8 @@ use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 use APY\BreadcrumbTrailBundle\Fixtures\ControllerWithAnnotations;
 use APY\BreadcrumbTrailBundle\Fixtures\ControllerWithAttributes;
 use APY\BreadcrumbTrailBundle\Fixtures\ControllerWithAttributesAndAnnotations;
+use APY\BreadcrumbTrailBundle\Fixtures\ControllerWithMultipleAttributes;
+use APY\BreadcrumbTrailBundle\InvalidBreadcrumbException;
 use Nyholm\BundleTest\AppKernel;
 use Nyholm\BundleTest\BaseBundleTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,20 +47,6 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
     }
 
     /**
-     * @requires PHP < 8.0
-     */
-    public function testWillNotThrowExceptionWhenAttributesAreNotSupportedAndAnnotationsAreMixed()
-    {
-        $this->setUpTest();
-
-        $controller = new ControllerWithAttributesAndAnnotations();
-        $kernelEvent = new ControllerEvent($this->kernel, [$controller, 'indexAction'], new Request(), HttpKernelInterface::MASTER_REQUEST);
-        $this->listener->onKernelController($kernelEvent);
-
-        self::assertCount(3, $this->breadcrumbTrail);
-    }
-
-    /**
      * @requires PHP >= 8.0
      */
     public function testAttributes()
@@ -75,14 +63,16 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
     /**
      * @requires PHP >= 8.0
      */
-    public function testExceptionOnMixedAttributesAndAnnotation()
+    public function testMixingAnnotationsWithAttributesFails()
     {
         $this->setUpTest();
-        $this->expectException(\LogicException::class);
+        $this->expectException(InvalidBreadcrumbException::class);
 
         $controller = new ControllerWithAttributesAndAnnotations();
         $kernelEvent = new ControllerEvent($this->kernel, [$controller, 'indexAction'], new Request(), HttpKernelInterface::MASTER_REQUEST);
         $this->listener->onKernelController($kernelEvent);
+
+        self::assertCount(4, $this->breadcrumbTrail);
     }
 
     protected function getBundleClass()
