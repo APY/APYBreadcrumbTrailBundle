@@ -12,7 +12,9 @@ use Nyholm\BundleTest\AppKernel;
 use Nyholm\BundleTest\BaseBundleTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 class BreadcrumbListenerTest extends BaseBundleTestCase
 {
@@ -39,7 +41,7 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
         $this->setUpTest();
 
         $controller = new ControllerWithAnnotations();
-        $kernelEvent = new ControllerEvent($this->kernel, [$controller, 'indexAction'], new Request(), HttpKernelInterface::MASTER_REQUEST);
+        $kernelEvent = $this->createControllerEvent($controller);
         $this->listener->onKernelController($kernelEvent);
 
         self::assertCount(3, $this->breadcrumbTrail);
@@ -53,7 +55,7 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
         $this->setUpTest();
 
         $controller = new ControllerWithAttributes();
-        $kernelEvent = new ControllerEvent($this->kernel, [$controller, 'indexAction'], new Request(), HttpKernelInterface::MASTER_REQUEST);
+        $kernelEvent = $this->createControllerEvent($controller);
         $this->listener->onKernelController($kernelEvent);
 
         self::assertCount(3, $this->breadcrumbTrail);
@@ -68,14 +70,23 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
         $this->expectException(InvalidBreadcrumbException::class);
 
         $controller = new ControllerWithAttributesAndAnnotations();
-        $kernelEvent = new ControllerEvent($this->kernel, [$controller, 'indexAction'], new Request(), HttpKernelInterface::MASTER_REQUEST);
+        $kernelEvent = $this->createControllerEvent($controller);
         $this->listener->onKernelController($kernelEvent);
-
-        self::assertCount(4, $this->breadcrumbTrail);
     }
 
     protected function getBundleClass()
     {
         return APYBreadcrumbTrailBundle::class;
+    }
+
+    /**
+     * @return ControllerEvent|FilterControllerEvent
+     */
+    private function createControllerEvent($controller)
+    {
+        if (Kernel::MAJOR_VERSION <= 4) {
+            return new FilterControllerEvent($this->kernel, [$controller, 'indexAction'], new Request(), HttpKernelInterface::MASTER_REQUEST);
+        }
+        return new ControllerEvent($this->kernel, [$controller, 'indexAction'], new Request(), HttpKernelInterface::MASTER_REQUEST);
     }
 }

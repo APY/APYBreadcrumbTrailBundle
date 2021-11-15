@@ -8,10 +8,11 @@ class InvalidBreadcrumbException extends \LogicException
     public function __construct(string $class, string $method = null)
     {
         $target = $class;
-        if ($method)
+        if ($method) {
             $target .= "::$method()";
-        else
+        } else {
             $target .= "::class";
+        }
 
         parent::__construct("The breadcrumb on $target is invalid. You can only use Attribute or Annotation, not both.");
     }
