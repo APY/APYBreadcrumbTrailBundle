@@ -11,7 +11,7 @@
 
 namespace APY\BreadcrumbTrailBundle\EventListener;
 
-use APY\BreadcrumbTrailBundle\InvalidBreadcrumbException;
+use APY\BreadcrumbTrailBundle\MixedAnnotationWithAttributeBreadcrumbsException;
 use Doctrine\Common\Annotations\Reader;
 use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
@@ -68,22 +68,31 @@ class BreadcrumbListener
             $this->breadcrumbTrail->reset();
 
             // Annotations from class
-            $classAnnotations = $this->reader->getClassAnnotations($class);
-            $classAttributes = $this->getAttributes($class);
-            if (count($classAttributes) > 0 && count($classAnnotations) > 0)
-                throw new InvalidBreadcrumbException($class->getName());
-
-            $this->addBreadcrumbsFromAnnotations(array_merge($classAnnotations, $classAttributes));
+            $classBreadcrumbs = $this->reader->getClassAnnotations($class);
+            if ($this->supportsLoadingAttributes()) {
+                $classAttributeBreadcrumbs = $this->getAttributes($class);
+                if (count($classAttributeBreadcrumbs) > 0) {
+                    if (count($classBreadcrumbs) > 0) {
+                        throw MixedAnnotationWithAttributeBreadcrumbsException::forClass($class->name);
+                    }
+                    $classBreadcrumbs = $classAttributeBreadcrumbs;
+                }
+            }
+            $this->addBreadcrumbsFromAnnotations($classBreadcrumbs);
 
             // Annotations from method
             $method = $class->getMethod($controller[1]);
-
-            $methodAnnotations = $this->reader->getMethodAnnotations($method);
-            $methodAttributes = $this->getAttributes($method);
-            if (count($methodAnnotations) > 0 && count($methodAttributes) > 0)
-                throw new InvalidBreadcrumbException($class->getName(), $method->getName());
-
-            $this->addBreadcrumbsFromAnnotations(array_merge($methodAnnotations, $methodAttributes));
+            $methodBreadcrumbs = $this->reader->getMethodAnnotations($method);
+            if ($this->supportsLoadingAttributes()) {
+                $methodAttributeBreadcrumbs = $this->getAttributes($method);
+                if (count($methodAttributeBreadcrumbs) > 0) {
+                    if (count($methodBreadcrumbs) > 0) {
+                        throw MixedAnnotationWithAttributeBreadcrumbsException::forClassMethod($class->name, $method->name);
+                    }
+                    $methodBreadcrumbs = $methodAttributeBreadcrumbs;
+                }
+            }
+            $this->addBreadcrumbsFromAnnotations($methodBreadcrumbs);
         }
     }
 
@@ -128,14 +137,19 @@ class BreadcrumbListener
         return substr($className, $pos + 8);
     }
 
+    private function supportsLoadingAttributes(): bool
+    {
+        return \PHP_VERSION_ID >= 80000;
+    }
+
     /**
      * @param \ReflectionClass|\ReflectionMethod $reflected
      * @return array<Breadcrumb>
      */
     private function getAttributes($reflected): array
     {
-        if (\PHP_VERSION_ID < 80000) {
-            return [];
+        if ($this->supportsLoadingAttributes() === false) {
+            throw new \RuntimeException('Detected an attempt on getting attributes while your version of PHP does not support this.');
         }
 
         $attributes = [];

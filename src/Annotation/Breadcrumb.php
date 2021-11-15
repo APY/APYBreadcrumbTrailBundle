@@ -87,6 +87,12 @@ class Breadcrumb
         $data['template'] = $data['template'] ?? $template;
         $data['attributes'] = $data['attributes'] ?? $attributes;
 
+        // When no data key is provided, the first value gets respected as the `value`
+        if (isset($data[0])) {
+            $data['value'] = $data[0];
+            unset($data[0]);
+        }
+
         if (isset($data['value'])) {
             $data['title'] = $data['value'];
             unset($data['value']);

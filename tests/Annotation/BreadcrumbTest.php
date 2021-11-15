@@ -42,4 +42,12 @@ class BreadcrumbTest extends TestCase
 
         self::assertEquals($expected, $breadcrumb->getTitle());
     }
+
+    public function testUnnamedWillGetInterpretedAsValueForTitle()
+    {
+        $expected = "title-of-the-breadcrumb";
+        $breadcrumb = new Breadcrumb([$expected, 'route' => ["name" => "my_route"]]);
+
+        self::assertEquals($expected, $breadcrumb->getTitle());
+    }
 }

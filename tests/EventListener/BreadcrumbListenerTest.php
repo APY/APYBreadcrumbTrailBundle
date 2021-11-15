@@ -7,7 +7,7 @@ use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 use APY\BreadcrumbTrailBundle\Fixtures\ControllerWithAnnotations;
 use APY\BreadcrumbTrailBundle\Fixtures\ControllerWithAttributes;
 use APY\BreadcrumbTrailBundle\Fixtures\ControllerWithAttributesAndAnnotations;
-use APY\BreadcrumbTrailBundle\InvalidBreadcrumbException;
+use APY\BreadcrumbTrailBundle\MixedAnnotationWithAttributeBreadcrumbsException;
 use Nyholm\BundleTest\AppKernel;
 use Nyholm\BundleTest\BaseBundleTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,7 +67,7 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
     public function testMixingAnnotationsWithAttributesFails()
     {
         $this->setUpTest();
-        $this->expectException(InvalidBreadcrumbException::class);
+        $this->expectException(MixedAnnotationWithAttributeBreadcrumbsException::class);
 
         $controller = new ControllerWithAttributesAndAnnotations();
         $kernelEvent = $this->createControllerEvent($controller);
