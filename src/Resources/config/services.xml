@@ -13,15 +13,11 @@
                 <argument>%apy_breadcrumb_trail.template%</argument>
             </call>
         </service>
-        <service id="apy_breadcrumb_trail" alias="APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail" public="true">
-            <deprecated>The "%service_id%" service is deprecated, use "%alias_id%" FQCN as service id instead.</deprecated>
-        </service>
+        <service id="apy_breadcrumb_trail" alias="APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail" public="true" />
 
         <service id="APY\BreadcrumbTrailBundle\EventListener\BreadcrumbListener">
             <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" priority="-1" />
         </service>
-        <service id="apy_breadcrumb_trail.annotation.listener" alias="APY\BreadcrumbTrailBundle\EventListener\BreadcrumbListener" public="true">
-            <deprecated>The "%service_id%" service is deprecated, use "%alias_id%" FQCN as service id instead.</deprecated>
-        </service>
+        <service id="apy_breadcrumb_trail.annotation.listener" alias="APY\BreadcrumbTrailBundle\EventListener\BreadcrumbListener" public="true" />
     </services>
 </container>
