@@ -29,19 +29,20 @@ class BreadcrumbListener
      * @var Trail An Trail instance
      */
     protected $breadcrumbTrail;
+
     /**
      * @var string
      */
-    protected $type;
+    private $type;
 
     /**
      * Constructor.
      *
+     * @param Reader $reader An Reader instance
      * @param Trail $breadcrumbTrail An Trail instance
      * @param string $type Load Annotation, Attribute or both
-     * @param Reader $reader An Reader instance
      */
-    public function __construct(Trail $breadcrumbTrail, string $type, Reader $reader = null)
+    public function __construct(Reader $reader, Trail $breadcrumbTrail, string $type)
     {
         $this->reader = $reader;
         $this->type = $type;
@@ -143,7 +144,6 @@ class BreadcrumbListener
      */
     private function getAttributes($reflected): array
     {
-
         if (\PHP_VERSION_ID < 80000) {
             return [];
         }
