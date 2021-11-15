@@ -7,7 +7,6 @@ use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 use APY\BreadcrumbTrailBundle\Fixtures\ControllerWithAnnotations;
 use APY\BreadcrumbTrailBundle\Fixtures\ControllerWithAttributes;
 use APY\BreadcrumbTrailBundle\Fixtures\ControllerWithAttributesAndAnnotations;
-use APY\BreadcrumbTrailBundle\Fixtures\ControllerWithMultipleAttributes;
 use APY\BreadcrumbTrailBundle\InvalidBreadcrumbException;
 use Nyholm\BundleTest\AppKernel;
 use Nyholm\BundleTest\BaseBundleTestCase;
