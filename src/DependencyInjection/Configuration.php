@@ -29,10 +29,6 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('template')
                     ->defaultValue('APYBreadcrumbTrailBundle::breadcrumbtrail.html.twig')
                 ->end()
-                ->scalarNode("type")
-                    ->defaultValue("annotation")
-                    ->example("attribute, annotation or both")
-                ->end()
              ->end()
         ;
 

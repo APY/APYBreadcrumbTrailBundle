@@ -15,3 +15,6 @@ test-lowest:
 
 test-php73-lowest:
 	docker run --rm -v $(DIR):/project -w /project webdevops/php:7.3 $(MAKE) test-lowest
+
+test-php74-lowest:
+	docker run --rm -v $(DIR):/project -w /project webdevops/php:7.4 $(MAKE) test-lowest
