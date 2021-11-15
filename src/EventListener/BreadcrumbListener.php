@@ -68,8 +68,8 @@ class BreadcrumbListener
             $this->breadcrumbTrail->reset();
 
             // Annotations from class
-            $classAnnotations = $this->shouldLoadAnnotations() ? $this->reader->getClassAnnotations($class) : [];
-            $classAttributes = $this->shouldLoadAttributes() ? $this->getAttributes($class): [];
+            $classAnnotations = $this->reader->getClassAnnotations($class);
+            $classAttributes = $this->getAttributes($class);
             if (count($classAttributes) > 0 && count($classAnnotations) > 0)
                 throw new InvalidBreadcrumbException($class->getName());
 
@@ -78,8 +78,8 @@ class BreadcrumbListener
             // Annotations from method
             $method = $class->getMethod($controller[1]);
 
-            $methodAnnotations = $this->shouldLoadAnnotations() ? $this->reader->getMethodAnnotations($method) : [];
-            $methodAttributes = $this->shouldLoadAttributes() ? $this->getAttributes($method) : [];
+            $methodAnnotations = $this->reader->getMethodAnnotations($method);
+            $methodAttributes = $this->getAttributes($method);
             if (count($methodAnnotations) > 0 && count($methodAttributes) > 0)
                 throw new InvalidBreadcrumbException($class->getName(), $method->getName());
 
@@ -128,19 +128,14 @@ class BreadcrumbListener
         return substr($className, $pos + 8);
     }
 
-    private function supportsLoadingAttributes(): bool
-    {
-        return \PHP_VERSION_ID >= 80000;
-    }
-
     /**
      * @param \ReflectionClass|\ReflectionMethod $reflected
      * @return array<Breadcrumb>
      */
     private function getAttributes($reflected): array
     {
-        if ($this->supportsLoadingAttributes() === false) {
-            throw new \RuntimeException('Detected an attempt on getting attributes while your version of PHP does not support this.');
+        if (\PHP_VERSION_ID < 80000) {
+            return [];
         }
 
         $attributes = [];
