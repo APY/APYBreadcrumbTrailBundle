@@ -39,7 +39,7 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
         $kernelEvent = new ControllerEvent($this->kernel, [$controller, 'indexAction'], new Request(), HttpKernelInterface::MASTER_REQUEST);
         $this->listener->onKernelController($kernelEvent);
 
-        self::assertGreaterThan(3,count($this->breadcrumbTrail));
+        self::assertGreaterThanOrEqual(3,count($this->breadcrumbTrail));
     }
 
     /**
