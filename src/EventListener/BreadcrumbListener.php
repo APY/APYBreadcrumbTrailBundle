@@ -78,7 +78,7 @@ class BreadcrumbListener
                     $classBreadcrumbs = $classAttributeBreadcrumbs;
                 }
             }
-            $this->addBreadcrumbsFromAnnotations($classBreadcrumbs);
+            $this->addBreadcrumbsToTrail($classBreadcrumbs);
 
             // Annotations from method
             $method = $class->getMethod($controller[1]);
@@ -92,16 +92,14 @@ class BreadcrumbListener
                     $methodBreadcrumbs = $methodAttributeBreadcrumbs;
                 }
             }
-            $this->addBreadcrumbsFromAnnotations($methodBreadcrumbs);
+            $this->addBreadcrumbsToTrail($methodBreadcrumbs);
         }
     }
 
     /**
-     * Add Breadcrumb from annotations to the trail.
-     *
      * @param array $annotations Array of Breadcrumb annotations
      */
-    private function addBreadcrumbsFromAnnotations(array $annotations)
+    private function addBreadcrumbsToTrail(array $annotations)
     {
         // requirements (@Breadcrumb)
         foreach ($annotations as $annotation) {
