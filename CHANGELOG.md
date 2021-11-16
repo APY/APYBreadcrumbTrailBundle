@@ -1,3 +1,8 @@
+# v1.7
+
+- support breadcrumbs via PHP Attributes
+- deprecate annotations, to be removed in v2.0
+
 #2020-06-10
  - Add PHPUnit to integration test bundle
 
