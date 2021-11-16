@@ -62,3 +62,11 @@ jobs:
       - name: Run tests
         run: make test-lowest
 
+ codestyle:
+    name: Code style
+    runs-on: ubuntu-latest
+    container: jakzal/phpqa
+    steps:
+      - uses: actions/checkout@v2
+      - name: PHP CS Fixer (via jakzal/phpqa)
+        run: php-cs-fixer fix
