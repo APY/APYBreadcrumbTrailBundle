@@ -17,18 +17,15 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 /**
- * Provides an extension for Twig to output breadcrumbs
+ * Provides an extension for Twig to output breadcrumbs.
  */
 class BreadcrumbTrailExtension extends AbstractExtension
 {
     private $trail;
     private $templating;
 
-
     /**
      * BreadcrumbTrailExtension constructor.
-     * @param Trail $trail
-     * @param Environment $templating
      */
     public function __construct(Trail $trail, Environment $templating)
     {
@@ -43,21 +40,21 @@ class BreadcrumbTrailExtension extends AbstractExtension
      */
     public function getFunctions()
     {
-        return array(
-            new TwigFunction("apy_breadcrumb_trail_render", array($this, "renderBreadcrumbTrail"), array("is_safe" => array("html"))),
-        );
+        return [
+            new TwigFunction('apy_breadcrumb_trail_render', [$this, 'renderBreadcrumbTrail'], ['is_safe' => ['html']]),
+        ];
     }
 
     /**
-     * Renders the breadcrumb trail in a list
+     * Renders the breadcrumb trail in a list.
      *
      * @return string
      */
     public function renderBreadcrumbTrail($template = null)
     {
         return $this->templating->render(
-                $template === null ? $this->trail->getTemplate() : $template,
-                array( 'breadcrumbs' => $this->trail )
+                null === $template ? $this->trail->getTemplate() : $template,
+                ['breadcrumbs' => $this->trail]
         );
     }
 
@@ -68,6 +65,6 @@ class BreadcrumbTrailExtension extends AbstractExtension
      */
     public function getName()
     {
-        return "breadcrumbtrail";
+        return 'breadcrumbtrail';
     }
 }

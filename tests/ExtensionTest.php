@@ -13,7 +13,7 @@ class ExtensionTest extends AbstractExtensionTestCase
     protected function getContainerExtensions(): array
     {
         return [
-            new APYBreadcrumbTrailExtension()
+            new APYBreadcrumbTrailExtension(),
         ];
     }
 

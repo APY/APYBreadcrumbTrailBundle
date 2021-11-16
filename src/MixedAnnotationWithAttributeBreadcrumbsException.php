@@ -2,7 +2,6 @@
 
 namespace APY\BreadcrumbTrailBundle;
 
-
 class MixedAnnotationWithAttributeBreadcrumbsException extends \LogicException
 {
     private function __construct(string $class, string $method = null)
@@ -11,7 +10,7 @@ class MixedAnnotationWithAttributeBreadcrumbsException extends \LogicException
         if ($method) {
             $target .= "::$method()";
         } else {
-            $target .= "::class";
+            $target .= '::class';
         }
 
         parent::__construct("A mix of Breadcrumb attributes and annotations is not allowed. Please upgrade all annotations on class `{$target}` to attributes.");

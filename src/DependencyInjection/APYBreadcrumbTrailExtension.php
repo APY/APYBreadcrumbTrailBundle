@@ -29,17 +29,18 @@ class APYBreadcrumbTrailExtension extends Extension
 
         $container->setParameter('apy_breadcrumb_trail.template', $config['template']);
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
-        $this->deprecateService($container, "apy_breadcrumb_trail");
-        $this->deprecateService($container, "apy_breadcrumb_trail.annotation.listener");
+        $this->deprecateService($container, 'apy_breadcrumb_trail');
+        $this->deprecateService($container, 'apy_breadcrumb_trail.annotation.listener');
     }
 
-    private function deprecateService(ContainerBuilder $container, string $id) {
+    private function deprecateService(ContainerBuilder $container, string $id)
+    {
         $alias = $container->getAlias($id);
         if (Kernel::VERSION_ID >= 50100) {
-            $alias->setDeprecated('APY/BreadcrumbTrailBundle','1.7','The service is deprecated, use "%alias_id%" FQCN as service id instead.');
+            $alias->setDeprecated('APY/BreadcrumbTrailBundle', '1.7', 'The service is deprecated, use "%alias_id%" FQCN as service id instead.');
         } elseif (Kernel::VERSION_ID >= 40300) {
             $alias->setDeprecated();
         }

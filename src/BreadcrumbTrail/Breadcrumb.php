@@ -31,11 +31,11 @@ class Breadcrumb
     /**
      * Constructor.
      *
-     * @param string $title Title of the breadcrumb
-     * @param string $url Url of the breadcrumb
-     * @param mixed $attributes Additional attributes for the breadcrumb
+     * @param string $title      Title of the breadcrumb
+     * @param string $url        Url of the breadcrumb
+     * @param mixed  $attributes Additional attributes for the breadcrumb
      */
-    public function __construct($title, $url = null, $attributes = array())
+    public function __construct($title, $url = null, $attributes = [])
     {
         $this->title = $title;
         $this->url = $url;

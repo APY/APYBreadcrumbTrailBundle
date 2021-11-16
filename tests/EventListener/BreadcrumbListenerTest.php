@@ -87,6 +87,7 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
         if (Kernel::MAJOR_VERSION <= 4) {
             return new FilterControllerEvent($this->kernel, [$controller, 'indexAction'], new Request(), HttpKernelInterface::MASTER_REQUEST);
         }
+
         return new ControllerEvent($this->kernel, [$controller, 'indexAction'], new Request(), HttpKernelInterface::MASTER_REQUEST);
     }
 }

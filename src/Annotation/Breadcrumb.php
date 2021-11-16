@@ -30,15 +30,15 @@ class Breadcrumb
     /**
      * @var mixed An array of parameters for the route
      */
-    private $routeParameters = array();
+    private $routeParameters = [];
 
     /**
-     * @var Boolean Whether to generate an absolute URL
+     * @var bool Whether to generate an absolute URL
      */
     private $routeAbsolute = false;
 
     /**
-     * @var integer Position of the breadcrumb (default = 0)
+     * @var int Position of the breadcrumb (default = 0)
      */
     private $position = 0;
 
@@ -50,17 +50,17 @@ class Breadcrumb
     /**
      * @var mixed An array of additional attributes for the breadcrumb
      */
-    private $attributes = array();
+    private $attributes = [];
 
     /**
-     * @param array|string $title title, or the legacy array that contains all annotation data
+     * @param array|string                 $title           title, or the legacy array that contains all annotation data
      * @param ?array<string, string|array> $route
-     * @param ?string $routeName
-     * @param ?array<string,mixed> $routeParameters
-     * @param bool $routeAbsolute
-     * @param int $position
-     * @param ?string $template
-     * @param array $attributes
+     * @param ?string                      $routeName
+     * @param ?array<string,mixed>         $routeParameters
+     * @param bool                         $routeAbsolute
+     * @param int                          $position
+     * @param ?string                      $template
+     * @param array                        $attributes
      */
     public function __construct(
         $title,
@@ -70,13 +70,12 @@ class Breadcrumb
         $position = null,
         $template = null,
         $attributes = null
-    )
-    {
+    ) {
         $data = [];
 
-        if (is_string($title)) {
-            $data = ["title" => $title];
-        } elseif (is_array($title)) {
+        if (\is_string($title)) {
+            $data = ['title' => $title];
+        } elseif (\is_array($title)) {
             $data = $title;
         }
 
@@ -99,16 +98,15 @@ class Breadcrumb
         }
 
         if (isset($data['route'])) {
-            if (is_array($data['route'])) {
+            if (\is_array($data['route'])) {
                 foreach ($data['route'] as $key => $value) {
                     $method = 'setRoute'.$key;
                     if (!method_exists($this, $method)) {
-                        throw new \BadMethodCallException(sprintf("Unknown property '%s' for the 'route' parameter on annotation '%s'.", $key, get_class($this)));
+                        throw new \BadMethodCallException(sprintf("Unknown property '%s' for the 'route' parameter on annotation '%s'.", $key, static::class));
                     }
                     $this->$method($value);
                 }
-            }
-            else {
+            } else {
                 $data['routeName'] = $data['route'];
             }
 
@@ -116,15 +114,14 @@ class Breadcrumb
         }
 
         foreach ($data as $key => $value) {
-
             // Do not attempt setting values that were provided as null
-            if ($value === null) {
+            if (null === $value) {
                 continue;
             }
 
             $method = 'set'.$key;
             if (!method_exists($this, $method)) {
-                throw new \BadMethodCallException(sprintf("Unknown property '%s' on annotation '%s'.", $key, get_class($this)));
+                throw new \BadMethodCallException(sprintf("Unknown property '%s' on annotation '%s'.", $key, static::class));
             }
             $this->$method($value);
         }
@@ -146,7 +143,7 @@ class Breadcrumb
     }
 
     /**
-     * Sets the name of the route
+     * Sets the name of the route.
      *
      * @param string $routeName The name of the route
      */
@@ -161,7 +158,7 @@ class Breadcrumb
     }
 
     /**
-     * Sets an array of parameters for the route
+     * Sets an array of parameters for the route.
      *
      * @param mixed $routeParameters An array of parameters for the route
      */
@@ -176,9 +173,9 @@ class Breadcrumb
     }
 
     /**
-     * Whether to generate an absolute URL
+     * Whether to generate an absolute URL.
      *
-     * @param Boolean $routeName Whether to generate an absolute URL
+     * @param bool $routeName Whether to generate an absolute URL
      */
     public function setRouteAbsolute($routeAbsolute)
     {
@@ -193,7 +190,7 @@ class Breadcrumb
     /**
      * Sets the position of the breadcrumb.
      *
-     * @param integer Position of the breadcrumb (default = 0)
+     * @param int Position of the breadcrumb (default = 0)
      */
     public function setPosition($position)
     {
@@ -208,7 +205,7 @@ class Breadcrumb
     /**
      * Sets the template of the breadcrumb trail.
      *
-     * @param string Template of the breadcrumb trail.
+     * @param string template of the breadcrumb trail
      */
     public function setTemplate($template)
     {
@@ -223,7 +220,7 @@ class Breadcrumb
     /**
      * Sets the additional attributes for the breadcrumb.
      *
-     * @param mixed Additional attributes for the breadcrumb.
+     * @param mixed additional attributes for the breadcrumb
      */
     public function setAttributes($attributes)
     {
