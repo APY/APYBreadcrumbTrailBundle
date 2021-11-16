@@ -26,6 +26,11 @@ $ make test-php73
 $ make test-php74-lowest
 ```
 
+In case all test suites pass but running tests still returns an error code, that
+might be related to the number of allowed deprecations. Make sure that the
+`SYMFONY_DEPRECATIONS_HELPER` value of `max[self]` as found in `phpunit.xml.dist`
+matches the "Remaining self deprecation notices" count from the test runner output.
+
 ## Code style
 
 PHP-CS-Fixer is used to keep the code style in shape. There is a make target that uses Docker to fix

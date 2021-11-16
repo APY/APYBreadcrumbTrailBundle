@@ -47,12 +47,13 @@ class BreadcrumbListener
      */
     public function onKernelController(KernelEvent $event)
     {
-        if (!\is_array($controller = $event->getController())) {
-            return;
-        }
+        $controller = $event->getController();
+
+        $reflectableClass = \is_array($controller) ? $controller[0] : \get_class($controller);
+        $reflectableMethod = \is_array($controller) ? $controller[1] : '__invoke';
 
         // Annotations from class
-        $class = new \ReflectionClass($controller[0]);
+        $class = new \ReflectionClass($reflectableClass);
 
         // Manage JMSSecurityExtraBundle proxy class
         if (false !== $className = $this->getRealClass($class->getName())) {
@@ -83,7 +84,7 @@ class BreadcrumbListener
             $this->addBreadcrumbsToTrail($classBreadcrumbs);
 
             // Annotations from method
-            $method = $class->getMethod($controller[1]);
+            $method = $class->getMethod($reflectableMethod);
             $methodBreadcrumbs = $this->reader->getMethodAnnotations($method);
             if ($this->supportsLoadingAttributes()) {
                 $methodAttributeBreadcrumbs = $this->getAttributes($method);

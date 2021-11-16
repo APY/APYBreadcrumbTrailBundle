@@ -7,6 +7,7 @@ use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 use APY\BreadcrumbTrailBundle\Fixtures\ControllerWithAnnotations;
 use APY\BreadcrumbTrailBundle\Fixtures\ControllerWithAttributes;
 use APY\BreadcrumbTrailBundle\Fixtures\ControllerWithAttributesAndAnnotations;
+use APY\BreadcrumbTrailBundle\Fixtures\InvokableControllerWithAnnotations;
 use APY\BreadcrumbTrailBundle\MixedAnnotationWithAttributeBreadcrumbsException;
 use Nyholm\BundleTest\AppKernel;
 use Nyholm\BundleTest\BaseBundleTestCase;
@@ -74,6 +75,17 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
         $this->listener->onKernelController($kernelEvent);
     }
 
+    public function testInvokableController()
+    {
+        $this->setUpTest();
+
+        $controller = new InvokableControllerWithAnnotations();
+        $kernelEvent = $this->createControllerEvent($controller);
+        $this->listener->onKernelController($kernelEvent);
+
+        self::assertCount(3, $this->breadcrumbTrail);
+    }
+
     protected function getBundleClass()
     {
         return APYBreadcrumbTrailBundle::class;
@@ -84,10 +96,11 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
      */
     private function createControllerEvent($controller)
     {
+        $callable = \is_callable($controller) ? $controller : [$controller, 'indexAction'];
         if (Kernel::MAJOR_VERSION <= 4) {
-            return new FilterControllerEvent($this->kernel, [$controller, 'indexAction'], new Request(), HttpKernelInterface::MASTER_REQUEST);
+            return new FilterControllerEvent($this->kernel, $callable, new Request(), HttpKernelInterface::MASTER_REQUEST);
         }
 
-        return new ControllerEvent($this->kernel, [$controller, 'indexAction'], new Request(), HttpKernelInterface::MASTER_REQUEST);
+        return new ControllerEvent($this->kernel, $callable, new Request(), HttpKernelInterface::MASTER_REQUEST);
     }
 }
