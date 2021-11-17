@@ -64,6 +64,7 @@ class Breadcrumb
      */
     public function __construct(
         $title,
+        $route = null,
         $routeName = null,
         $routeParameters = null,
         $routeAbsolute = null,
@@ -79,6 +80,7 @@ class Breadcrumb
             $data = $title;
         }
 
+        $data['route'] = $data['route'] ?? $route;
         $data['routeName'] = $data['routeName'] ?? $routeName;
         $data['routeParameters'] = $data['routeParameters'] ?? $routeParameters;
         $data['routeAbsolute'] = $data['routeAbsolute'] ?? $routeAbsolute;
@@ -99,6 +101,7 @@ class Breadcrumb
 
         if (isset($data['route'])) {
             if (\is_array($data['route'])) {
+                trigger_deprecation('apy/breadcrumb-bundle', '1.7', 'Please replace the route param with the more specific routeName and routeParameters. Using route is deprecated and will be removed in v2.0.');
                 foreach ($data['route'] as $key => $value) {
                     $method = 'setRoute'.$key;
                     if (!method_exists($this, $method)) {
@@ -107,6 +110,7 @@ class Breadcrumb
                     $this->$method($value);
                 }
             } else {
+                trigger_deprecation('apy/breadcrumb-bundle', '1.7', 'Please replace the route param with the more specific routeName. Using route is deprecated and will be removed in v2.0.');
                 $data['routeName'] = $data['route'];
             }
 
