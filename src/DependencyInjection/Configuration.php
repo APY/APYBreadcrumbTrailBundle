@@ -27,7 +27,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('template')
-                    ->defaultValue('APYBreadcrumbTrailBundle::breadcrumbtrail.html.twig')
+                    ->defaultValue('@APYBreadcrumbTrail/breadcrumbtrail.html.twig')
                 ->end()
              ->end()
         ;
