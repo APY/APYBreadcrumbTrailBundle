@@ -1,16 +1,10 @@
 {
     "name": "apy/breadcrumbtrail-bundle",
     "type": "symfony-bundle",
-    "description": "Symfony2 Breadcrumbs Bundle with annotations and PHP",
+    "description": "Symfony bundle to generate a dynamic Twig breacrumbs trail by using provides Annotations, PHP Attributes or PHP methods.",
     "keywords": ["symfony", "breadcrumb Trail", "breadcrumbs", "fil ariane", "annotation"],
     "homepage": "https://github.com/Abhoryo/APYBreadcrumbTrailBundle",
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Yoann Petit",
-            "email": "abhoryo@free.fr"
-        }
-    ],
     "require": {
         "php": ">=7.2",
         "symfony/framework-bundle": "^3.4|^4.0|^5.0",
