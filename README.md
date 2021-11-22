@@ -39,3 +39,12 @@ the code style without having to install any other dependencies:
 ```
 $ make cs
 ```
+
+## Static code analysis
+
+PHPStan is used to keep the code quality up to par. There is a make target that uses Docker to test
+the code quality without having to install any other dependencies:
+
+```
+$ make static
+```
