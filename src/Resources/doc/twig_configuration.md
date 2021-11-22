@@ -1,7 +1,7 @@
 # Twig configuration
 
-Add breadcumbs to the trail with Twig in your template works exactly like the [PHP configuration](php_configuration.md).  
-You just have to add the service in a global variable.
+Adding breadcumbs to the trail in your template directly works exactly like the [PHP configuration](php_configuration.md).
+In order to do so, you just have to add the service in a global variable.
 
 ## Configuration
 
@@ -14,7 +14,7 @@ twig:
 
 ## Basic example
 
-```django
+```twig
 <!-- MyProject\MyBundle\Resources\views\myTemplate.html.twig -->
 {% do breadcrumb_trail.add('My new breadcrumb') %}
 {{ apy_breadcrumb_trail_render() }}
@@ -22,7 +22,7 @@ twig:
 
 Functions are chainable so you can write this code:
 
-```django
+```twig
 <!-- MyProject\MyBundle\Resources\views\myTemplate.html.twig -->
 {% do breadcrumb_trail.reset().add('breadcrumb 1').add('breadcrumb 2') %}
 {{ apy_breadcrumb_trail_render() }}

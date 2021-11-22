@@ -2,7 +2,7 @@
 
 How to add breadcumbs to the trail in the controller.
 
-## Example 1) Injected via the controller's constructor 
+## Example 1) Injected via the controller's constructor
 
 Autowiring has to be enabled for the folder where the controller is located. Symfony 4 and higher
 by default have autowiring enabled.
@@ -11,22 +11,18 @@ by default have autowiring enabled.
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 
-/**
- * @Breadcrumb("Level 1")
- * @Breadcrumb("Level 2")
- */
+#[Breadcrumb("Level 1")]
+#[Breadcrumb("Level 2")]
 class MyController extends Controller
 {
    private $trail;
-   
+
    public function __construct(Trail $trail)
    {
         $this->trail = $trail;
     }
-    
-    /**
-     * @Breadcrumb("Level 3")
-     */
+
+    #[Breadcrumb("Level 3")]
     public function myAction()
     {
         $this->trail->add('Level 4');
@@ -44,15 +40,11 @@ The above example will render the following breadcrumb trail:
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 
-/**
- * @Breadcrumb("Level 1")
- * @Breadcrumb("Level 2")
- */
+#[Breadcrumb("Level 1")]
+#[Breadcrumb("Level 2")]
 class MyController extends Controller
 {
-    /**
-     * @Breadcrumb("Level 3")
-     */
+    #[Breadcrumb("Level 3")]
     public function myAction(Trail $trail)
     {
         $trail->add('Level 4');
@@ -95,18 +87,16 @@ $trail->add(
 Assume that you have defined the following route :
 
 ```php
-/**
- * @Route("/var/{var}", name="my_route")
- */
+use Symfony\Component\Routing\Annotation\Route;
+
+#[Route("/var/{var}", name: "my_route")]
 ```
 
 ```php
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 
-/**
- * @Breadcrumb("Level 1")
- */
+#[Breadcrumb("Level 1")]
 public function myAction(Trail $trail)
 {
     $trail->add('Level 2', 'my_route', ["var" => "foo"]);
@@ -124,9 +114,7 @@ Will render the following breadcrumb trail :
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 
-/**
- * @Breadcrumb("Level 1")
- */
+#[Breadcrumb("Level 1")]
 public function myAction(Trail $trail)
 {
     $trail->add('Level 2', null, [], false, 1);
@@ -139,7 +127,7 @@ Will render the following breadcrumb trail :
 
 > Level 2 > Level 1 > Level 4 > Level 3
 
-**Note:** `position=0` will put the breacrumb to the end of the trail.
+**Note:** `position=0` will put the breadcrumb to the end of the trail.
 
 ### Reset the trail
 
@@ -147,9 +135,7 @@ Will render the following breadcrumb trail :
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 
-/**
- * @Breadcrumb("Level 1")
- */
+#[Breadcrumb("Level 1")]
 public function myAction(Trail $trail)
 {
     $trail

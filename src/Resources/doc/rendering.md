@@ -1,5 +1,8 @@
 # Render a breadcrumb trail in a template
 
+A Twig method is registered to render the breadcrumb trail on the template. The
+preferred way of rendering breadcrumbs is by calling the Twig method on the
+base template.
 
 ```php
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
@@ -25,7 +28,7 @@ class MyController extends Controller
 {{ apy_breadcrumb_trail_render() }}
 ```
 
-The previous action `my` will render the following breadcrumb trail:
+The above controller's `myAction` will render the following breadcrumb trail:
 
 ```html
 <ul id="breadcrumbtrail">
