@@ -77,5 +77,6 @@ jobs:
     container: jakzal/phpqa
     steps:
       - uses: actions/checkout@v2
+      - run: composer install
       - name: PHPStan (via jakzal/phpqa)
         run: phpstan analyze -c .phpstan.neon
