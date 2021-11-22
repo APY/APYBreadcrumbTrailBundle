@@ -21,3 +21,6 @@ test-php74-lowest:
 
 cs:
 	docker run --rm -v $(DIR):/project -w /project jakzal/phpqa php-cs-fixer fix
+
+static:
+	docker run --rm -v $(DIR):/project -w /project jakzal/phpqa phpstan analyze -c .phpstan.neon

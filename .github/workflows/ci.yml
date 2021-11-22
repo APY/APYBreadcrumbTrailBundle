@@ -70,3 +70,12 @@ jobs:
       - uses: actions/checkout@v2
       - name: PHP CS Fixer (via jakzal/phpqa)
         run: php-cs-fixer fix
+
+ static:
+    name: Static code analysis
+    runs-on: ubuntu-latest
+    container: jakzal/phpqa
+    steps:
+      - uses: actions/checkout@v2
+      - name: PHPStan (via jakzal/phpqa)
+        run: phpstan analyze -c .phpstan.neon

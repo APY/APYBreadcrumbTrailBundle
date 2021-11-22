@@ -39,9 +39,9 @@ class APYBreadcrumbTrailExtension extends Extension
     private function deprecateService(ContainerBuilder $container, string $id)
     {
         $alias = $container->getAlias($id);
-        if (Kernel::VERSION_ID >= 50100) {
+        if (version_compare(Kernel::VERSION, '5.1.0', '>=')) {
             $alias->setDeprecated('APY/BreadcrumbTrailBundle', '1.7', 'The service is deprecated, use "%alias_id%" FQCN as service id instead.');
-        } elseif (Kernel::VERSION_ID >= 40300) {
+        } elseif (version_compare(Kernel::VERSION, '4.3.0', '>=')) {
             $alias->setDeprecated();
         }
     }

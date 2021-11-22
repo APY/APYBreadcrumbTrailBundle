@@ -48,13 +48,12 @@ class Breadcrumb
     private $template = null;
 
     /**
-     * @var mixed An array of additional attributes for the breadcrumb
+     * @var array with additional attributes for the breadcrumb
      */
     private $attributes = [];
 
     /**
      * @param array|string                 $title           title, or the legacy array that contains all annotation data
-     * @param ?array<string, string|array> $route
      * @param ?string                      $routeName
      * @param ?array<string,mixed>         $routeParameters
      * @param bool                         $routeAbsolute
@@ -130,7 +129,7 @@ class Breadcrumb
     /**
      * Sets the title of the breadcrumb.
      *
-     * @param string $methods The title of the breadcrumb
+     * @param string $title The title of the breadcrumb
      */
     public function setTitle($title)
     {
@@ -175,7 +174,7 @@ class Breadcrumb
     /**
      * Whether to generate an absolute URL.
      *
-     * @param bool $routeName Whether to generate an absolute URL
+     * @param bool $routeAbsolute Whether to generate an absolute URL
      */
     public function setRouteAbsolute($routeAbsolute)
     {
@@ -190,7 +189,7 @@ class Breadcrumb
     /**
      * Sets the position of the breadcrumb.
      *
-     * @param int Position of the breadcrumb (default = 0)
+     * @param int $position Position of the breadcrumb (default = 0)
      */
     public function setPosition($position)
     {
@@ -205,7 +204,7 @@ class Breadcrumb
     /**
      * Sets the template of the breadcrumb trail.
      *
-     * @param string template of the breadcrumb trail
+     * @param string $template with path of the breadcrumb trail that should get rendered
      */
     public function setTemplate($template)
     {
@@ -220,7 +219,7 @@ class Breadcrumb
     /**
      * Sets the additional attributes for the breadcrumb.
      *
-     * @param mixed additional attributes for the breadcrumb
+     * @param array $attributes additional attributes for the breadcrumb
      */
     public function setAttributes($attributes)
     {

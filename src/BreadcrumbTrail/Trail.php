@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class Trail implements \IteratorAggregate, \Countable
 {
     /**
-     * @var Breadcrumb[] Array of breadcrumbs
+     * @var \SplObjectStorage<Breadcrumb> Array of breadcrumbs
      */
     private $breadcrumbs;
 
@@ -62,18 +62,18 @@ class Trail implements \IteratorAggregate, \Countable
      * Add breadcrumb.
      *
      * @param mixed  $breadcrumb_or_title A Breadcrumb instance or the title of the breadcrumb
-     * @param string $routeName           The name of the route
-     * @param mixed  $routeParameters     An array of parameters for the route
+     * @param string|null $routeName           The name of the route, or `null` in case no route has to get rendered
+     * @param array  $routeParameters     An array of parameters for the route
      * @param bool   $routeAbsolute       Whether to generate an absolute URL
      * @param int    $position            Position of the breadcrumb (default = 0)
-     * @param mixed  $attributes          Additional attributes for the breadcrumb
+     * @param array  $attributes          Additional attributes for the breadcrumb
      *
      * @throws \RuntimeException
      * @throws \InvalidArgumentException
      *
      * @return self
      */
-    public function add($breadcrumb_or_title, $routeName = null, $routeParameters = [], $routeAbsolute = UrlGeneratorInterface::ABSOLUTE_PATH, $position = 0, $attributes = [])
+    public function add($breadcrumb_or_title, $routeName = null, $routeParameters = [], $routeAbsolute = true, $position = 0, $attributes = [])
     {
         if (null === $breadcrumb_or_title) {
             return $this->reset();
@@ -100,9 +100,8 @@ class Trail implements \IteratorAggregate, \Countable
                     if ($request->attributes->has($varName)) {
                         $object = $request->attributes->get($varName);
 
-                        if (empty($functions)) {
-                            $objectValue = (string) $object;
-                        } else {
+                        $objectValue = (string) $object;
+                        if (false === empty($functions)) {
                             foreach ($functions as $f => $function) {
                                 // While this is not the last function, call the chain
                                 if ($f < $nbCalls - 1) {
@@ -136,54 +135,55 @@ class Trail implements \IteratorAggregate, \Countable
                     if (is_numeric($key)) {
                         $routeParameters[$value] = $request->get($value);
                         unset($routeParameters[$key]);
-                    } else {
-                        if (preg_match_all('#\{(?P<variable>\w+).?(?P<function>([\w\.])*):?(?P<parameters>(\w|,| )*)\}#', $value, $matches, \PREG_OFFSET_CAPTURE | \PREG_SET_ORDER)) {
-                            foreach ($matches as $match) {
-                                $varName = $match['variable'][0];
-                                $functions = $match['function'][0] ? explode('.', $match['function'][0]) : [];
-                                $parameters = $match['parameters'][0] ? explode(',', $match['parameters'][0]) : [];
-                                $nbCalls = \count($functions);
 
-                                if ($request->attributes->has($varName)) {
-                                    $object = $request->attributes->get($varName);
+                        continue;
+                    }
 
-                                    if (empty($functions)) {
-                                        $objectValue = (string) $object;
-                                    } else {
-                                        foreach ($functions as $f => $function) {
-                                            // While this is not the last function, call the chain
-                                            if ($f < $nbCalls - 1) {
-                                                if (\is_callable([$object, $fullFunctionName = 'get'.$function])
-                                                    || \is_callable([$object, $fullFunctionName = 'has'.$function])
-                                                    || \is_callable([$object, $fullFunctionName = 'is'.$function])
-                                                ) {
-                                                    $object = \call_user_func([$object, $fullFunctionName]);
-                                                } else {
-                                                    throw new \RuntimeException(sprintf('"%s" is not callable.', implode('.', array_merge([$varName], $functions))));
-                                                }
+                    if (preg_match_all('#\{(?P<variable>\w+).?(?P<function>([\w\.])*):?(?P<parameters>(\w|,| )*)\}#', $value, $matches, \PREG_OFFSET_CAPTURE | \PREG_SET_ORDER)) {
+                        foreach ($matches as $match) {
+                            $varName = $match['variable'][0];
+                            $functions = $match['function'][0] ? explode('.', $match['function'][0]) : [];
+                            $parameters = $match['parameters'][0] ? explode(',', $match['parameters'][0]) : [];
+                            $nbCalls = \count($functions);
+
+                            if ($request->attributes->has($varName)) {
+                                $object = $request->attributes->get($varName);
+
+                                $objectValue = (string) $object;
+                                if (false === empty($functions)) {
+                                    foreach ($functions as $f => $function) {
+                                        // While this is not the last function, call the chain
+                                        if ($f < $nbCalls - 1) {
+                                            if (\is_callable([$object, $fullFunctionName = 'get'.$function])
+                                                || \is_callable([$object, $fullFunctionName = 'has'.$function])
+                                                || \is_callable([$object, $fullFunctionName = 'is'.$function])
+                                            ) {
+                                                $object = \call_user_func([$object, $fullFunctionName]);
+                                            } else {
+                                                throw new \RuntimeException(sprintf('"%s" is not callable.', implode('.', array_merge([$varName], $functions))));
                                             }
+                                        }
 
-                                            // End of the chain: call the method
-                                            else {
-                                                if (\is_callable([$object, $fullFunctionName = 'get'.$function])
-                                                    || \is_callable([$object, $fullFunctionName = 'has'.$function])
-                                                    || \is_callable([$object, $fullFunctionName = 'is'.$function])
-                                                ) {
-                                                    $objectValue = \call_user_func_array([$object, $fullFunctionName], $parameters);
-                                                } else {
-                                                    throw new \RuntimeException(sprintf('"%s" is not callable.', implode('.', array_merge([$varName], $functions))));
-                                                }
+                                        // End of the chain: call the method
+                                        else {
+                                            if (\is_callable([$object, $fullFunctionName = 'get'.$function])
+                                                || \is_callable([$object, $fullFunctionName = 'has'.$function])
+                                                || \is_callable([$object, $fullFunctionName = 'is'.$function])
+                                            ) {
+                                                $objectValue = \call_user_func_array([$object, $fullFunctionName], $parameters);
+                                            } else {
+                                                throw new \RuntimeException(sprintf('"%s" is not callable.', implode('.', array_merge([$varName], $functions))));
                                             }
                                         }
                                     }
-
-                                    $routeParameter = str_replace($match[0][0], $objectValue, $value);
-                                    $routeParameters[$key] = $routeParameter;
                                 }
+
+                                $routeParameter = str_replace($match[0][0], $objectValue, $value);
+                                $routeParameters[$key] = $routeParameter;
                             }
-                        } elseif (preg_match('#^\{(?P<parameter>\w+)\}$#', $value, $matches)) {
-                            $routeParameters[$key] = $request->get($matches['parameter']);
                         }
+                    } elseif (preg_match('#^\{(?P<parameter>\w+)\}$#', $value, $matches)) {
+                        $routeParameters[$key] = $request->get($matches['parameter']);
                     }
                 }
             }
@@ -201,7 +201,7 @@ class Trail implements \IteratorAggregate, \Countable
             throw new \InvalidArgumentException('The position of a breadcrumb must be an integer.');
         }
 
-        if (0 == $position || $position > $this->breadcrumbs->count()) {
+        if (0 === $position || $position > $this->breadcrumbs->count()) {
             $this->breadcrumbs->attach($breadcrumb);
         } else {
             $this->insert($breadcrumb, $position);
