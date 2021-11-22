@@ -1,0 +1,32 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Elseif condition is always true\\.$#"
+			count: 1
+			path: src/DependencyInjection/APYBreadcrumbTrailExtension.php
+
+		-
+			message: "#^If condition is always true\\.$#"
+			count: 1
+			path: src/DependencyInjection/APYBreadcrumbTrailExtension.php
+
+		-
+			message: "#^Call to an undefined method Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\TreeBuilder\\:\\:root\\(\\)\\.$#"
+			count: 1
+			path: src/DependencyInjection/Configuration.php
+
+		-
+			message: "#^Call to an undefined method Symfony\\\\Component\\\\HttpKernel\\\\Event\\\\KernelEvent\\:\\:getController\\(\\)\\.$#"
+			count: 1
+			path: src/EventListener/BreadcrumbListener.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$event with type Symfony\\\\Component\\\\HttpKernel\\\\Event\\\\ControllerEvent\\|Symfony\\\\Component\\\\HttpKernel\\\\Event\\\\FilterControllerEvent is not subtype of native type Symfony\\\\Component\\\\HttpKernel\\\\Event\\\\KernelEvent\\.$#"
+			count: 1
+			path: src/EventListener/BreadcrumbListener.php
+
+		-
+			message: "#^Parameter \\$event of method APY\\\\BreadcrumbTrailBundle\\\\EventListener\\\\BreadcrumbListener\\:\\:onKernelController\\(\\) has invalid typehint type Symfony\\\\Component\\\\HttpKernel\\\\Event\\\\FilterControllerEvent\\.$#"
+			count: 1
+			path: src/EventListener/BreadcrumbListener.php
+
