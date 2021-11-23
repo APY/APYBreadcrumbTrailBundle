@@ -12,14 +12,30 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['7.3', '7.4', '8.0']
-        symfony: ['3.4', '4.4', '5.1', '5.2', '5.3']
+        php-version: ['7.3', '7.4', '8.0']
+        symfony-version: ['3.4', '4.4', '5.1', '5.2', '5.3']
+        
+        experimental:
+          - false
+
+        include:
+          - php-version: "8.1"
+            symfony-version: '5.4'
+            experimental: true
+          - php-version: "8.1"
+            symfony-version: '6.0'
+            experimental: true
+          - php-version: "8.2"
+            symfony-version: '6.0'
+            experimental: true
+
+    continue-on-error: ${{ matrix.experimental }}
 
     steps:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: ${{ matrix.php-version }}
           coverage: none
           extensions: mbstring, intl
           tools: composer:v2
@@ -31,7 +47,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Select supported Symfony version
-        run: composer require symfony/framework-bundle:"^${{ matrix.symfony }}" --no-update
+        run: composer require symfony/framework-bundle:"^${{ matrix.symfony-version }}" --no-update
 
       - name: Run tests
         run: make test
@@ -42,13 +58,24 @@ jobs:
     strategy:
       max-parallel: 10
       matrix:
-        php: ['7.2', '7.3', '7.4', '8.0']
+        php-version: ['7.2', '7.3', '7.4', '8.0']
+        
+        experimental:
+          - false
+
+        include:
+          - php-version: "8.1"
+            experimental: true
+          - php-version: "8.2"
+            experimental: true
+
+    continue-on-error: ${{ matrix.experimental }}
 
     steps:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: ${{ matrix.php-version }}
           coverage: none
           extensions: mbstring, intl
           tools: composer:v2
