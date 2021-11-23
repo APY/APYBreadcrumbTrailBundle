@@ -51,7 +51,7 @@ jobs:
         run: composer config minimum-stability dev
 
       - name: Select supported Symfony version
-        run:
+        run: |
           export SYMFONY_REQUIRE=${{ matrix.symfony-version }}
           composer global require --no-progress --no-scripts --no-plugins symfony/flex
           composer require symfony/framework-bundle:"${{ matrix.symfony-version }}" --no-update
