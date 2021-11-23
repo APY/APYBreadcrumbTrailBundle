@@ -14,7 +14,7 @@ jobs:
       matrix:
         php-version: ['7.3', '7.4', '8.0']
         symfony-version: ['3.4.*', '4.4.*', '5.1.*', '5.2.*', '5.3.*']
-        
+
         experimental:
           - false
 
@@ -45,13 +45,16 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v2
-        
+
       - name: Lower Composer minimum-stability to dev for experimental runs
         if: ${{ matrix.experimental }}
         run: composer config minimum-stability dev
 
       - name: Select supported Symfony version
-        run: composer require symfony/framework-bundle:"${{ matrix.symfony-version }}" --no-update
+        run:
+          export SYMFONY_REQUIRE=${{ matrix.symfony-version }}
+          composer global require --no-progress --no-scripts --no-plugins symfony/flex
+          composer require symfony/framework-bundle:"${{ matrix.symfony-version }}" --no-update
 
       - name: Run tests
         run: make test
@@ -59,11 +62,13 @@ jobs:
  test-lowest:
     name: Test Lowest
     runs-on: ubuntu-latest
+    env:
+        SYMFONY_DEPRECATIONS_HELPER: 'disabled=1'
     strategy:
       max-parallel: 10
       matrix:
         php-version: ['7.2', '7.3', '7.4', '8.0']
-        
+
         experimental:
           - false
 

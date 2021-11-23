@@ -11,7 +11,7 @@ test:
 	composer test
 
 test-lowest:
-	COMPOSER_PARAMS='--prefer-lowest' $(MAKE) test
+	SYMFONY_DEPRECATIONS_HELPER='disabled=1' COMPOSER_PARAMS='--prefer-lowest' $(MAKE) test
 
 test-php73-lowest:
 	docker run --rm -v $(DIR):/project -w /project webdevops/php:7.3 $(MAKE) test-lowest
