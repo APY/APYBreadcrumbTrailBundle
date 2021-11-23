@@ -69,7 +69,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: PHP CS Fixer (via jakzal/phpqa)
-        run: php-cs-fixer fix
+        run: php-cs-fixer fix -vv --dry-run
 
  static:
     name: Static code analysis

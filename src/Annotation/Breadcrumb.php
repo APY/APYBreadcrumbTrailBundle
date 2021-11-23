@@ -53,13 +53,13 @@ class Breadcrumb
     private $attributes = [];
 
     /**
-     * @param array|string                 $title           title, or the legacy array that contains all annotation data
-     * @param ?string                      $routeName
-     * @param ?array<string,mixed>         $routeParameters
-     * @param bool                         $routeAbsolute
-     * @param int                          $position
-     * @param ?string                      $template
-     * @param array                        $attributes
+     * @param array|string         $title           title, or the legacy array that contains all annotation data
+     * @param ?string              $routeName
+     * @param ?array<string,mixed> $routeParameters
+     * @param bool                 $routeAbsolute
+     * @param int                  $position
+     * @param ?string              $template
+     * @param array                $attributes
      */
     public function __construct(
         $title,
