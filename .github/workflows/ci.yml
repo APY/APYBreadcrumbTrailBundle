@@ -20,13 +20,13 @@ jobs:
 
         include:
           - php-version: "8.1"
-            symfony-version: 'dev-5.4'
+            symfony-version: '5.4.*@dev'
             experimental: true
           - php-version: "8.1"
-            symfony-version: 'dev-6.0'
+            symfony-version: '6.0.*@dev'
             experimental: true
           - php-version: "8.2"
-            symfony-version: 'dev-6.0'
+            symfony-version: '6.0.*@dev'
             experimental: true
 
     continue-on-error: ${{ matrix.experimental }}
