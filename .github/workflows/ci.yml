@@ -45,6 +45,10 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v2
+        
+      - name: Lower Composer minimum-stability to dev for experimental runs
+        if: ${{ matrix.experimental }}
+        run: composer config minimum-stability dev
 
       - name: Select supported Symfony version
         run: composer require symfony/framework-bundle:"${{ matrix.symfony-version }}" --no-update
