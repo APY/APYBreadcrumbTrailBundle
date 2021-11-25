@@ -61,128 +61,68 @@ class Trail implements \IteratorAggregate, \Countable
     /**
      * Add breadcrumb.
      *
-     * @param mixed       $breadcrumb_or_title A Breadcrumb instance or the title of the breadcrumb
-     * @param string|null $routeName           The name of the route, or `null` in case no route has to get rendered
-     * @param array       $routeParameters     An array of parameters for the route
-     * @param bool        $routeAbsolute       Whether to generate an absolute URL
-     * @param int         $position            Position of the breadcrumb (default = 0)
-     * @param array       $attributes          Additional attributes for the breadcrumb
-     *
-     * @throws \RuntimeException
-     * @throws \InvalidArgumentException
+     * @param mixed       $breadcrumbOrTitle A Breadcrumb instance or the title of the breadcrumb
+     * @param string|null $routeName         The name of the route, or `null` in case no route has to get rendered
+     * @param array       $routeParameters   An array of parameters for the route
+     * @param bool        $routeAbsolute     Whether to generate an absolute URL
+     * @param int         $position          Position of the breadcrumb (default = 0)
+     * @param array       $attributes        Additional attributes for the breadcrumb
      *
      * @return self
+     *
+     *@throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
-    public function add($breadcrumb_or_title, $routeName = null, $routeParameters = [], $routeAbsolute = true, $position = 0, $attributes = [])
+    public function add($breadcrumbOrTitle, $routeName = null, $routeParameters = [], $routeAbsolute = true, $position = 0, $attributes = [])
     {
-        if (null === $breadcrumb_or_title) {
+        if (null === $breadcrumbOrTitle) {
             return $this->reset();
         }
 
-        if ($breadcrumb_or_title instanceof Breadcrumb) {
-            $breadcrumb = $breadcrumb_or_title;
+        if ($breadcrumbOrTitle instanceof Breadcrumb) {
+            $breadcrumb = $breadcrumbOrTitle;
         } else {
-            if (!\is_string($breadcrumb_or_title)) {
+            if (!\is_string($breadcrumbOrTitle)) {
                 throw new \InvalidArgumentException('The title of a breadcrumb must be a string.');
             }
 
             $request = $this->requestStack->getCurrentRequest();
 
+            // Render (traversed) values from the request in the breadcrumb title and route parameters
             if (null !== $request) {
-                preg_match_all('#\{(?P<variable>\w+).?(?P<function>([\w\.])*):?(?P<parameters>(\w|,| )*)\}#', $breadcrumb_or_title, $matches, \PREG_OFFSET_CAPTURE | \PREG_SET_ORDER);
+                preg_match_all('#\{(?P<variable>\w+).?(?P<function>([\w\.])*):?(?P<parameters>(\w|,| )*)\}#', $breadcrumbOrTitle, $matches, \PREG_OFFSET_CAPTURE | \PREG_SET_ORDER);
 
                 foreach ($matches as $match) {
                     $varName = $match['variable'][0];
-                    $functions = $match['function'][0] ? explode('.', $match['function'][0]) : [];
-                    $parameters = $match['parameters'][0] ? explode(',', $match['parameters'][0]) : [];
-                    $nbCalls = \count($functions);
 
-                    if ($request->attributes->has($varName)) {
-                        $object = $request->attributes->get($varName);
-
-                        $objectValue = (string) $object;
-                        if (false === empty($functions)) {
-                            foreach ($functions as $f => $function) {
-                                // While this is not the last function, call the chain
-                                if ($f < $nbCalls - 1) {
-                                    if (\is_callable([$object, $fullFunctionName = 'get'.$function])
-                                        || \is_callable([$object, $fullFunctionName = 'has'.$function])
-                                        || \is_callable([$object, $fullFunctionName = 'is'.$function])) {
-                                        $object = \call_user_func([$object, $fullFunctionName]);
-                                    } else {
-                                        throw new \RuntimeException(sprintf('"%s" is not callable.', implode('.', array_merge([$varName], $functions))));
-                                    }
-                                }
-
-                                // End of the chain: call the method
-                                else {
-                                    if (\is_callable([$object, $fullFunctionName = 'get'.$function])
-                                        || \is_callable([$object, $fullFunctionName = 'has'.$function])
-                                        || \is_callable([$object, $fullFunctionName = 'is'.$function])) {
-                                        $objectValue = \call_user_func_array([$object, $fullFunctionName], $parameters);
-                                    } else {
-                                        throw new \RuntimeException(sprintf('"%s" is not callable.', implode('.', array_merge([$varName], $functions))));
-                                    }
-                                }
-                            }
-                        }
-
-                        $breadcrumb_or_title = str_replace($match[0][0], $objectValue, $breadcrumb_or_title);
+                    if (false === $request->attributes->has($varName)) {
+                        continue;
                     }
+                    $object = $request->attributes->get($varName);
+
+                    $breadcrumbOrTitle = $this->renderObjectValuesInSubject($match, $object, $varName, $breadcrumbOrTitle);
                 }
 
-                foreach ($routeParameters as $key => $value) {
+                foreach ($routeParameters as $key => $parameterValue) {
                     if (is_numeric($key)) {
-                        $routeParameters[$value] = $request->get($value);
+                        $routeParameters[$parameterValue] = $request->get($parameterValue);
                         unset($routeParameters[$key]);
 
                         continue;
                     }
 
-                    if (preg_match_all('#\{(?P<variable>\w+).?(?P<function>([\w\.])*):?(?P<parameters>(\w|,| )*)\}#', $value, $matches, \PREG_OFFSET_CAPTURE | \PREG_SET_ORDER)) {
+                    if (preg_match_all('#\{(?P<variable>\w+).?(?P<function>([\w\.])*):?(?P<parameters>(\w|,| )*)\}#', $parameterValue, $matches, \PREG_OFFSET_CAPTURE | \PREG_SET_ORDER)) {
                         foreach ($matches as $match) {
                             $varName = $match['variable'][0];
-                            $functions = $match['function'][0] ? explode('.', $match['function'][0]) : [];
-                            $parameters = $match['parameters'][0] ? explode(',', $match['parameters'][0]) : [];
-                            $nbCalls = \count($functions);
 
-                            if ($request->attributes->has($varName)) {
-                                $object = $request->attributes->get($varName);
-
-                                $objectValue = (string) $object;
-                                if (false === empty($functions)) {
-                                    foreach ($functions as $f => $function) {
-                                        // While this is not the last function, call the chain
-                                        if ($f < $nbCalls - 1) {
-                                            if (\is_callable([$object, $fullFunctionName = 'get'.$function])
-                                                || \is_callable([$object, $fullFunctionName = 'has'.$function])
-                                                || \is_callable([$object, $fullFunctionName = 'is'.$function])
-                                            ) {
-                                                $object = \call_user_func([$object, $fullFunctionName]);
-                                            } else {
-                                                throw new \RuntimeException(sprintf('"%s" is not callable.', implode('.', array_merge([$varName], $functions))));
-                                            }
-                                        }
-
-                                        // End of the chain: call the method
-                                        else {
-                                            if (\is_callable([$object, $fullFunctionName = 'get'.$function])
-                                                || \is_callable([$object, $fullFunctionName = 'has'.$function])
-                                                || \is_callable([$object, $fullFunctionName = 'is'.$function])
-                                            ) {
-                                                $objectValue = \call_user_func_array([$object, $fullFunctionName], $parameters);
-                                            } else {
-                                                throw new \RuntimeException(sprintf('"%s" is not callable.', implode('.', array_merge([$varName], $functions))));
-                                            }
-                                        }
-                                    }
-                                }
-
-                                $routeParameter = str_replace($match[0][0], $objectValue, $value);
-                                $routeParameters[$key] = $routeParameter;
+                            if (false === $request->attributes->has($varName)) {
+                                continue;
                             }
+                            $object = $request->attributes->get($varName);
+
+                            $routeParameters[$key] = $this->renderObjectValuesInSubject($match, $object, $varName, $parameterValue);
                         }
-                    } elseif (preg_match('#^\{(?P<parameter>\w+)\}$#', $value, $matches)) {
+                    } elseif (preg_match('#^\{(?P<parameter>\w+)\}$#', $parameterValue, $matches)) {
                         $routeParameters[$key] = $request->get($matches['parameter']);
                     }
                 }
@@ -194,7 +134,7 @@ class Trail implements \IteratorAggregate, \Countable
                 $url = $this->router->generate($routeName, $routeParameters, $referenceType);
             }
 
-            $breadcrumb = new Breadcrumb($breadcrumb_or_title, $url, $attributes);
+            $breadcrumb = new Breadcrumb($breadcrumbOrTitle, $url, $attributes);
         }
 
         if (!\is_int($position)) {
@@ -258,6 +198,71 @@ class Trail implements \IteratorAggregate, \Countable
      */
     public function getIterator()
     {
+        $this->breadcrumbs->rewind();
+
         return $this->breadcrumbs;
+    }
+
+    /**
+     * Render all variables, parameters and function calls in the renderSubject by iteratively traversing an object graph tree.
+     *
+     * Will eventually return `title` from `organization` when the breadcrumb contains `{organization.author.book.title}`.
+     */
+    private function renderObjectValuesInSubject($match, $object, $varName, $renderSubject)
+    {
+        $functions = $match['function'][0] ? explode('.', $match['function'][0]) : [];
+        $parameters = $match['parameters'][0] ? explode(',', $match['parameters'][0]) : [];
+        $nbCalls = \count($functions);
+
+        // Eventually the last function is the one that is needed to retrieve the actual object value for
+        foreach ($functions as $f => $function) {
+            // While this is not the last function, call the chain
+            if ($f < $nbCalls - 1) {
+                $object = $this->retrieveChildObject($object, $function, $varName, $functions);
+
+                continue;
+            }
+            $objectValue = $this->retrieveObjectValue($object, $function, $parameters, $varName, $functions);
+        }
+
+        if (!isset($objectValue)) {
+            $objectValue = (string) $object;
+        }
+
+        return str_replace($match[0][0], $objectValue, $renderSubject);
+    }
+
+    /**
+     * Allows retrieving the next child object by calling the related method.
+     *
+     * Gets used in case breadcrumb values are splitted by dots (e.g. `{organization.author.book.title}`).
+     */
+    private function retrieveChildObject($object, $function, $varName, array $functions)
+    {
+        if (\is_callable([$object, $fullFunctionName = 'get'.$function])
+            || \is_callable([$object, $fullFunctionName = 'has'.$function])
+            || \is_callable([$object, $fullFunctionName = 'is'.$function])
+        ) {
+            return \call_user_func([$object, $fullFunctionName]);
+        }
+
+        throw new \RuntimeException(sprintf('"%s" is not callable.', implode('.', array_merge([$varName], $functions))));
+    }
+
+    /**
+     * Allow to finally retrieve the value in case the last method was reached.
+     *
+     * Gets used once the splitted breadcrumb value reached the end of the call stack (e.g. for `title`
+     * when `{organization.author.book.title}` gets requested).
+     */
+    private function retrieveObjectValue($object, $function, $parameters, $varName, array $functions)
+    {
+        if (\is_callable([$object, $fullFunctionName = 'get'.$function])
+            || \is_callable([$object, $fullFunctionName = 'has'.$function])
+            || \is_callable([$object, $fullFunctionName = 'is'.$function])) {
+            return \call_user_func_array([$object, $fullFunctionName], $parameters);
+        }
+
+        throw new \RuntimeException(sprintf('"%s" is not callable.', implode('.', array_merge([$varName], $functions))));
     }
 }
