@@ -53,7 +53,7 @@ class Breadcrumb
     private $attributes = [];
 
     /**
-     * @param array|string         $title           title, or the legacy array that contains all annotation data
+     * @param array|string|null    $title           title, or the legacy array that contains all annotation data. Passing `null` to reset the breadcrumb trail is deprecated and will throw an exception in `2.0`.
      * @param ?string              $routeName
      * @param ?array<string,mixed> $routeParameters
      * @param bool                 $routeAbsolute
@@ -62,7 +62,7 @@ class Breadcrumb
      * @param array                $attributes
      */
     public function __construct(
-        $title,
+        $title = null,
         $routeName = null,
         $routeParameters = null,
         $routeAbsolute = null,

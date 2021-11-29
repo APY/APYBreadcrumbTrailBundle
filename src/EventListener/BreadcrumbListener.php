@@ -12,6 +12,7 @@
 namespace APY\BreadcrumbTrailBundle\EventListener;
 
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use APY\BreadcrumbTrailBundle\Annotation\ResetBreadcrumbTrail;
 use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 use APY\BreadcrumbTrailBundle\MixedAnnotationWithAttributeBreadcrumbsException;
 use Doctrine\Common\Annotations\Reader;
@@ -29,6 +30,11 @@ class BreadcrumbListener
      * @var Trail An Trail instance
      */
     protected $breadcrumbTrail;
+
+    private $supportedAttributes = [
+        Breadcrumb::class,
+        ResetBreadcrumbTrail::class,
+    ];
 
     /**
      * Constructor.
@@ -109,9 +115,19 @@ class BreadcrumbListener
     {
         // requirements (@Breadcrumb)
         foreach ($annotations as $annotation) {
+            if ($annotation instanceof ResetBreadcrumbTrail) {
+                $this->breadcrumbTrail->reset();
+
+                continue;
+            }
+
             if ($annotation instanceof Breadcrumb) {
                 $template = $annotation->getTemplate();
                 $title = $annotation->getTitle();
+
+                if (null === $title) {
+                    trigger_deprecation('apy/breadcrumb-bundle', '1.8', 'Resetting the breadcrumb trail by passing a Breadcrumb without parameters, and will throw an exception in v2.0. Use #[ResetBreadcrumbTrail] attribute instead.');
+                }
 
                 if (null != $template) {
                     $this->breadcrumbTrail->setTemplate($template);
@@ -158,7 +174,11 @@ class BreadcrumbListener
         }
 
         $attributes = [];
-        foreach ($reflected->getAttributes(Breadcrumb::class) as $reflectionAttribute) {
+        foreach ($reflected->getAttributes() as $reflectionAttribute) {
+            if (false === \in_array($reflectionAttribute->getName(), $this->supportedAttributes)) {
+                continue;
+            }
+
             $attributes[] = $reflectionAttribute->newInstance();
         }
 
