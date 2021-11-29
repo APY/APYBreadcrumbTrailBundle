@@ -284,7 +284,7 @@ Will render the following breadcrumb trail :
 
 ### Reset the trail
 
-Passing an breadcrumb without any parameter values will remove all existing
+Adding a ResetBreadcrumbTrail attribute will remove all existing
 breadcrumbs from the trail.
 
 Resetting might come in handy in case the controller class unwantedly defines
@@ -292,9 +292,10 @@ breadcrumbs already.
 
 ```php
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use APY\BreadcrumbTrailBundle\Annotation\ResetBreadcrumbTrail;
 
 #[Breadcrumb("Level 1")]
-#[Breadcrumb()]
+#[ResetBreadcrumbTrail()]
 #[Breadcrumb("Level 2")]
 #[Breadcrumb("Level 3")]
 ```
