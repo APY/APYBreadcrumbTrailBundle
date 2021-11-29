@@ -50,4 +50,15 @@ class BreadcrumbTest extends TestCase
 
         self::assertEquals($expected, $breadcrumb->getTitle());
     }
+
+    /**
+     * @deprecated passing empty constructor is deprecated since 1.8. ResetBreadcrumbTrail attribute should be used instead. Will throw exception in 2.0.
+     */
+    public function testConstructorWithoutArgumentsIsAllowedForResettingTrail()
+    {
+        $expected = null;
+        $breadcrumb = new Breadcrumb();
+
+        self::assertEquals($expected, $breadcrumb->getTitle());
+    }
 }

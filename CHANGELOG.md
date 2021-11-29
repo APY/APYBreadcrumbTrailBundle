@@ -1,3 +1,7 @@
+# v1.8
+
+- introduce ResetBreadcrumbtrail attribute for resetting trail, prefer over empty annotation
+
 # v1.7
 
 - support breadcrumbs via PHP Attributes

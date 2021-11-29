@@ -8,6 +8,7 @@ use APY\BreadcrumbTrailBundle\Fixtures\ControllerWithAnnotations;
 use APY\BreadcrumbTrailBundle\Fixtures\ControllerWithAttributes;
 use APY\BreadcrumbTrailBundle\Fixtures\ControllerWithAttributesAndAnnotations;
 use APY\BreadcrumbTrailBundle\Fixtures\InvokableControllerWithAnnotations;
+use APY\BreadcrumbTrailBundle\Fixtures\ResetTrailAttribute;
 use APY\BreadcrumbTrailBundle\MixedAnnotationWithAttributeBreadcrumbsException;
 use Nyholm\BundleTest\AppKernel;
 use Nyholm\BundleTest\BaseBundleTestCase;
@@ -84,6 +85,20 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
         $this->listener->onKernelController($kernelEvent);
 
         self::assertCount(3, $this->breadcrumbTrail);
+    }
+
+    /**
+     * @requires PHP >= 8.0
+     */
+    public function testResetTrailAttribute()
+    {
+        $this->setUpTest();
+
+        $controller = new ResetTrailAttribute();
+        $kernelEvent = $this->createControllerEvent($controller);
+        $this->listener->onKernelController($kernelEvent);
+
+        self::assertCount(1, $this->breadcrumbTrail);
     }
 
     protected function getBundleClass()
