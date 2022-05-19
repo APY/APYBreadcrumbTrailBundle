@@ -13,6 +13,7 @@ namespace APY\BreadcrumbTrailBundle\BreadcrumbTrail;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Traversable;
 
 class Trail implements \IteratorAggregate, \Countable
 {
@@ -188,7 +189,7 @@ class Trail implements \IteratorAggregate, \Countable
     /**
      * {@inheritDoc}
      */
-    public function count()
+    public function count(): int
     {
         return $this->breadcrumbs->count();
     }
@@ -196,7 +197,7 @@ class Trail implements \IteratorAggregate, \Countable
     /**
      * {@inheritDoc}
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         $this->breadcrumbs->rewind();
 
