@@ -33,3 +33,6 @@ test-cs:
 
 static:
 	docker run --rm -v $(DIR):/project -w /project jakzal/phpqa phpstan analyze -c .phpstan.neon
+
+composer:
+	docker run --rm -v $(DIR):/project -w /project webdevops/php:7.2 composer install

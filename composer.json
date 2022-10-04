@@ -7,9 +7,9 @@
     "license": "MIT",
     "require": {
         "php": ">=7.2",
-        "symfony/framework-bundle": "^3.4|^4.0|^5.0",
+        "symfony/framework-bundle": "^3.4|^4.0|^5.0|^6.0",
         "twig/twig": "^1.41|^2.7|^3.0",
-        "symfony/deprecation-contracts": "^2.4"
+        "symfony/deprecation-contracts": "^2.4|^3.0"
     },
     "scripts": {
         "test": "vendor/bin/simple-phpunit --testdox"
@@ -22,16 +22,16 @@
         "psr-4": { "APY\\BreadcrumbTrailBundle\\": "src/" }
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "^5.0",
+        "symfony/phpunit-bridge": "^5.0|^6.0",
         "nyholm/symfony-bundle-test": "^1.5",
         "matthiasnoback/symfony-dependency-injection-test": "^4.0",
         "doctrine/doctrine-bundle": "^v1.0|^v2.0",
-        "symfony/twig-bundle": "^3.4|^4.0|^5.0"
+        "symfony/twig-bundle": "^3.4|^4.0|^5.0|^6.0"
     },
     "conflict": {
         "doctrine/annotations": "< 1.7",
         "symfony/framework-bundle": "<3.4.26 || >4 <4.1.12 || >4.2 <4.2.7",
-        "twig/twig": ">=2.0 || < 2.15.3"
+        "twig/twig": ">=2.0 <2.15.3"
     },
     "autoload-dev": {
         "psr-4": { "APY\\BreadcrumbTrailBundle\\": "tests/" }
