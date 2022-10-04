@@ -53,8 +53,8 @@ class BreadcrumbTrailExtension extends AbstractExtension
     public function renderBreadcrumbTrail($template = null)
     {
         return $this->templating->render(
-                null === $template ? $this->trail->getTemplate() : $template,
-                ['breadcrumbs' => $this->trail]
+            null === $template ? $this->trail->getTemplate() : $template,
+            ['breadcrumbs' => $this->trail]
         );
     }
 
