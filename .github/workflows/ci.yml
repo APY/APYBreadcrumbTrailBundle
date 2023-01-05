@@ -67,7 +67,7 @@ jobs:
  codestyle:
     name: Code style
     runs-on: ubuntu-latest
-    container: jakzal/phpqa
+    container: jakzal/phpqa:php8.1
     steps:
       - uses: actions/checkout@v2
       - name: PHP CS Fixer (via jakzal/phpqa)
