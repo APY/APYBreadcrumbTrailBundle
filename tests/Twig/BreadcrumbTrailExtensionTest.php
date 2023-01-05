@@ -29,6 +29,9 @@ class BreadcrumbTrailExtensionTest extends KernelTestCase
         return $kernel;
     }
 
+    /**
+     * @requires PHP >= 8.0
+     */
     public function testTwigFunctionGetsRegistered()
     {
         $container = self::getContainer();

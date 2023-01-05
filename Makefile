@@ -34,14 +34,14 @@ test-php73-lowest:
 test-php74-lowest:
 	docker run --rm -v $(DIR):/project -w /project webdevops/php:7.4 make test-lowest
 
-cs:
+cs: composer.lock
 	docker run --rm -v $(DIR):/project -w /project jakzal/phpqa:php8.1 php-cs-fixer fix -vv ${CS_PARAMS}
 
-test-cs:
+test-cs: composer.lock
 	CS_PARAMS='--dry-run' make cs
 
-static:
+static: composer.lock
 	docker run --rm -v $(DIR):/project -w /project jakzal/phpqa phpstan analyze -c .phpstan.neon
 
-composer:
-	docker run --rm -v $(DIR):/project -w /project webdevops/php:7.2 composer install
+composer.lock:
+	docker run --rm -v $(DIR):/project -w /project jakzal/phpqa composer install
