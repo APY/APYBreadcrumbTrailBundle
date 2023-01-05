@@ -101,7 +101,7 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
         self::assertCount(1, $this->breadcrumbTrail);
     }
 
-    protected function getBundleClass()
+    protected function getBundleClass(): string
     {
         return APYBreadcrumbTrailBundle::class;
     }
