@@ -23,7 +23,7 @@
     },
     "require-dev": {
         "symfony/phpunit-bridge": "^5.0|^6.0",
-        "nyholm/symfony-bundle-test": "^1.5",
+        "nyholm/symfony-bundle-test": "^v2.0",
         "matthiasnoback/symfony-dependency-injection-test": "^4.0",
         "doctrine/doctrine-bundle": "^v1.0|^v2.0",
         "doctrine/annotations": "^v1.7",
