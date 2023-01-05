@@ -26,10 +26,10 @@
         "nyholm/symfony-bundle-test": "^1.5",
         "matthiasnoback/symfony-dependency-injection-test": "^4.0",
         "doctrine/doctrine-bundle": "^v1.0|^v2.0",
+        "doctrine/annotations": "^v1.7",
         "symfony/twig-bundle": "^3.4|^4.0|^5.0|^6.0"
     },
     "conflict": {
-        "doctrine/annotations": "< 1.7",
         "symfony/framework-bundle": "<3.4.26 || >4 <4.1.12 || >4.2 <4.2.7",
         "twig/twig": ">=2.0 <2.15.3"
     },
