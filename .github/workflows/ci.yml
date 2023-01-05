@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['7.2', '7.3', '7.4', '8.0']
-        symfony: ['3.4', '4.4', '5.1', '5.2', '5.3']
+        php: ['7.2', '7.4', '8.0', '8.1', '8.2']
+        symfony: ['4.4.*', '5.4.*', '6.1.*', '6.2.*']
 
     steps:
       - name: Set up PHP
@@ -22,7 +22,7 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: none
           extensions: mbstring, intl
-          tools: composer:v2
+          tools: composer:v2, flex
 
       - name: Setup Problem Matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
@@ -30,8 +30,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Select supported Symfony version
-        run: composer require symfony/framework-bundle:"^${{ matrix.symfony }}" --no-update
+      - name: Download dependencies
+        env:
+          SYMFONY_REQUIRE: ${{ matrix.symfony }}
+        uses: ramsey/composer-install@v1
 
       - name: Run tests
         run: make test
@@ -42,7 +44,7 @@ jobs:
     strategy:
       max-parallel: 10
       matrix:
-        php: ['7.2', '7.3', '7.4', '8.0']
+        php: ['7.2','7.4', '8.0', '8.1', '8.2']
 
     steps:
       - name: Set up PHP
@@ -51,7 +53,7 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: none
           extensions: mbstring, intl
-          tools: composer:v2
+          tools: composer:v2, flex
 
       - name: Setup Problem Matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
