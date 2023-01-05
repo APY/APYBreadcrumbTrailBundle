@@ -6,7 +6,7 @@ use Nyholm\BundleTest\BaseBundleTestCase;
 
 class BundleInitializationTest extends BaseBundleTestCase
 {
-    protected function getBundleClass()
+    protected function getBundleClass(): string
     {
         return APYBreadcrumbTrailBundle::class;
     }
