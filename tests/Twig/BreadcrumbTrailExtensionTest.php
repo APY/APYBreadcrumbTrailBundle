@@ -12,7 +12,7 @@ use Twig\Environment;
  */
 class BreadcrumbTrailExtensionTest extends BaseBundleTestCase
 {
-    protected function getBundleClass()
+    protected function getBundleClass(): string
     {
         return APYBreadcrumbTrailBundle::class;
     }
