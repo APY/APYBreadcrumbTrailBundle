@@ -3,36 +3,44 @@
 namespace APY\BreadcrumbTrailBundle\Twig;
 
 use APY\BreadcrumbTrailBundle\APYBreadcrumbTrailBundle;
-use Nyholm\BundleTest\BaseBundleTestCase;
+use Nyholm\BundleTest\TestKernel;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Bundle\TwigBundle\TwigBundle;
-use Twig\Environment;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * @coversDefaultClass \APY\BreadcrumbTrailBundle\Twig\BreadcrumbTrailExtension
  */
-class BreadcrumbTrailExtensionTest extends BaseBundleTestCase
+class BreadcrumbTrailExtensionTest extends KernelTestCase
 {
-    protected function getBundleClass()
+    protected static function getKernelClass(): string
     {
-        return APYBreadcrumbTrailBundle::class;
+        return TestKernel::class;
     }
 
-    protected function setUp(): void
+    protected static function createKernel(array $options = []): KernelInterface
     {
-        $kernel = $this->createKernel();
-        $kernel->addBundle(TwigBundle::class);
-        $kernel->boot();
+        /** @var TestKernel $kernel */
+        $kernel = parent::createKernel($options);
+        $kernel->addTestBundle(APYBreadcrumbTrailBundle::class);
+        $kernel->addTestBundle(TwigBundle::class);
+        $kernel->handleOptions($options);
+
+        return $kernel;
     }
 
+    /**
+     * @requires PHP >= 8.0
+     */
     public function testTwigFunctionGetsRegistered()
     {
-        $container = $this->getContainer();
+        $container = self::getContainer();
 
-        /** @var Environment $twig */
-        $twig = $container->get('twig');
+        /** @var BreadcrumbTrailExtension $extension */
+        $extension = $container->get(BreadcrumbTrailExtension::class);
 
-        self::assertNotNull(
-            $twig->getFunction('apy_breadcrumb_trail_render')
-        );
+        $function = current($extension->getFunctions());
+
+        self::assertEquals('apy_breadcrumb_trail_render', $function->getName());
     }
 }

@@ -15,9 +15,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    /**
-     * {@inheritDoc}
-     */
+    #[\ReturnTypeWillChange]
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('apy_breadcrumb_trail');

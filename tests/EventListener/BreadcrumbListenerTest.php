@@ -10,15 +10,16 @@ use APY\BreadcrumbTrailBundle\Fixtures\ControllerWithAttributesAndAnnotations;
 use APY\BreadcrumbTrailBundle\Fixtures\InvokableControllerWithAnnotations;
 use APY\BreadcrumbTrailBundle\Fixtures\ResetTrailAttribute;
 use APY\BreadcrumbTrailBundle\MixedAnnotationWithAttributeBreadcrumbsException;
-use Nyholm\BundleTest\AppKernel;
-use Nyholm\BundleTest\BaseBundleTestCase;
+use Nyholm\BundleTest\TestKernel;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpKernel\KernelInterface;
 
-class BreadcrumbListenerTest extends BaseBundleTestCase
+class BreadcrumbListenerTest extends KernelTestCase
 {
     /** @var BreadcrumbListener */
     private $listener;
@@ -26,16 +27,26 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
     /** @var Trail */
     private $breadcrumbTrail;
 
-    /** @var AppKernel */
-    private $kernel;
+    protected static function getKernelClass(): string
+    {
+        return TestKernel::class;
+    }
+
+    protected static function createKernel(array $options = []): KernelInterface
+    {
+        /** @var TestKernel $kernel */
+        $kernel = parent::createKernel($options);
+        $kernel->addTestBundle(APYBreadcrumbTrailBundle::class);
+        $kernel->handleOptions($options);
+
+        return $kernel;
+    }
 
     protected function setUpTest(): void
     {
-        // TODO rename this to setUp method once bumping PHP to supporting return type declarations
-        $this->kernel = $this->createKernel();
-        $this->kernel->boot();
-        $this->listener = $this->getContainer()->get('apy_breadcrumb_trail.annotation.listener');
-        $this->breadcrumbTrail = $this->getContainer()->get('apy_breadcrumb_trail');
+        $kernel = self::bootKernel();
+        $this->listener = $kernel->getContainer()->get('apy_breadcrumb_trail.annotation.listener');
+        $this->breadcrumbTrail = $kernel->getContainer()->get('apy_breadcrumb_trail');
     }
 
     public function testAnnotations()
@@ -101,7 +112,7 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
         self::assertCount(1, $this->breadcrumbTrail);
     }
 
-    protected function getBundleClass()
+    protected function getBundleClass(): string
     {
         return APYBreadcrumbTrailBundle::class;
     }
@@ -113,9 +124,9 @@ class BreadcrumbListenerTest extends BaseBundleTestCase
     {
         $callable = \is_callable($controller) ? $controller : [$controller, 'indexAction'];
         if (Kernel::MAJOR_VERSION <= 4) {
-            return new FilterControllerEvent($this->kernel, $callable, new Request(), HttpKernelInterface::MASTER_REQUEST);
+            return new FilterControllerEvent(self::$kernel, $callable, new Request(), HttpKernelInterface::MASTER_REQUEST);
         }
 
-        return new ControllerEvent($this->kernel, $callable, new Request(), HttpKernelInterface::MASTER_REQUEST);
+        return new ControllerEvent(self::$kernel, $callable, new Request(), HttpKernelInterface::MASTER_REQUEST);
     }
 }
