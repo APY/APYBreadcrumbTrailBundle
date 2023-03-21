@@ -27,11 +27,11 @@
         "matthiasnoback/symfony-dependency-injection-test": "^4.0",
         "doctrine/doctrine-bundle": "^v1.0|^v2.0",
         "doctrine/annotations": "^v1.7",
-        "symfony/twig-bundle": "^3.4|^4.0|^5.0|^6.0"
+        "symfony/twig-bundle": "^3.4|^4.0|^5.0|^6.0",
+        "twig/twig": "^1.38|^v2.15|^v3.0"
     },
     "conflict": {
-        "symfony/framework-bundle": "<3.4.26 || >4 <4.1.12 || >4.2 <4.2.7",
-        "twig/twig": "<1.38 || >=2.0 <2.15.3"
+        "symfony/framework-bundle": "<3.4.26 || >4 <4.1.12 || >4.2 <4.2.7"
     },
     "autoload-dev": {
         "psr-4": { "APY\\BreadcrumbTrailBundle\\": "tests/" }
