@@ -7,7 +7,7 @@
     "license": "MIT",
     "require": {
         "php": ">=7.2",
-        "symfony/framework-bundle": "^4.4|^5.0|^6.0",
+        "symfony/framework-bundle": "^6.0|^7.0",
         "twig/twig": "^2.15|^3.0",
         "symfony/deprecation-contracts": "^2.4|^3.0"
     },
@@ -23,10 +23,10 @@
     },
     "require-dev": {
         "symfony/phpunit-bridge": "^5.0|^6.0",
-        "nyholm/symfony-bundle-test": "^v2.0",
+        "nyholm/symfony-bundle-test": "^3.0",
         "matthiasnoback/symfony-dependency-injection-test": "^4.0",
         "doctrine/doctrine-bundle": "^v1.0|^v2.0",
-        "doctrine/annotations": "^v1.7",
+        "doctrine/annotations": "^2.0",
         "symfony/twig-bundle": "^3.4|^4.0|^5.0|^6.0"
     },
     "autoload-dev": {

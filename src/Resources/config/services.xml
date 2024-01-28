@@ -19,5 +19,14 @@
             <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" priority="-1" />
         </service>
         <service id="apy_breadcrumb_trail.annotation.listener" alias="APY\BreadcrumbTrailBundle\EventListener\BreadcrumbListener" public="true" />
+
+                <!-- Definición del servicio AnnotationReader -->
+        <service id="Doctrine\Common\Annotations\AnnotationReader" />
+
+        <!-- Definición del servicio BreadcrumbListener -->
+        <service id="APY\BreadcrumbTrailBundle\EventListener\BreadcrumbListener">
+            <argument type="service" id="Doctrine\Common\Annotations\AnnotationReader" />
+            <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" priority="-1" />
+        </service>
     </services>
 </container>
