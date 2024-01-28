@@ -70,7 +70,7 @@ class BreadcrumbListener
             throw new \InvalidArgumentException(sprintf('Annotations from class "%s" cannot be read as it is abstract.', $class));
         }
 
-        if (HttpKernelInterface::MASTER_REQUEST == $event->getRequestType()) {
+        if (HttpKernelInterface::MAIN_REQUEST  == $event->getRequestType()) {
             $this->breadcrumbTrail->reset();
 
             // Annotations from class
