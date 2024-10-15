@@ -70,7 +70,7 @@ class Trail implements \IteratorAggregate, \Countable
      *
      * @return self
      *
-     *@throws \InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
     public function add($breadcrumbOrTitle, $routeName = null, $routeParameters = [], $routeAbsolute = true, $position = 0, $attributes = [])
@@ -185,17 +185,11 @@ class Trail implements \IteratorAggregate, \Countable
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function count(): int
     {
         return $this->breadcrumbs->count();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getIterator(): \Traversable
     {
         $this->breadcrumbs->rewind();
@@ -246,7 +240,7 @@ class Trail implements \IteratorAggregate, \Countable
             return \call_user_func([$object, $fullFunctionName]);
         }
 
-        throw new \RuntimeException(sprintf('"%s" is not callable.', implode('.', array_merge([$varName], $functions))));
+        throw new \RuntimeException(\sprintf('"%s" is not callable.', implode('.', array_merge([$varName], $functions))));
     }
 
     /**
@@ -263,6 +257,6 @@ class Trail implements \IteratorAggregate, \Countable
             return \call_user_func_array([$object, $fullFunctionName], $parameters);
         }
 
-        throw new \RuntimeException(sprintf('"%s" is not callable.', implode('.', array_merge([$varName], $functions))));
+        throw new \RuntimeException(\sprintf('"%s" is not callable.', implode('.', array_merge([$varName], $functions))));
     }
 }

@@ -1,4 +1,4 @@
-Getting Started With BreadcrumbTrailBundle
+Getting Started With BreadcrumbTrailBundle 
 ==========================================
 
 This bundle provides a breadcrumb trail service also known as breadcrumbs or Fil d'Ariane.

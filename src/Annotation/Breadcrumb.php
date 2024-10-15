@@ -20,12 +20,12 @@ class Breadcrumb
     /**
      * @var string Title of the breadcrumb
      */
-    private $title = null;
+    private $title;
 
     /**
      * @var string The name of the route
      */
-    private $routeName = null;
+    private $routeName;
 
     /**
      * @var mixed An array of parameters for the route
@@ -45,7 +45,7 @@ class Breadcrumb
     /**
      * @var string Template of the breadcrumb trail
      */
-    private $template = null;
+    private $template;
 
     /**
      * @var array with additional attributes for the breadcrumb
@@ -61,15 +61,8 @@ class Breadcrumb
      * @param ?string              $template
      * @param array                $attributes
      */
-    public function __construct(
-        $title = null,
-        $routeName = null,
-        $routeParameters = null,
-        $routeAbsolute = null,
-        $position = null,
-        $template = null,
-        $attributes = null
-    ) {
+    public function __construct($title = null, $routeName = null, $routeParameters = null, $routeAbsolute = null, $position = null, $template = null, $attributes = null)
+    {
         $data = [];
 
         if (\is_string($title)) {
@@ -101,7 +94,7 @@ class Breadcrumb
                 foreach ($data['route'] as $key => $value) {
                     $method = 'setRoute'.$key;
                     if (!method_exists($this, $method)) {
-                        throw new \BadMethodCallException(sprintf("Unknown property '%s' for the 'route' parameter on annotation '%s'.", $key, static::class));
+                        throw new \BadMethodCallException(\sprintf("Unknown property '%s' for the 'route' parameter on annotation '%s'.", $key, static::class));
                     }
                     $this->$method($value);
                 }
@@ -120,7 +113,7 @@ class Breadcrumb
 
             $method = 'set'.$key;
             if (!method_exists($this, $method)) {
-                throw new \BadMethodCallException(sprintf("Unknown property '%s' on annotation '%s'.", $key, static::class));
+                throw new \BadMethodCallException(\sprintf("Unknown property '%s' on annotation '%s'.", $key, static::class));
             }
             $this->$method($value);
         }

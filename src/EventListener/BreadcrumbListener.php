@@ -67,10 +67,12 @@ class BreadcrumbListener
         }
 
         if ($class->isAbstract()) {
-            throw new \InvalidArgumentException(sprintf('Annotations from class "%s" cannot be read as it is abstract.', $class));
+            throw new \InvalidArgumentException(\sprintf('Annotations from class "%s" cannot be read as it is abstract.', $class));
         }
 
-        if (HttpKernelInterface::MASTER_REQUEST == $event->getRequestType()) {
+        $kernelRequest = \defined(HttpKernelInterface::class.'::MASTER_REQUEST') ? HttpKernelInterface::MASTER_REQUEST : HttpKernelInterface::MAIN_REQUEST;
+
+        if ($kernelRequest == $event->getRequestType()) {
             $this->breadcrumbTrail->reset();
 
             // Annotations from class

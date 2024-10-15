@@ -19,9 +19,6 @@ use Symfony\Component\HttpKernel\Kernel;
 
 class APYBreadcrumbTrailExtension extends Extension
 {
-    /**
-     * {@inheritDoc}
-     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();
