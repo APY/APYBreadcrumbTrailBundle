@@ -104,6 +104,10 @@ class Trail implements \IteratorAggregate, \Countable
                 }
 
                 foreach ($routeParameters as $key => $parameterValue) {
+                    if ($parameterValue === null) {
+                        continue;
+                    }
+
                     if (is_numeric($key)) {
                         $routeParameters[$parameterValue] = $request->get($parameterValue);
                         unset($routeParameters[$key]);
