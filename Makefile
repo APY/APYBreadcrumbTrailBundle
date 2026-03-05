@@ -18,6 +18,12 @@ test-php81:
 test-php82:
 	docker run --rm -v $(DIR):/project -w /project webdevops/php:8.2 make test
 
+test-php83:
+	docker run --rm -v $(DIR):/project -w /project webdevops/php:8.3 make test
+
+test-php84:
+	docker run --rm -v $(DIR):/project -w /project webdevops/php:8.4 make test
+
 test:
 	composer update --prefer-dist --no-interaction ${COMPOSER_PARAMS}
 	composer test
