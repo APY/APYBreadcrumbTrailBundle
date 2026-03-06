@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['8.1', '8.2']
-        symfony: ['4.4.*', '5.4.*', '6.1.*', '6.2.*']
+        php: ['8.2', '8.3', '8.4', '8.5']
+        symfony: ['5.4.*', '6.4.*', '7.4.*', '8.0.*']
 
     steps:
       - name: Set up PHP
@@ -28,12 +28,12 @@ jobs:
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
 
       - name: Download dependencies
         env:
           SYMFONY_REQUIRE: ${{ matrix.symfony }}
-        uses: ramsey/composer-install@v1
+        uses: ramsey/composer-install@v3
 
       - name: Run tests
         run: composer run test
@@ -44,7 +44,7 @@ jobs:
     strategy:
       max-parallel: 10
       matrix:
-        php: ['7.2', '7.3', '7.4', '8.0', '8.1', '8.2']
+        php: ['8.0', '8.1', '8.2', '8.3']
 
     steps:
       - name: Set up PHP
@@ -59,7 +59,7 @@ jobs:
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
 
       - name: Run tests
         run: make test-lowest
@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     container: jakzal/phpqa:php8.1
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
       - name: PHP CS Fixer (via jakzal/phpqa)
         run: php-cs-fixer fix -vv --dry-run
 
@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     container: jakzal/phpqa
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
       - run: composer install
       - name: PHPStan (via jakzal/phpqa)
         run: phpstan analyze -c .phpstan.neon
