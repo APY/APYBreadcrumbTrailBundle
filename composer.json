@@ -8,7 +8,7 @@
     "require": {
         "php": ">=8.2",
         "symfony/framework-bundle": "^5.4|^6.4|^7.0",
-        "twig/twig": "^2.15|^3.0",
+        "twig/twig": "^2.15|^3.12",
         "symfony/deprecation-contracts": "^2.4|^3.0"
     },
     "scripts": {
