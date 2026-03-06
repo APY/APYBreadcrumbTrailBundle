@@ -22,12 +22,12 @@
         "psr-4": { "APY\\BreadcrumbTrailBundle\\": "src/" }
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "^5.4|^6.4|^7.0",
+        "symfony/phpunit-bridge": "^5.4|^6.4|^7.4|^8.0",
         "nyholm/symfony-bundle-test": "^v2.0|^v3.0",
         "matthiasnoback/symfony-dependency-injection-test": "^4.0",
-        "doctrine/doctrine-bundle": "^v1.0|^v2.0",
-        "doctrine/annotations": "^v1.7",
-        "symfony/twig-bundle": "^5.4|^6.4|^7.0"
+        "doctrine/doctrine-bundle": "^v1.0|^v2.0|^v3.0",
+        "doctrine/annotations": "^v1.7|^v2.0",
+        "symfony/twig-bundle": "^5.4|^6.4|^7.4|^8.4"
     },
     "autoload-dev": {
         "psr-4": { "APY\\BreadcrumbTrailBundle\\": "tests/" }
