@@ -29,6 +29,31 @@ class TrailTest extends TestCase
         $breadcrumb = $iterator->current();
         self::assertEquals($expected, $breadcrumb->title);
     }
+
+    public function testAddWithNullRouteParameter()
+    {
+        $router = $this->createMock(UrlGeneratorInterface::class);
+        $routeName = 'route_name';
+        $router
+            ->expects(self::once())
+            ->method('generate')
+            ->with($routeName, ['id' => null], UrlGeneratorInterface::ABSOLUTE_URL)
+            ->willReturn('https://example.test/page');
+        $requestStack = new RequestStack();
+        $requestStack->push(new Request());
+
+        $trail = new Trail($router, $requestStack);
+        $title = 'Title';
+        $trail->add($title, $routeName, ['id' => null]);
+
+        $iterator = $trail->getIterator();
+        self::assertCount(1, $iterator);
+
+        /** @var Breadcrumb $breadcrumb */
+        $breadcrumb = $iterator->current();
+        self::assertSame($title, $breadcrumb->title);
+        self::assertSame('https://example.test/page', $breadcrumb->url);
+    }
 }
 
 final class User
