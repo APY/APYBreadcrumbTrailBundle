@@ -175,11 +175,20 @@ class BreadcrumbListener
 
         $attributes = [];
         foreach ($reflected->getAttributes() as $reflectionAttribute) {
-            if (false === \in_array($reflectionAttribute->getName(), $this->supportedAttributes)) {
-                continue;
+
+            foreach($this->supportedAttributes as $supportedAttribute) {
+                $reflectionAttributeName = $reflectionAttribute->getName();
+
+                if(
+                    ($reflectionAttributeName !== $supportedAttribute) && 
+                    !is_subclass_of($reflectionAttributeName, $supportedAttribute)
+                ) {
+                    continue;
+                }
+
+                $attributes[] = $reflectionAttribute->newInstance();
             }
 
-            $attributes[] = $reflectionAttribute->newInstance();
         }
 
         return $attributes;
